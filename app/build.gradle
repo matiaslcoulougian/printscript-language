@@ -3,15 +3,5 @@
  */
 
 plugins {
-    id 'printscript.language.kotlin-application-conventions'
-}
-
-dependencies {
-    implementation 'org.apache.commons:commons-text'
-//    implementation project(':utilities')
-}
-
-application {
-    // Define the main class for the application.
-    mainClass = 'printscript.language.app.AppKt'
+    id 'printscript.language.kotlin-custom-conventions'
 }

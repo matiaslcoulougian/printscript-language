@@ -3,9 +3,5 @@
  */
 
 plugins {
-    id 'printscript.language.kotlin-library-conventions'
-}
-
-dependencies {
-    testImplementation 'org.jetbrains.kotlin:kotlin-test'
+    id 'printscript.language.kotlin-custom-conventions'
 }
