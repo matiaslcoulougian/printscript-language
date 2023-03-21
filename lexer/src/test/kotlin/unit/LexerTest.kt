@@ -73,19 +73,19 @@ class LexerTest {
         testLexer(expectedTokens, inputString)
     }
 
-//    @Test
-//    fun testSubtractionOperator() {
-//        val expectedTokens = listOf(Token("2", TokenType.number_literal), Token("-", TokenType.operator), Token("4", TokenType.number_literal), Token(";", TokenType.end))
-//        val inputString = "2 - 4;"
-//        testLexer(expectedTokens, inputString)
-//    }
-//
-//    @Test
-//    fun testProductOperator() {
-//        val expectedTokens = listOf(Token("2", TokenType.number_literal), Token("*", TokenType.operator), Token("4", TokenType.number_literal), Token(";", TokenType.end))
-//        val inputString = "2 * 4;"
-//        testLexer(expectedTokens, inputString)
-//    }
+    @Test
+    fun testSubtractionOperator() {
+        val expectedTokens = getLexSubtractionOperationResponse()
+        val inputString = "2 - 4;"
+        testLexer(expectedTokens, inputString)
+    }
+
+    @Test
+    fun testProductOperator() {
+        val expectedTokens = geLexProductOperationResponse()
+        val inputString = "2 * 4;"
+        testLexer(expectedTokens, inputString)
+    }
 
     @Test
     fun testDivisionOperator() {
