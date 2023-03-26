@@ -6,5 +6,5 @@ package AST
  * @property value The value of the literal
  */
 interface LiteralAST<T> {
-    val value:T
+    val value: T
 }

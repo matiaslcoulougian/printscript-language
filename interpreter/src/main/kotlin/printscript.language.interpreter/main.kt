@@ -1,4 +1,3 @@
 package printscript.language.interpreter
 
-class main {
-}
+class main
