@@ -4,4 +4,5 @@
 
 plugins {
     id 'printscript.language.kotlin-custom-conventions'
+    id 'printscript.language.git-hooks'
 }
