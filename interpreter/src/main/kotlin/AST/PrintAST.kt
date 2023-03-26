@@ -1,13 +1,13 @@
 package AST
 
-import Interpreter.ASTVisitor
+import interpreter.ASTVisitor
 
-class PrintAST:AST {
+/**
+ * @param value AST value to Print
+ */
+ data class PrintAST(val value:AST):AST {
 
-    override fun accept(visitor: ASTVisitor) = visitor.visit(this)
+    override fun accept(visitor: ASTVisitor):AST = visitor.visit(this)
 
 
-    fun getToPrint(): Any {
-        return "string"
-    }
 }

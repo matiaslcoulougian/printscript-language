@@ -126,3 +126,5 @@ class Lexer {
         currentPos = 0
     }
 }
+
+// hello
