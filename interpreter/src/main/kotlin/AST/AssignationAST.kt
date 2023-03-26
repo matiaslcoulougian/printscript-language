@@ -1,13 +1,17 @@
 package AST
 
-import Interpreter.ASTVisitor
+import interpreter.ASTVisitor
 
 
- class AssignationAST( private val declaration: DeclarationAST,  private val expression: AST):AST {
+ /**
+  * Assignation AST node.
+  * @param declaration DeclarationAST
+  * @param expression AST
+  */
+ class AssignationAST( val declaration: DeclarationAST, val expression: AST):AST {
 
      override fun  accept(visitor: ASTVisitor): AST = visitor.visit(this)
 
-     fun getDeclaration(): DeclarationAST = declaration
-     fun getExpression(): AST = expression
+
 
  }
