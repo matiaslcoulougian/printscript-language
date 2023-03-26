@@ -37,7 +37,7 @@ class Lexer {
 
         // Check for identifier or keyword token
         if (input[currentPos].isLetter()) {
-            return checkIdentifier(input)
+            return checkIdentifierOrKeyword(input)
         }
 
         // Check for string literal token with " or '
@@ -87,7 +87,7 @@ class Lexer {
         return Token(TokenType.STRING_LITERAL, value)
     }
 
-    private fun checkIdentifier(input: String): Token {
+    private fun checkIdentifierOrKeyword(input: String): Token {
         var value = ""
         while (currentPos < input.length && (input[currentPos].isLetterOrDigit() || input[currentPos] == '_')) {
             value += input[currentPos]
