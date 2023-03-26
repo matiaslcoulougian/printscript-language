@@ -1,12 +1,20 @@
 package AST
 
-import Interpreter.ASTVisitor
+import interpreter.ASTVisitor
 
- class DeclarationAST( private val name: String, private val type:String):AST{
 
-     override fun  accept(visitor: ASTVisitor) =visitor.visit(this)
 
-     fun getName(): String = name
-     fun getType(): String = type
+ data class DeclarationAST(
+     /**
+      * val name: String,
+      */
+     val name: String,
+     /**
+      * val value: AST,
+      */
+     val type:String):AST{
+
+     override fun  accept(visitor: ASTVisitor): AST =visitor.visit(this)
+     
 
  }

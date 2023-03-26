@@ -1,5 +1,0 @@
-package AST
-
-class Operation {
-
-}
