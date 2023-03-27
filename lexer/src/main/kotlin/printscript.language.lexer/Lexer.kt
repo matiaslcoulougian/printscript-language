@@ -13,6 +13,8 @@ enum class TokenType {
     SUBTRACTION,
     PRODUCT,
     EQUALS,
+    OPEN_PARENTHESIS,
+    CLOSE_PARENTHESIS,
     EOL, // end of line
     EOF // end of file
 }
@@ -27,13 +29,6 @@ class Lexer {
 
         // If we have reached the end of file, return EOF token
         if (currentPos >= input.length) return Token(TokenType.EOF, "")
-
-
-        // If we have reached the end of line, return EOL token
-        if (input[currentPos] == ';') {
-            currentPos++
-            return Token(TokenType.EOL, "")
-        }
 
         // Check for identifier or keyword token
         if (input[currentPos].isLetter()) {
@@ -60,6 +55,9 @@ class Lexer {
             '*' -> return Token(TokenType.PRODUCT)
             '/' -> return Token(TokenType.DIVISION)
             '=' -> return Token(TokenType.EQUALS)
+            '(' -> return Token(TokenType.OPEN_PARENTHESIS)
+            ')' -> return Token(TokenType.CLOSE_PARENTHESIS)
+            ';' -> return Token(TokenType.EOL)
         }
 
         // If we haven't matched any token, raise an exception
@@ -105,8 +103,6 @@ class Lexer {
     private fun checkIgnoreChars(input: String) =
         currentPos < input.length
                 && (input[currentPos].isWhitespace()
-                || input[currentPos] == '('
-                || input[currentPos] == ')'
                 || input[currentPos] == ':')
 
     fun getAllTokens(input: String): List<Token> {
