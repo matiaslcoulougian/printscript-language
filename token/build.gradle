@@ -5,7 +5,3 @@
 plugins {
     id 'printscript.language.kotlin-custom-conventions'
 }
-
-dependencies {
-    implementation project(':token')
-}

@@ -1,4 +1,4 @@
-import lexer.Lexer
+import printscript.language.lexer.Lexer
 
 fun main() {
     val lexer = Lexer()
