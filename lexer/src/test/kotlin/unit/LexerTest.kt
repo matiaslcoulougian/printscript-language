@@ -1,10 +1,10 @@
 package unit
 
 import fixtures.*
-import lexer.Lexer
-import lexer.Token
-import lexer.TokenType
+import printscript.language.lexer.Lexer
 import org.junit.jupiter.api.Test
+import printscript.language.token.Token
+import printscript.language.token.TokenType
 import kotlin.test.assertEquals
 
 class LexerTest {
