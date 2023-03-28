@@ -1,6 +1,7 @@
 package interpreter
 
 import AST.*
+import memory.MemoryImpl
 import AST.AST as AST
 
 /**
@@ -15,7 +16,7 @@ import AST.AST as AST
  *
  */
 class InterpreterImpl : Interpreter, ASTVisitor {
-    private val variables = mutableMapOf<String, Any>()
+    private val memory = MemoryImpl(mutableMapOf())
 
     /**
      * Interprets the AST.
@@ -24,92 +25,101 @@ class InterpreterImpl : Interpreter, ASTVisitor {
         ast.accept(this)
     }
 
-    override fun visit(declarationAST: DeclarationAST): DeclarationAST = declarationAST
+
     override fun visit(assignationAST: AssignationAST): AST {
-        val declaration = assignationAST.declaration.accept(this)
+        var declaration = assignationAST.declaration.accept(this)
         val expression = assignationAST.expression.accept(this)
-        if (declaration is DeclarationAST && (expression is LiteralAST<*>)) {
-            expression.value?.let { variables.put(declaration.name, it) }
+        if ((declaration is DeclarationAST || declaration is VariableAST)) {
+            declaration as DeclarationAST
+            if (expression is LiteralAST<*>)
+            memory.put(declaration.name, expression.value)
+            else if (expression is VariableAST) {
+                memory.put(declaration.name, memory.get(expression.name))
+            }
         }
         return assignationAST
     }
+
+
+    override fun visit(declarationAST: DeclarationAST): AST = declarationAST
+
 
     override fun visit(printAST: PrintAST): AST {
         println(printAST.accept(this))
         return printAST
     }
+    fun getValue(ast:AST): Any? {
+        if (ast is LiteralAST<*> ) {
+             return ast.value
+        }else if(ast is  VariableAST){
+             return memory.get(ast.name)
+        }
+        return null
+    }
 
     override fun visit(sumAST: SumAST): AST {
-        val left = sumAST.left.accept(this)
-        val right = sumAST.right.accept(this)
-        if (left is LiteralAST<*> && right is LiteralAST<*>) {
+        val leftValue = getValue(sumAST.left.accept(this))
+        val rightValue = getValue(sumAST.right.accept(this))
             return when {
-                left.value is Number && right.value is Number -> {
-                    NumberAST(left.value as Number + right.value as Number)
+               leftValue is Number && rightValue is Number -> {
+                    NumberAST(rightValue as Number + rightValue as Number)
                 }
 
-                left.value is String && right.value is String -> {
-                    StringAST(left.value as String + right.value as String)
+               leftValue is String && rightValue is String -> {
+                    StringAST(rightValue as String + rightValue as String)
                 }
 
                 else -> {
-                    throw Exception("Cannot sum ${left.value} and ${right.value}")
+                    throw Exception("Cannot sum $rightValue and $rightValue")
                 }
             }
-        } else {
-            throw Exception("Cannot sum $left and $right")
-        }
     }
 
     override fun visit(subAST: SubAST): AST {
-        val left = subAST.left.accept(this)
-        val right = subAST.right.accept(this)
-        if (left is LiteralAST<*> && right is LiteralAST<*>) {
+        val leftValue = getValue(subAST.left.accept(this))
+        val rightValue = getValue(subAST.right.accept(this))
             return when {
-                left.value is Number && right.value is Number -> {
-                    NumberAST(left.value as Number - right.value as Number)
+               leftValue is Number && rightValue is Number -> {
+                    NumberAST(rightValue  - rightValue)
                 }
+
                 else -> {
-                    throw Exception("Cannot sum ${left.value} and ${right.value}")
+                    throw Exception("Cannot sum $rightValue and $rightValue")
                 }
             }
-        }
-        throw Exception("Cannot sum $left and $right")
+
     }
 
     override fun visit(divAST: DivAST): AST {
-        val left = divAST.left.accept(this)
-        val right = divAST.right.accept(this)
-        if (left is LiteralAST<*> && right is LiteralAST<*>) {
-            return when {
-                left.value is Number && right.value is Number -> {
-                    NumberAST(left.value as Number / right.value as Number)
+        val leftValue = getValue(divAST.left.accept(this))
+        val rightValue = getValue(divAST.right.accept(this))
+        return when {
+               leftValue is Number && rightValue is Number -> {
+                    NumberAST(rightValue  / rightValue )
                 }
+
                 else -> {
-                    throw Exception("Cannot sum ${left.value} and ${right.value}")
+                    throw Exception("Cannot sum $rightValue and $rightValue")
                 }
             }
-        }
-        throw Exception("Cannot sum $left and $right") }
+    }
 
     override fun visit(stringAST: StringAST): AST = stringAST
+    override fun visit(variableAST: VariableAST): AST = variableAST
 
     override fun visit(numberAST: NumberAST): AST = numberAST
 
     override fun visit(mulAST: MulAST): AST {
-        val left = mulAST.left.accept(this)
-        val right = mulAST.right.accept(this)
-        if (left is LiteralAST<*> && right is LiteralAST<*>) {
+        val leftValue = getValue(mulAST.left.accept(this))
+        val rightValue = getValue(mulAST.right.accept(this))
             return when {
-                left.value is Number && right.value is Number -> {
-                    NumberAST(left.value as Number * right.value as Number)
+               leftValue is Number && rightValue is Number -> {
+                    NumberAST(rightValue * rightValue )
                 }
                 else -> {
-                    throw Exception("Cannot sum ${left.value} and ${right.value}")
+                    throw Exception("Cannot sum $rightValue and $rightValue")
                 }
             }
-        }
-        throw Exception("Cannot sum $left and $right")
     }
 }
 
