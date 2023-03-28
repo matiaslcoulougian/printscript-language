@@ -108,16 +108,3 @@ class Lexer {
         currentPos = 0
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
