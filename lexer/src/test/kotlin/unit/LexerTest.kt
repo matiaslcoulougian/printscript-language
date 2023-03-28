@@ -1,8 +1,8 @@
 package unit
 
-import fixtures.*
-import printscript.language.lexer.Lexer
+import fixtures.* // ktlint-disable no-wildcard-imports
 import org.junit.jupiter.api.Test
+import printscript.language.lexer.Lexer
 import printscript.language.token.Token
 import printscript.language.token.TokenType
 import kotlin.test.assertEquals
@@ -21,6 +21,7 @@ class LexerTest {
 
         testLexer(expectedTokens, inputString)
     }
+
     @Test
     fun testStringVariableDeclarationDoubleQuoted() {
         val expectedTokens = getLexStringVariableWithDoubleQuoteResponse("name", "Joe")
@@ -96,7 +97,7 @@ class LexerTest {
     }
 
     fun testOperationWithParenthesis() {
-        val expectedTokens = geLexOperationsWithParenthesisResponse( "2", "4", "6", TokenType.SUM, TokenType.SUBTRACTION)
+        val expectedTokens = geLexOperationsWithParenthesisResponse("2", "4", "6", TokenType.SUM, TokenType.SUBTRACTION)
         val inputString = "(2 + 4) - 6;"
         testLexer(expectedTokens, inputString)
     }

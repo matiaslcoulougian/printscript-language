@@ -1,6 +1,5 @@
 package ast
 
-
 /**
  * Assignation AST node.
  * @param declaration DeclarationAST

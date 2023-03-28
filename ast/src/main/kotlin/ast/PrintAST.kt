@@ -1,6 +1,5 @@
 package ast
 
-
 /**
  * @param value AST value to Print
  */

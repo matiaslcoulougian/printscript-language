@@ -1,6 +1,5 @@
 package ast
 
-
 /**
  * AST visitor
  *
@@ -51,5 +50,5 @@ interface ASTVisitor {
      */
     fun visit(stringAST: StringAST): AST
 
-    fun visit(variableAST: VariableAST):AST
+    fun visit(variableAST: VariableAST): AST
 }

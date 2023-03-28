@@ -1,6 +1,5 @@
 package ast
 
-
 /**
  * NumberAST is a class that represents a number in the AST.
  * @param value The value of the number.

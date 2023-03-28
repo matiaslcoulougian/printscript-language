@@ -1,6 +1,5 @@
 package ast
 
-
 /**
  * StringAST is a class that represents a string in the AST.
  * @param value The value of the string.

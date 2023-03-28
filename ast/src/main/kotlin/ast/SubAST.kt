@@ -1,6 +1,5 @@
 package ast
 
-
 /**
  * AST visitor
  * @param left AST

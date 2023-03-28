@@ -1,6 +1,5 @@
 package ast
 
-
 /**
  * @param name Variable name
  */

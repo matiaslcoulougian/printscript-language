@@ -1,6 +1,5 @@
 package ast
 
-
 /**
  * AST interface
  */

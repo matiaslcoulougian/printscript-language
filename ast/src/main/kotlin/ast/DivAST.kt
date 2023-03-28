@@ -1,6 +1,5 @@
 package ast
 
-
 /**
  * Represents a division operation.
  * @param left The left operand.

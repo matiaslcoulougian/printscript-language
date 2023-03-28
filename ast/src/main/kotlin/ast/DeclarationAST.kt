@@ -1,6 +1,5 @@
 package ast
 
-
 data class DeclarationAST(
     /**
      * val name: String,

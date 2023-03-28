@@ -1,7 +1,6 @@
 package printscript.language.interpreter
 
-import ast.*
-import printscript.language.interpreter.Interpreter
+import ast.* // ktlint-disable no-wildcard-imports
 import printscript.language.interpreter.memory.MemoryImpl
 
 /**
@@ -25,24 +24,21 @@ class InterpreterImpl : Interpreter, ASTVisitor {
         ast.accept(this)
     }
 
-
     override fun visit(assignationAST: AssignationAST): AST {
         var declaration = assignationAST.declaration.accept(this)
         val expression = assignationAST.expression.accept(this)
         if ((declaration is DeclarationAST || declaration is VariableAST)) {
             declaration as DeclarationAST
-            if (expression is LiteralAST<*>)
-            memory.put(declaration.name, expression.value)
-            else if (expression is VariableAST) {
+            if (expression is LiteralAST<*>) {
+                memory.put(declaration.name, expression.value)
+            } else if (expression is VariableAST) {
                 memory.put(declaration.name, memory.get(expression.name))
             }
         }
         return assignationAST
     }
 
-
     override fun visit(declarationAST: DeclarationAST): AST = declarationAST
-
 
     override fun visit(printAST: PrintAST): AST {
         val toPrint = getValue(printAST.value.accept(this))
@@ -51,51 +47,49 @@ class InterpreterImpl : Interpreter, ASTVisitor {
         return printAST
     }
 
-
     override fun visit(sumAST: SumAST): AST {
         val leftValue = getValue(sumAST.left.accept(this))
         val rightValue = getValue(sumAST.right.accept(this))
-            return when {
-               leftValue is Number && rightValue is Number -> {
-                   NumberAST(rightValue + rightValue)
-                }
-
-               leftValue is String && rightValue is String -> {
-                   StringAST(rightValue + rightValue)
-                }
-
-                else -> {
-                    throw Exception("Cannot sum $rightValue and $rightValue")
-                }
+        return when {
+            leftValue is Number && rightValue is Number -> {
+                NumberAST(rightValue + rightValue)
             }
+
+            leftValue is String && rightValue is String -> {
+                StringAST(rightValue + rightValue)
+            }
+
+            else -> {
+                throw Exception("Cannot sum $rightValue and $rightValue")
+            }
+        }
     }
 
     override fun visit(subAST: SubAST): AST {
         val leftValue = getValue(subAST.left.accept(this))
         val rightValue = getValue(subAST.right.accept(this))
-            return when {
-               leftValue is Number && rightValue is Number -> {
-                   NumberAST(rightValue - rightValue)
-                }
-
-                else -> {
-                    throw Exception("Cannot sum $rightValue and $rightValue")
-                }
+        return when {
+            leftValue is Number && rightValue is Number -> {
+                NumberAST(rightValue - rightValue)
             }
 
+            else -> {
+                throw Exception("Cannot sum $rightValue and $rightValue")
+            }
+        }
     }
     override fun visit(divAST: DivAST): AST {
         val leftValue = this.getValue(divAST.left.accept(this))
         val rightValue = this.getValue(divAST.right.accept(this))
         return when {
-               leftValue is Number && rightValue is Number -> {
-                   NumberAST(rightValue / rightValue)
-                }
-
-                else -> {
-                    throw Exception("Cannot sum $rightValue and $rightValue")
-                }
+            leftValue is Number && rightValue is Number -> {
+                NumberAST(rightValue / rightValue)
             }
+
+            else -> {
+                throw Exception("Cannot sum $rightValue and $rightValue")
+            }
+        }
     }
     override fun visit(mulAST: MulAST): AST {
         val leftValue = this.getValue(mulAST.left.accept(this))
@@ -115,11 +109,10 @@ class InterpreterImpl : Interpreter, ASTVisitor {
 
     override fun visit(numberAST: NumberAST): AST = numberAST
 
-
     private fun getValue(ast: AST): Any? {
         if (ast is LiteralAST<*>) {
             return ast.value
-        }else if(ast is VariableAST){
+        } else if (ast is VariableAST) {
             return memory.get(ast.name)
         }
         return null
