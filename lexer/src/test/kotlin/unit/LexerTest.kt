@@ -3,6 +3,7 @@ package unit
 import fixtures.*
 import lexer.Lexer
 import lexer.Token
+import lexer.TokenType
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
@@ -15,14 +16,14 @@ class LexerTest {
 
     @Test
     fun testStringVariableDeclaration() {
-        val expectedTokens = getLexStringVariableDeclarationResponse()
+        val expectedTokens = getLexStringVariableDeclarationResponse("name", "Joe")
         val inputString = "let name: string = 'Joe';"
 
         testLexer(expectedTokens, inputString)
     }
     @Test
     fun testStringVariableDeclarationDoubleQuoted() {
-        val expectedTokens = getLexStringVariableWithDoubleQuoteResponse()
+        val expectedTokens = getLexStringVariableWithDoubleQuoteResponse("name", "Joe")
         val inputString = "let name: string = \"Joe\";"
 
         testLexer(expectedTokens, inputString)
@@ -30,7 +31,7 @@ class LexerTest {
 
     @Test
     fun testNumberVariableDeclaration() {
-        val expectedTokens = getLexNumberVariableDeclarationResponse()
+        val expectedTokens = getLexNumberVariableDeclarationResponse("a", "12")
         val inputString = "let a: number = 12;"
 
         testLexer(expectedTokens, inputString)
@@ -38,7 +39,7 @@ class LexerTest {
 
     @Test
     fun testPrintLnFunction() {
-        val expectedTokens = getLexPrintLnFunctionResponse()
+        val expectedTokens = getLexPrintLnFunctionResponse("hello")
         val inputString = "println('hello');"
 
         testLexer(expectedTokens, inputString)
@@ -46,7 +47,7 @@ class LexerTest {
 
     @Test
     fun testPrintLnFunctionWithIdentifier() {
-        val expectedTokens = getLexPrintLnFunctionWithIdentifierResponse()
+        val expectedTokens = getLexPrintLnFunctionWithIdentifierResponse("name")
         val inputString = "println(name);"
 
         testLexer(expectedTokens, inputString)
@@ -54,43 +55,49 @@ class LexerTest {
 
     @Test
     fun testStringConcatenation() {
-        val expectedTokens = getLexStringConcatenationResponse()
+        val expectedTokens = getLexStringConcatenationResponse("hello", "world")
         val inputString = "'hello' + 'world';"
         testLexer(expectedTokens, inputString)
     }
 
     @Test
     fun testStringConcatenationWithIdentifier() {
-        val expectedTokens = getLexStringConcatenationWithIdentifierResponse()
+        val expectedTokens = getLexStringConcatenationWithIdentifierResponse("name", "hello ")
         val inputString = "'hello ' + name;"
         testLexer(expectedTokens, inputString)
     }
 
     @Test
     fun testSumOperator() {
-        val expectedTokens = geLexSumOperationResponse()
+        val expectedTokens = geLexOperationResponse("2", "4", TokenType.SUM)
         val inputString = "2 + 4;"
         testLexer(expectedTokens, inputString)
     }
 
     @Test
     fun testSubtractionOperator() {
-        val expectedTokens = getLexSubtractionOperationResponse()
+        val expectedTokens = geLexOperationResponse("2", "4", TokenType.SUBTRACTION)
         val inputString = "2 - 4;"
         testLexer(expectedTokens, inputString)
     }
 
     @Test
     fun testProductOperator() {
-        val expectedTokens = geLexProductOperationResponse()
+        val expectedTokens = geLexOperationResponse("2", "4", TokenType.PRODUCT)
         val inputString = "2 * 4;"
         testLexer(expectedTokens, inputString)
     }
 
     @Test
     fun testDivisionOperator() {
-        val expectedTokens = getLexDivideOperationResponse()
+        val expectedTokens = geLexOperationResponse("2", "4", TokenType.DIVISION)
         val inputString = "2/4;"
+        testLexer(expectedTokens, inputString)
+    }
+
+    fun testOperationWithParenthesis() {
+        val expectedTokens = geLexOperationsWithParenthesisResponse( "2", "4", "6", TokenType.SUM, TokenType.SUBTRACTION)
+        val inputString = "(2 + 4) - 6;"
         testLexer(expectedTokens, inputString)
     }
 }
