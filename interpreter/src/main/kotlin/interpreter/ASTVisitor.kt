@@ -51,4 +51,6 @@ interface ASTVisitor {
      * Accepts a node and returns the result of the visit.
      */
     fun visit(stringAST: StringAST): AST
+
+    fun visit(variableAST: VariableAST):AST
 }

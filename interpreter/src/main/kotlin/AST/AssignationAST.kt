@@ -7,7 +7,7 @@ import interpreter.ASTVisitor
  * @param declaration DeclarationAST
  * @param expression AST
  */
-class AssignationAST(val declaration: DeclarationAST, val expression: AST) : AST {
+class AssignationAST(val declaration: AST, val expression: AST) : AST {
 
     override fun accept(visitor: ASTVisitor): AST = visitor.visit(this)
 }

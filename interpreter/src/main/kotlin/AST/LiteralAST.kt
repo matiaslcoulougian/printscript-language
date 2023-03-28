@@ -1,5 +1,7 @@
 package AST
 
+import lexer.Token
+
 /**
  * Literal AST node.
  * @param T Type of the literal
