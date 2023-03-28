@@ -86,10 +86,10 @@ class Lexer {
 
     private fun checkIgnoreChars(input: String) =
         currentPos < input.length &&
-                (
-                        input[currentPos].isWhitespace() ||
-                                input[currentPos] == ':'
-                        )
+            (
+                input[currentPos].isWhitespace() ||
+                    input[currentPos] == ':'
+                )
 
     fun getAllTokens(input: String): List<Token> {
         val tokens = mutableListOf<Token>()
@@ -108,5 +108,3 @@ class Lexer {
         currentPos = 0
     }
 }
-
-
