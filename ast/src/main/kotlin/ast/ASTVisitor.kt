@@ -1,6 +1,5 @@
-package interpreter
+package ast
 
-import AST.*
 
 /**
  * AST visitor

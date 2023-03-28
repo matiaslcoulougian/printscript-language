@@ -1,6 +1,5 @@
-package AST
+package ast
 
-import interpreter.ASTVisitor
 
 /**
  * Represents a division operation.

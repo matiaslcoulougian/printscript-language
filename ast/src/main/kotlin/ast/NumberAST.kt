@@ -1,6 +1,5 @@
-package AST
+package ast
 
-import interpreter.ASTVisitor
 
 /**
  * NumberAST is a class that represents a number in the AST.

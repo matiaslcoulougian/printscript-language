@@ -1,6 +1,5 @@
-package AST
+package ast
 
-import interpreter.ASTVisitor
 
 data class DeclarationAST(
     /**

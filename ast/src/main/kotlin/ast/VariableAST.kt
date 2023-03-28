@@ -1,6 +1,5 @@
-package AST
+package ast
 
-import interpreter.ASTVisitor
 
 /**
  * @param name Variable name

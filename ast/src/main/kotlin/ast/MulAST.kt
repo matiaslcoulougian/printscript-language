@@ -1,6 +1,5 @@
-package AST
+package ast
 
-import interpreter.ASTVisitor
 
 /**
  * MulAST is a class that represents a multiplication in the AST.
