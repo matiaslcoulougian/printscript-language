@@ -1,6 +1,4 @@
-package AST
-
-import interpreter.ASTVisitor
+package ast
 
 /**
  * @param value AST value to Print

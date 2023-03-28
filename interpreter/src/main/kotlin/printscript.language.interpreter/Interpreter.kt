@@ -1,8 +1,7 @@
-package interpreter
+package printscript.language.interpreter
 
-import AST.*
-import memory.MemoryImpl
-import AST.AST as AST
+import ast.* // ktlint-disable no-wildcard-imports
+import printscript.language.interpreter.memory.MemoryImpl
 
 /**
  * Interpreter implementation.
@@ -25,83 +24,84 @@ class InterpreterImpl : Interpreter, ASTVisitor {
         ast.accept(this)
     }
 
-
     override fun visit(assignationAST: AssignationAST): AST {
         var declaration = assignationAST.declaration.accept(this)
         val expression = assignationAST.expression.accept(this)
         if ((declaration is DeclarationAST || declaration is VariableAST)) {
             declaration as DeclarationAST
-            if (expression is LiteralAST<*>)
-            memory.put(declaration.name, expression.value)
-            else if (expression is VariableAST) {
+            if (expression is LiteralAST<*>) {
+                memory.put(declaration.name, expression.value)
+            } else if (expression is VariableAST) {
                 memory.put(declaration.name, memory.get(expression.name))
             }
         }
         return assignationAST
     }
 
-
     override fun visit(declarationAST: DeclarationAST): AST = declarationAST
 
-
     override fun visit(printAST: PrintAST): AST {
-        println(printAST.accept(this))
+        val toPrint = getValue(printAST.value.accept(this))
+        println(toPrint)
+
         return printAST
-    }
-    fun getValue(ast:AST): Any? {
-        if (ast is LiteralAST<*> ) {
-             return ast.value
-        }else if(ast is  VariableAST){
-             return memory.get(ast.name)
-        }
-        return null
     }
 
     override fun visit(sumAST: SumAST): AST {
         val leftValue = getValue(sumAST.left.accept(this))
         val rightValue = getValue(sumAST.right.accept(this))
-            return when {
-               leftValue is Number && rightValue is Number -> {
-                    NumberAST(rightValue as Number + rightValue as Number)
-                }
-
-               leftValue is String && rightValue is String -> {
-                    StringAST(rightValue as String + rightValue as String)
-                }
-
-                else -> {
-                    throw Exception("Cannot sum $rightValue and $rightValue")
-                }
+        return when {
+            leftValue is Number && rightValue is Number -> {
+                NumberAST(rightValue + rightValue)
             }
+
+            leftValue is String && rightValue is String -> {
+                StringAST(rightValue + rightValue)
+            }
+
+            else -> {
+                throw Exception("Cannot sum $rightValue and $rightValue")
+            }
+        }
     }
 
     override fun visit(subAST: SubAST): AST {
         val leftValue = getValue(subAST.left.accept(this))
         val rightValue = getValue(subAST.right.accept(this))
-            return when {
-               leftValue is Number && rightValue is Number -> {
-                    NumberAST(rightValue  - rightValue)
-                }
-
-                else -> {
-                    throw Exception("Cannot sum $rightValue and $rightValue")
-                }
-            }
-
-    }
-
-    override fun visit(divAST: DivAST): AST {
-        val leftValue = getValue(divAST.left.accept(this))
-        val rightValue = getValue(divAST.right.accept(this))
         return when {
-               leftValue is Number && rightValue is Number -> {
-                    NumberAST(rightValue  / rightValue )
-                }
-
-                else -> {
-                    throw Exception("Cannot sum $rightValue and $rightValue")
-                }
+            leftValue is Number && rightValue is Number -> {
+                NumberAST(rightValue - rightValue)
             }
+
+            else -> {
+                throw Exception("Cannot sum $rightValue and $rightValue")
+            }
+        }
+    }
+    override fun visit(divAST: DivAST): AST {
+        val leftValue = this.getValue(divAST.left.accept(this))
+        val rightValue = this.getValue(divAST.right.accept(this))
+        return when {
+            leftValue is Number && rightValue is Number -> {
+                NumberAST(rightValue / rightValue)
+            }
+
+            else -> {
+                throw Exception("Cannot sum $rightValue and $rightValue")
+            }
+        }
+    }
+    override fun visit(mulAST: MulAST): AST {
+        val leftValue = this.getValue(mulAST.left.accept(this))
+        val rightValue = this.getValue(mulAST.right.accept(this))
+        return when {
+            leftValue is Number && rightValue is Number -> {
+                NumberAST(rightValue * rightValue)
+            }
+            else -> {
+                throw Exception("Cannot sum $rightValue and $rightValue")
+            }
+        }
     }
 
     override fun visit(stringAST: StringAST): AST = stringAST
@@ -109,17 +109,13 @@ class InterpreterImpl : Interpreter, ASTVisitor {
 
     override fun visit(numberAST: NumberAST): AST = numberAST
 
-    override fun visit(mulAST: MulAST): AST {
-        val leftValue = getValue(mulAST.left.accept(this))
-        val rightValue = getValue(mulAST.right.accept(this))
-            return when {
-               leftValue is Number && rightValue is Number -> {
-                    NumberAST(rightValue * rightValue )
-                }
-                else -> {
-                    throw Exception("Cannot sum $rightValue and $rightValue")
-                }
-            }
+    private fun getValue(ast: AST): Any? {
+        if (ast is LiteralAST<*>) {
+            return ast.value
+        } else if (ast is VariableAST) {
+            return memory.get(ast.name)
+        }
+        return null
     }
 }
 
@@ -127,3 +123,13 @@ private operator fun Number.minus(number: Number): Number = this.toDouble() - nu
 private operator fun Number.div(number: Number): Number = this.toDouble() / number.toDouble()
 private operator fun Number.plus(number: Number): Number = this.toDouble() + number.toDouble()
 private operator fun Number.times(number: Number): Number = this.toDouble() * number.toDouble()
+
+/**
+ * Interpreter Interface
+ */
+sealed interface Interpreter {
+    /**
+     * Interpret the AST
+     */
+    fun interpret(ast: AST)
+}

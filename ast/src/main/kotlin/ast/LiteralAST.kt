@@ -1,6 +1,4 @@
-package AST
-
-import lexer.Token
+package ast
 
 /**
  * Literal AST node.

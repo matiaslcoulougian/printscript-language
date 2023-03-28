@@ -1,6 +1,4 @@
-package AST
-
-import interpreter.ASTVisitor
+package ast
 
 /**
  * StringAST is a class that represents a string in the AST.

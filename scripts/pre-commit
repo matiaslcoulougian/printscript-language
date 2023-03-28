@@ -2,17 +2,10 @@
 
 echo "*****Running pre-commit******"
 
-./gradlew copyPreCommitHook
-
-git stash -q --keep-index
-
-
 ./gradlew ktlintFormat
 ./gradlew test
 
 status=$?
-
-git stash pop -q
 
 echo "*****Done with pre-commit******"
 

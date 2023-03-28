@@ -1,6 +1,4 @@
-package AST
-
-import interpreter.ASTVisitor
+package ast
 
 /**
  * Assignation AST node.

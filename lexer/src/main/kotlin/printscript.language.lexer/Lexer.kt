@@ -1,23 +1,7 @@
-package lexer
+package printscript.language.lexer
 
-enum class TokenType {
-    IDENTIFIER,
-    DESIGNATOR,
-    STRING_LITERAL,
-    NUMBER_LITERAL,
-    NUMBER_TYPE,
-    STRING_TYPE,
-    PRINTLN,
-    SUM,
-    DIVISION,
-    SUBTRACTION,
-    PRODUCT,
-    EQUALS,
-    OPEN_PARENTHESIS,
-    CLOSE_PARENTHESIS,
-    EOL, // end of line
-    EOF // end of file
-}
+import printscript.language.token.Token
+import printscript.language.token.TokenType
 
 class Lexer {
     private var currentPos = 0
@@ -49,7 +33,7 @@ class Lexer {
         currentPos++
 
         // Check for operation token or equals
-        when(token) {
+        when (token) {
             '+' -> return Token(TokenType.SUM)
             '-' -> return Token(TokenType.SUBTRACTION)
             '*' -> return Token(TokenType.PRODUCT)
@@ -101,9 +85,11 @@ class Lexer {
     }
 
     private fun checkIgnoreChars(input: String) =
-        currentPos < input.length
-                && (input[currentPos].isWhitespace()
-                || input[currentPos] == ':')
+        currentPos < input.length &&
+            (
+                input[currentPos].isWhitespace() ||
+                    input[currentPos] == ':'
+                )
 
     fun getAllTokens(input: String): List<Token> {
         val tokens = mutableListOf<Token>()

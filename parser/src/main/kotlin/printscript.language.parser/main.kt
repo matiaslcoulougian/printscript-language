@@ -1,4 +1,3 @@
 package printscript.language.parser
 
-class main {
-}
+class main
