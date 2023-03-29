@@ -7,6 +7,6 @@ package ast
  * @constructor Creates a new division operation.
  *
  */
-data class DivAST(val left: AST, val right: AST) : AST {
+data class DivAST(val right: AST, val left: AST) : AST {
     override fun accept(visitor: ASTVisitor): AST = visitor.visit(this)
 }
