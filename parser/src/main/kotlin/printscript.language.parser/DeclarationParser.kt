@@ -6,7 +6,7 @@ import ast.DeclarationAST
 import printscript.language.token.Token
 import printscript.language.token.TokenType
 
-class DeclarationParser () : LineParser {
+class DeclarationParser() : LineParser {
 
 //    Valid declarations
 //    -> let a : String
@@ -38,8 +38,11 @@ class DeclarationParser () : LineParser {
     private fun checkExceptions(tokens: List<Token>, parsers: List<LineParser>) {
         if (tokens[0].type != TokenType.DESIGNATOR) throw Exception("invalid declaration")
         if (tokens[1].type != TokenType.IDENTIFIER) throw Exception("Not a variable name")
-        if (tokens[2].type != TokenType.STRING_TYPE
-            && tokens[2].type != TokenType.NUMBER_TYPE) throw Exception("Invalid type")
+        if (tokens[2].type != TokenType.STRING_TYPE &&
+            tokens[2].type != TokenType.NUMBER_TYPE
+        ) {
+            throw Exception("Invalid type")
+        }
         if (tokens.size > 3 && tokens[3].type == TokenType.EQUALS) {
             val isExpressionValid = parsers.any { it.isValidDeclaration(tokens.subList(4, tokens.size)) }
             if (!isExpressionValid) throw Exception("Invalid assignation value")

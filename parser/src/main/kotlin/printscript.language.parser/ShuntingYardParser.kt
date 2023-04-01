@@ -50,10 +50,11 @@ class ShuntingYardParser : LineParser {
         val parenthesisStack = Stack<Token>()
         val lastToken = Stack<Token>()
         for (token in tokens) {
-            when(token.type) {
+            when (token.type) {
                 TokenType.NUMBER_LITERAL,
                 TokenType.STRING_LITERAL,
-                TokenType.IDENTIFIER -> {
+                TokenType.IDENTIFIER,
+                -> {
                     if (lastToken.size > 0 && isOperand(lastToken.pop())) {
                         throw Exception("Missing operator")
                     }
@@ -62,7 +63,8 @@ class ShuntingYardParser : LineParser {
                 TokenType.SUM,
                 TokenType.SUBTRACTION,
                 TokenType.PRODUCT,
-                TokenType.DIVISION -> {
+                TokenType.DIVISION,
+                -> {
                     if (lastToken.size == 0 || isOperator(lastToken.pop())) {
                         throw Exception("Cant concatenate operators")
                     }
@@ -77,21 +79,23 @@ class ShuntingYardParser : LineParser {
     }
 
     private fun isOperand(token: Token): Boolean {
-        return when(token.type) {
+        return when (token.type) {
             TokenType.NUMBER_LITERAL,
             TokenType.STRING_LITERAL,
-            TokenType.IDENTIFIER -> true
-            else -> {false}
+            TokenType.IDENTIFIER,
+            -> true
+            else -> { false }
         }
     }
 
     private fun isOperator(token: Token): Boolean {
-        return when(token.type) {
+        return when (token.type) {
             TokenType.SUM,
             TokenType.SUBTRACTION,
             TokenType.PRODUCT,
-            TokenType.DIVISION -> true
-            else -> {false}
+            TokenType.DIVISION,
+            -> true
+            else -> { false }
         }
     }
     private fun getOperatorPrecedence(operatorToken: Token): Int {

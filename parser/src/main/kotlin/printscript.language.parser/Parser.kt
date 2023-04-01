@@ -5,7 +5,7 @@ import printscript.language.token.Token
 import printscript.language.token.TokenType
 import kotlin.Exception
 
-class Parser (val lineParsers: List<LineParser>) {
+class Parser(val lineParsers: List<LineParser>) {
     fun isValid(tokens: List<Token>): Boolean {
         val lines = getLines(tokens)
         for (line in lines) {
@@ -37,7 +37,7 @@ class Parser (val lineParsers: List<LineParser>) {
         }
     }
 
-    //Gets all tokens and separates them into lines, removing the semicolons and EOF token
+    // Gets all tokens and separates them into lines, removing the semicolons and EOF token
     private fun getLines(tokens: List<Token>): List<List<Token>> {
         val linesList = ArrayList<ArrayList<Token>>()
         val remainingTokens = tokens.toMutableList()
