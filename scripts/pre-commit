@@ -5,6 +5,10 @@ echo "*****Running pre-commit******"
 ./gradlew ktlintFormat
 ./gradlew test
 
+added_files=$(git diff --name-only --cached --diff-filter=d)
+
+git add "${added_files}"
+
 status=$?
 
 echo "*****Done with pre-commit******"
