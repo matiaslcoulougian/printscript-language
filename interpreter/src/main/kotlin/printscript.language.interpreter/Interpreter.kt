@@ -133,6 +133,3 @@ sealed interface Interpreter {
      */
     fun interpret(ast: AST)
 }
-
-
-
