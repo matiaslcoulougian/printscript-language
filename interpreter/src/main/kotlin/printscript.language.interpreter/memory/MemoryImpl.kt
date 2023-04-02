@@ -21,6 +21,7 @@ data class MemoryImpl(val variables: MutableMap<String, Any>) : Memory {
      * Gets a value from the memory
      */
     override fun get(key: String): Any? = variables[key]
+
     /**
      * Gets the type of variable
      */
@@ -30,7 +31,6 @@ data class MemoryImpl(val variables: MutableMap<String, Any>) : Memory {
             is Number -> TokenType.NUMBER_TYPE
             is String -> TokenType.STRING_TYPE
             else -> throw Exception("Type not found for $name")
-
         }
     }
 }

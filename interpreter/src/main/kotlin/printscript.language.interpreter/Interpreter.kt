@@ -32,7 +32,7 @@ class InterpreterImpl : Interpreter, ASTVisitor {
     /**
      * Gets the memory of the interpreter.
      */
-    override fun getMemory(): Memory  = memory
+    override fun getMemory(): Memory = memory
 
     override fun visit(assignationAST: AssignationAST): AST {
         val declaration = assignationAST.declaration.accept(this)
@@ -40,13 +40,17 @@ class InterpreterImpl : Interpreter, ASTVisitor {
         if ((declaration is DeclarationAST || declaration is VariableAST)) {
             declaration as DeclarationAST
             if (expression is LiteralAST<*>) {
-                if (declaration.type === expression.type)
+                if (declaration.type === expression.type) {
                     memory = memory.put(declaration.name, expression.value) as MemoryImpl
-                else throw Exception("Cannot assign ${expression.type} to ${declaration.type}")
+                } else {
+                    throw Exception("Cannot assign ${expression.type} to ${declaration.type}")
+                }
             } else if (expression is VariableAST) {
-                if (declaration.type === memory.getType(expression.name))
+                if (declaration.type === memory.getType(expression.name)) {
                     memory = memory.put(declaration.name, memory.get(expression.name)) as MemoryImpl
-                        else throw Exception("Cannot assign ${memory.getType(expression.name)} to ${declaration.type}, types dont match")
+                } else {
+                    throw Exception("Cannot assign ${memory.getType(expression.name)} to ${declaration.type}, types dont match")
+                }
             }
         }
         return expression
@@ -88,7 +92,7 @@ class InterpreterImpl : Interpreter, ASTVisitor {
             }
 
             else -> {
-                    throw Exception("Cannot sum $rightValue and $leftValue")
+                throw Exception("Cannot sum $rightValue and $leftValue")
             }
         }
     }
@@ -146,5 +150,5 @@ sealed interface Interpreter {
      */
     fun interpret(ast: AST)
     fun interpret(astArray: Array<AST>)
-    fun getMemory():Memory
+    fun getMemory(): Memory
 }

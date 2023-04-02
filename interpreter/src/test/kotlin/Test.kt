@@ -19,7 +19,7 @@ class Test {
             ),
             SumAST(
                 NumberAST(6.0),
-                NumberAST(1.0)
+                NumberAST(1.0),
             ),
         )
         interpreter.interpret(tree)
@@ -36,7 +36,7 @@ class Test {
             ),
             MulAST(
                 NumberAST(6.0),
-                NumberAST(3.0)
+                NumberAST(3.0),
             ),
         )
         interpreter.interpret(tree)
@@ -53,7 +53,7 @@ class Test {
             ),
             SubAST(
                 NumberAST(6.0),
-                NumberAST(2.0)
+                NumberAST(2.0),
             ),
         )
         interpreter.interpret(tree)
@@ -70,7 +70,7 @@ class Test {
             ),
             DivAST(
                 NumberAST(6.0),
-                NumberAST(3.0)
+                NumberAST(3.0),
             ),
         )
         interpreter.interpret(tree)
@@ -89,14 +89,15 @@ class Test {
                     ),
                     DivAST(
                         NumberAST(6.0),
-                        NumberAST(3.0)
+                        NumberAST(3.0),
                     ),
-                )
+                ),
             )
         interpreter.interpret(tree)
         assert(interpreter.getMemory().get("someNumber") == 2.0)
     }
-  @Test
+
+    @Test
     fun testInvalidTypeAssignationException() {
         // let someNumber: Number = 3*2+1;
         val tree = AssignationAST(
@@ -104,12 +105,13 @@ class Test {
                 "someNumber",
                 TokenType.NUMBER_TYPE,
             ),
-            StringAST("1")
+            StringAST("1"),
         )
-      assertThrows<Exception> {
-          interpreter.interpret(tree)
-      }
+        assertThrows<Exception> {
+            interpreter.interpret(tree)
+        }
     }
+
     @Test
     fun testInvalidTypeSumException() {
         // let someNumber: Number = 3*2+1;
@@ -120,12 +122,11 @@ class Test {
             ),
             SumAST(
                 NumberAST(6.0),
-                StringAST("1")
+                StringAST("1"),
             ),
         )
         assertThrows<Exception> {
             interpreter.interpret(tree)
         }
     }
-
 }
