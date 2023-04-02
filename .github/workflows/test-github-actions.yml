@@ -21,6 +21,6 @@ jobs:
       - name: Grant execute permission to gradlew
         run: chmod +x gradlew
       - name: Run ktlintFormat
-        run: ./gradlew ktlintFormat --console=plain
+        run: ./gradlew ktlintCheck --console=plain
       - name: Run tests
         run: ./gradlew test --console=plain
