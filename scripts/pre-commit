@@ -7,7 +7,7 @@ echo "*****Running pre-commit******"
 
 added_files=$(git diff --name-only --cached --diff-filter=d)
 
-git add "${added_files}"
+git add ${added_files}
 
 status=$?
 
