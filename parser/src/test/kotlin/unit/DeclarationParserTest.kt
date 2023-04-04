@@ -24,7 +24,7 @@ class DeclarationParserTest {
             ),
             Token(TokenType.STRING_LITERAL, "This is a test text"),
             Token(TokenType.EOL),
-            Token(TokenType.EOF)
+            Token(TokenType.EOF),
         )
 
         val actualResult = parser.parse(line)
@@ -50,7 +50,7 @@ class DeclarationParserTest {
             Token(TokenType.SUM),
             Token(TokenType.NUMBER_LITERAL, "5"),
             Token(TokenType.EOL),
-            Token(TokenType.EOF)
+            Token(TokenType.EOF),
         )
 
         val actualResult = parser.parse(line)
@@ -70,7 +70,7 @@ class DeclarationParserTest {
             ),
             Token(TokenType.NUMBER_TYPE),
             Token(TokenType.EOL),
-            Token(TokenType.EOF)
+            Token(TokenType.EOF),
         )
 
         val actualResult = parser.parse(line)

@@ -6,11 +6,13 @@ import printscript.language.token.TokenType
 import kotlin.Exception
 
 fun CompleteParser(): Parser {
-    return Parser(listOf(
-        ShuntingYardParser(),
-        DeclarationParser(),
-        PrintParser(),
-    ))
+    return Parser(
+        listOf(
+            ShuntingYardParser(),
+            DeclarationParser(),
+            PrintParser(),
+        ),
+    )
 }
 
 class Parser(val lineParsers: List<LineParser>) {
@@ -52,7 +54,7 @@ class Parser(val lineParsers: List<LineParser>) {
         while (remainingTokens[0] != Token(TokenType.EOF)) {
             val indexEOL = remainingTokens.indexOf(Token(TokenType.EOL))
             val lineTokens = remainingTokens.subList(0, indexEOL)
-            remainingTokens = remainingTokens.slice(IntRange(indexEOL+1, remainingTokens.size-1))
+            remainingTokens = remainingTokens.slice(IntRange(indexEOL + 1, remainingTokens.size - 1))
             linesList = linesList.plus(listOf(lineTokens))
         }
         return linesList

@@ -23,7 +23,7 @@ class ParserTest {
             Token(TokenType.SUM),
             Token(TokenType.NUMBER_LITERAL, "5"),
             Token(TokenType.EOL),
-            Token(TokenType.EOF)
+            Token(TokenType.EOF),
         )
 
         val parser = CompleteParser()
@@ -50,7 +50,7 @@ class ParserTest {
             Token(TokenType.SUM),
             Token(TokenType.IDENTIFIER, "b"),
             Token(TokenType.EOL),
-            Token(TokenType.EOF)
+            Token(TokenType.EOF),
         )
 
         val parser = CompleteParser()
