@@ -1,11 +1,11 @@
-import ast.*
+import ast.* // ktlint-disable no-wildcard-imports
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import printscript.language.interpreter.Interpreter
 import printscript.language.interpreter.InterpreterImpl
 import printscript.language.token.TokenType
 
-class Test {
+class Interpreter {
 
     val interpreter: Interpreter = InterpreterImpl()
 
