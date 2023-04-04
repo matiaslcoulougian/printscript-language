@@ -10,7 +10,7 @@ import kotlin.test.assertEquals
 class LexerTest {
     var lexer = Lexer()
     fun testLexer(expectedTokens: List<Token>, inputString: String) {
-        val resultTokens: List<Token> = lexer.getAllTokens(inputString)
+        val resultTokens: List<Token> = lexer.getTokens(inputString)
         assertEquals(expectedTokens, resultTokens)
     }
 
