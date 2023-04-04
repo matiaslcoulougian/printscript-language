@@ -91,7 +91,7 @@ class Lexer {
                     input[currentPos] == ':'
                 )
 
-    fun getAllTokens(input: String): List<Token> {
+    fun getTokens(input: String): List<Token> {
         val tokens = mutableListOf<Token>()
         while (true) {
             val token = getNextToken(input)

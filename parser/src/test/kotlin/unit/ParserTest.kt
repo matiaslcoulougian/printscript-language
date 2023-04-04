@@ -1,10 +1,7 @@
 package unit
-import ast.MulAST
-import ast.NumberAST
-import ast.SumAST
-import ast.VariableAST
+import ast.*
 import org.junit.jupiter.api.Test
-import printscript.language.parser.ShuntingYardParser
+import printscript.language.parser.CompleteParser
 import printscript.language.token.Token
 import printscript.language.token.TokenType
 import kotlin.test.assertEquals
@@ -25,13 +22,15 @@ class ParserTest {
             Token(TokenType.NUMBER_LITERAL, "2"),
             Token(TokenType.SUM),
             Token(TokenType.NUMBER_LITERAL, "5"),
+            Token(TokenType.EOL),
+            Token(TokenType.EOF),
         )
 
-        val parser = ShuntingYardParser()
+        val parser = CompleteParser()
         val result = parser.parse(infixExpression)
 
         // val expectedAST = SumAST(MulAST(MulAST(SumAST(NumberAST(5), NumberAST(3)), NumberAST(2)), NumberAST(2)), NumberAST(5))
-        val expectedAST = SumAST(NumberAST(5.0), MulAST(NumberAST(2.0), MulAST(NumberAST(2.0), SumAST(NumberAST(3.0), NumberAST(5.0)))))
+        val expectedAST = listOf<AST>(SumAST(NumberAST(5.0), MulAST(NumberAST(2.0), MulAST(NumberAST(2.0), SumAST(NumberAST(3.0), NumberAST(5.0))))))
         assertEquals(result, expectedAST)
     }
 
@@ -50,13 +49,15 @@ class ParserTest {
             Token(TokenType.NUMBER_LITERAL, "2"),
             Token(TokenType.SUM),
             Token(TokenType.IDENTIFIER, "b"),
+            Token(TokenType.EOL),
+            Token(TokenType.EOF),
         )
 
-        val parser = ShuntingYardParser()
+        val parser = CompleteParser()
         val result = parser.parse(infixExpression)
 
         // val expectedAST = SumAST(MulAST(MulAST(SumAST(NumberAST(5), NumberAST(3)), NumberAST(2)), NumberAST(2)), NumberAST(5))
-        val expectedAST = SumAST(VariableAST("b"), MulAST(NumberAST(2.0), MulAST(NumberAST(2.0), SumAST(VariableAST("a"), NumberAST(5.0)))))
+        val expectedAST = listOf<AST>(SumAST(VariableAST("b"), MulAST(NumberAST(2.0), MulAST(NumberAST(2.0), SumAST(VariableAST("a"), NumberAST(5.0))))))
         assertEquals(result, expectedAST)
     }
 }

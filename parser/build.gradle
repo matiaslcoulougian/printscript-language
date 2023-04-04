@@ -10,3 +10,5 @@ dependencies {
     implementation project(':ast')
     implementation project(':token')
 }
+
+version "0.0.1"
