@@ -8,8 +8,11 @@ plugins {
 
 dependencies {
     implementation project(':lexer')
+    implementation project(':ast')
+    implementation project(':token')
 }
 
 dependencies {
-    implementation project(':ast')
 }
+
+version "0.0.1"

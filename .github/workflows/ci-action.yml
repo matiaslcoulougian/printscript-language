@@ -20,7 +20,7 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle-
       - name: Grant execute permission to gradlew
         run: chmod +x gradlew
-      - name: Run ktlintFormat
-        run: ./gradlew ktlintFormat --console=plain
+      - name: Run ktlintCheck
+        run: ./gradlew ktlintCheck --console=plain
       - name: Run tests
         run: ./gradlew test --console=plain

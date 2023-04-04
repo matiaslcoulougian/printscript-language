@@ -1,6 +1,7 @@
 package printscript.language.interpreter
 
 import ast.* // ktlint-disable no-wildcard-imports
+import printscript.language.interpreter.memory.Memory
 import printscript.language.interpreter.memory.MemoryImpl
 
 /**
@@ -15,7 +16,7 @@ import printscript.language.interpreter.memory.MemoryImpl
  *
  */
 class InterpreterImpl : Interpreter, ASTVisitor {
-    private val memory = MemoryImpl(mutableMapOf())
+    private var memory = MemoryImpl(mutableMapOf())
 
     /**
      * Interprets the AST.
@@ -24,18 +25,35 @@ class InterpreterImpl : Interpreter, ASTVisitor {
         ast.accept(this)
     }
 
+    override fun interpret(astArray: Array<AST>) {
+        astArray.forEach { it.accept(this) }
+    }
+
+    /**
+     * Gets the memory of the interpreter.
+     */
+    override fun getMemory(): Memory = memory
+
     override fun visit(assignationAST: AssignationAST): AST {
-        var declaration = assignationAST.declaration.accept(this)
+        val declaration = assignationAST.declaration.accept(this)
         val expression = assignationAST.expression.accept(this)
         if ((declaration is DeclarationAST || declaration is VariableAST)) {
             declaration as DeclarationAST
             if (expression is LiteralAST<*>) {
-                memory.put(declaration.name, expression.value)
+                if (declaration.type === expression.type) {
+                    memory = memory.put(declaration.name, expression.value) as MemoryImpl
+                } else {
+                    throw Exception("Cannot assign ${expression.type} to ${declaration.type}")
+                }
             } else if (expression is VariableAST) {
-                memory.put(declaration.name, memory.get(expression.name))
+                if (declaration.type === memory.getType(expression.name)) {
+                    memory = memory.put(declaration.name, memory.get(expression.name)) as MemoryImpl
+                } else {
+                    throw Exception("Cannot assign ${memory.getType(expression.name)} to ${declaration.type}, types dont match")
+                }
             }
         }
-        return assignationAST
+        return expression
     }
 
     override fun visit(declarationAST: DeclarationAST): AST = declarationAST
@@ -52,15 +70,15 @@ class InterpreterImpl : Interpreter, ASTVisitor {
         val rightValue = getValue(sumAST.right.accept(this))
         return when {
             leftValue is Number && rightValue is Number -> {
-                NumberAST(rightValue + rightValue)
+                NumberAST(rightValue + leftValue)
             }
 
             leftValue is String && rightValue is String -> {
-                StringAST(rightValue + rightValue)
+                StringAST(rightValue + leftValue)
             }
 
             else -> {
-                throw Exception("Cannot sum $rightValue and $rightValue")
+                throw Exception("Cannot sum $rightValue and $leftValue")
             }
         }
     }
@@ -70,11 +88,11 @@ class InterpreterImpl : Interpreter, ASTVisitor {
         val rightValue = getValue(subAST.right.accept(this))
         return when {
             leftValue is Number && rightValue is Number -> {
-                NumberAST(rightValue - rightValue)
+                NumberAST(rightValue - leftValue)
             }
 
             else -> {
-                throw Exception("Cannot sum $rightValue and $rightValue")
+                throw Exception("Cannot sum $rightValue and $leftValue")
             }
         }
     }
@@ -83,11 +101,11 @@ class InterpreterImpl : Interpreter, ASTVisitor {
         val rightValue = this.getValue(divAST.right.accept(this))
         return when {
             leftValue is Number && rightValue is Number -> {
-                NumberAST(rightValue / rightValue)
+                NumberAST(rightValue / leftValue)
             }
 
             else -> {
-                throw Exception("Cannot sum $rightValue and $rightValue")
+                throw Exception("Cannot sum $rightValue and $leftValue")
             }
         }
     }
@@ -96,17 +114,16 @@ class InterpreterImpl : Interpreter, ASTVisitor {
         val rightValue = this.getValue(mulAST.right.accept(this))
         return when {
             leftValue is Number && rightValue is Number -> {
-                NumberAST(rightValue * rightValue)
+                NumberAST(rightValue * leftValue)
             }
             else -> {
-                throw Exception("Cannot sum $rightValue and $rightValue")
+                throw Exception("Cannot sum $rightValue and $leftValue")
             }
         }
     }
 
     override fun visit(stringAST: StringAST): AST = stringAST
     override fun visit(variableAST: VariableAST): AST = variableAST
-
     override fun visit(numberAST: NumberAST): AST = numberAST
 
     private fun getValue(ast: AST): Any? {
@@ -132,4 +149,6 @@ sealed interface Interpreter {
      * Interpret the AST
      */
     fun interpret(ast: AST)
+    fun interpret(astArray: Array<AST>)
+    fun getMemory(): Memory
 }

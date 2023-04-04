@@ -1,5 +1,7 @@
 package ast
 
+import printscript.language.token.TokenType
+
 /**
  * Literal AST node.
  * @param T Type of the literal
@@ -7,4 +9,5 @@ package ast
  */
 interface LiteralAST<T> {
     val value: T
+    val type: TokenType
 }

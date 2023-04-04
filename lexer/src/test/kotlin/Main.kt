@@ -2,7 +2,7 @@ import printscript.language.lexer.Lexer
 
 fun main() {
     val lexer = Lexer()
-    val tokens = lexer.getAllTokens("let result: number = (1 + 5) - 6;")
+    val tokens = lexer.getTokens("let result: number = (1 + 5) - 6;")
     for (token in tokens) {
         println(token.type.name + " " + token.value)
     }
