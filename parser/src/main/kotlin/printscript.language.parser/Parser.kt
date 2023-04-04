@@ -5,6 +5,14 @@ import printscript.language.token.Token
 import printscript.language.token.TokenType
 import kotlin.Exception
 
+fun CompleteParser(): Parser {
+    return Parser(listOf(
+        ShuntingYardParser(),
+        DeclarationParser(),
+        PrintParser(),
+    ))
+}
+
 class Parser(val lineParsers: List<LineParser>) {
     fun isValid(tokens: List<Token>): Boolean {
         val lines = getLines(tokens)
@@ -28,7 +36,7 @@ class Parser(val lineParsers: List<LineParser>) {
         }
         return astList
     }
-    fun parseLine(tokens: List<Token>): AST {
+    private fun parseLine(tokens: List<Token>): AST {
         val validParser = lineParsers.find { it -> it.isValidDeclaration(tokens, lineParsers) }
         if (validParser != null) {
             return validParser.parse(tokens, lineParsers)
@@ -39,13 +47,13 @@ class Parser(val lineParsers: List<LineParser>) {
 
     // Gets all tokens and separates them into lines, removing the semicolons and EOF token
     private fun getLines(tokens: List<Token>): List<List<Token>> {
-        val linesList = ArrayList<ArrayList<Token>>()
-        val remainingTokens = tokens.toMutableList()
+        var linesList = emptyList<List<Token>>()
+        var remainingTokens = tokens
         while (remainingTokens[0] != Token(TokenType.EOF)) {
             val indexEOL = remainingTokens.indexOf(Token(TokenType.EOL))
             val lineTokens = remainingTokens.subList(0, indexEOL)
-            remainingTokens.subList(indexEOL + 1, remainingTokens.size).clear()
-            linesList.add(lineTokens as ArrayList<Token>)
+            remainingTokens = remainingTokens.slice(IntRange(indexEOL+1, remainingTokens.size-1))
+            linesList = linesList.plus(listOf(lineTokens))
         }
         return linesList
     }
