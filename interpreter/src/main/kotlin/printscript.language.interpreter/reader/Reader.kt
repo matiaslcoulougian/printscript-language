@@ -1,6 +1,6 @@
 package printscript.language.interpreter.reader
 
-import java.util.*
+import java.util.* // ktlint-disable no-wildcard-imports
 
 /**
  * Reads a line from the console
