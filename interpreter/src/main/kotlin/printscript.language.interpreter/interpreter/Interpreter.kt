@@ -1,6 +1,7 @@
-package printscript.language.interpreter
+package printscript.language.interpreter.interpreter
 
 import ast.* // ktlint-disable no-wildcard-imports
+import printscript.language.interpreter.contextProvider.ConsoleContext
 import printscript.language.interpreter.memory.Memory
 import printscript.language.interpreter.memory.MemoryImpl
 
@@ -12,11 +13,12 @@ import printscript.language.interpreter.memory.MemoryImpl
  *                  The value can be a number or a string.
  *                  The value can be null.
  * @constructor Creates a new interpreter.
- * @property variables The variables of the program.
  *
  */
-class InterpreterImpl : Interpreter, ASTVisitor {
+
+class InterpreterImpl : Interpreter {
     private var memory = MemoryImpl(mutableMapOf())
+    private val contextProvider = ConsoleContext()
 
     /**
      * Interprets the AST.
@@ -25,6 +27,9 @@ class InterpreterImpl : Interpreter, ASTVisitor {
         ast.accept(this)
     }
 
+    /**
+     * Interprets an array of AST.
+     */
     override fun interpret(astArray: Array<AST>) {
         astArray.forEach { it.accept(this) }
     }
@@ -60,8 +65,7 @@ class InterpreterImpl : Interpreter, ASTVisitor {
 
     override fun visit(printAST: PrintAST): AST {
         val toPrint = getValue(printAST.value.accept(this))
-        println(toPrint)
-
+        contextProvider.emit(toPrint.toString())
         return printAST
     }
 
@@ -76,7 +80,12 @@ class InterpreterImpl : Interpreter, ASTVisitor {
             leftValue is String && rightValue is String -> {
                 StringAST(rightValue + leftValue)
             }
-
+            leftValue is String && rightValue is Number -> {
+                StringAST(rightValue + leftValue)
+            }
+            leftValue is Number && rightValue is String -> {
+                StringAST(rightValue + leftValue)
+            }
             else -> {
                 throw Exception("Cannot sum $rightValue and $leftValue")
             }
@@ -123,6 +132,10 @@ class InterpreterImpl : Interpreter, ASTVisitor {
     }
 
     override fun visit(stringAST: StringAST): AST = stringAST
+
+    /**
+     * Visits a variable
+     */
     override fun visit(variableAST: VariableAST): AST = variableAST
     override fun visit(numberAST: NumberAST): AST = numberAST
 
@@ -139,16 +152,30 @@ class InterpreterImpl : Interpreter, ASTVisitor {
 private operator fun Number.minus(number: Number): Number = this.toDouble() - number.toDouble()
 private operator fun Number.div(number: Number): Number = this.toDouble() / number.toDouble()
 private operator fun Number.plus(number: Number): Number = this.toDouble() + number.toDouble()
+private operator fun Number.plus(string: String): String = "$this" + string
+private operator fun String.plus(string: String): String = this + string
+private operator fun String.plus(number: Number): String = this + "$number"
+
 private operator fun Number.times(number: Number): Number = this.toDouble() * number.toDouble()
 
 /**
  * Interpreter Interface
  */
-sealed interface Interpreter {
+sealed interface Interpreter : ASTVisitor {
     /**
      * Interpret the AST
+     * @param ast The AST to interpret.
+     *
      */
     fun interpret(ast: AST)
+
+    /**
+     * Interpret an array of AST
+     */
     fun interpret(astArray: Array<AST>)
+
+    /**
+     * Gets the memory of the interpreter.
+     */
     fun getMemory(): Memory
 }
