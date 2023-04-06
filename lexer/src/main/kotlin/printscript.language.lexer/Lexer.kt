@@ -3,49 +3,58 @@ package printscript.language.lexer
 import printscript.language.token.Token
 import printscript.language.token.TokenType
 
+private val tokenMap = mapOf(
+    "+" to TokenType.SUM,
+    "-" to TokenType.SUBTRACTION,
+    "*" to TokenType.PRODUCT,
+    "/" to TokenType.DIVISION,
+    "=" to TokenType.EQUALS,
+    "(" to TokenType.OPEN_PARENTHESIS,
+    ")" to TokenType.CLOSE_PARENTHESIS,
+    ";" to TokenType.EOL,
+    "let" to TokenType.VARIABLE,
+    "string" to TokenType.STRING_TYPE,
+    "number" to TokenType.NUMBER_TYPE,
+    "boolean" to TokenType.BOOLEAN_TYPE,
+    "true" to TokenType.TRUE,
+    "false" to TokenType.FALSE,
+    "println" to TokenType.PRINTLN,
+    "const" to TokenType.CONSTANT,
+    "if" to TokenType.IF,
+    "else" to TokenType.ELSE,
+    "{" to TokenType.OPEN_BLOCK,
+    "}" to TokenType.CLOSE_BLOCK,
+    "readInput" to TokenType.READ_INPUT,
+)
+
 class Lexer {
     private var currentPos = 0
+    private var tokenMatcher = TokenMatcher(tokenMap)
+
     private fun getNextToken(input: String): Token {
+        // If we have reached the end of file, return EOF token
+        if (currentPos >= input.length) return Token(TokenType.EOF)
+
         // Skip whitespace characters
         while (checkIgnoreChars(input)) {
             currentPos++
         }
 
-        // If we have reached the end of file, return EOF token
-        if (currentPos >= input.length) return Token(TokenType.EOF, "")
-
-        // Check for identifier or keyword token
-        if (input[currentPos].isLetter()) {
-            return checkIdentifierOrKeyword(input)
-        }
-
         // Check for string literal token with " or '
-        if (input[currentPos] == '"' || input[currentPos] == '\'') {
-            return checkStringLiteral(input)
-        }
+        if (input[currentPos] == '"' || input[currentPos] == '\'') return checkStringLiteral(input)
+
 
         // Check for number literal token
-        if (input[currentPos].isDigit()) {
-            return checkNumberLiteral(input)
-        }
+        if (input[currentPos].isDigit()) return checkNumberLiteral(input)
 
+
+        // Check for identifier or keyword token
+        if (input[currentPos].isLetter()) return checkIdentifierOrKeyword(input)
+
+        // Check for one character tokens
         val token = input[currentPos]
         currentPos++
-
-        // Check for operation token or equals
-        when (token) {
-            '+' -> return Token(TokenType.SUM)
-            '-' -> return Token(TokenType.SUBTRACTION)
-            '*' -> return Token(TokenType.PRODUCT)
-            '/' -> return Token(TokenType.DIVISION)
-            '=' -> return Token(TokenType.EQUALS)
-            '(' -> return Token(TokenType.OPEN_PARENTHESIS)
-            ')' -> return Token(TokenType.CLOSE_PARENTHESIS)
-            ';' -> return Token(TokenType.EOL)
-        }
-
-        // If we haven't matched any token, raise an exception
-        throw IllegalArgumentException("Invalid character: ${input[currentPos]}")
+        return tokenMatcher.match("$token")
     }
 
     private fun checkNumberLiteral(input: String): Token {
@@ -70,26 +79,15 @@ class Lexer {
     }
 
     private fun checkIdentifierOrKeyword(input: String): Token {
-        var value = ""
+        var tokenValue = ""
         while (currentPos < input.length && (input[currentPos].isLetterOrDigit() || input[currentPos] == '_')) {
-            value += input[currentPos]
+            tokenValue += input[currentPos]
             currentPos++
         }
-        return when (value) {
-            "let" -> Token(TokenType.DESIGNATOR)
-            "string" -> Token(TokenType.STRING_TYPE)
-            "number" -> Token(TokenType.NUMBER_TYPE)
-            "println" -> Token(TokenType.PRINTLN)
-            else -> Token(TokenType.IDENTIFIER, value)
-        }
+        return tokenMatcher.match(tokenValue)
     }
 
-    private fun checkIgnoreChars(input: String) =
-        currentPos < input.length &&
-            (
-                input[currentPos].isWhitespace() ||
-                    input[currentPos] == ':'
-                )
+    private fun checkIgnoreChars(input: String) = currentPos < input.length && (input[currentPos].isWhitespace() || input[currentPos] == ':')
 
     fun getTokens(input: String): List<Token> {
         val tokens = mutableListOf<Token>()

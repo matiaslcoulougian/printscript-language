@@ -4,7 +4,7 @@ import printscript.language.token.Token
 import printscript.language.token.TokenType
 
 fun getLexStringVariableDeclarationResponse(identifier: String, literal: String): List<Token> = listOf(
-    Token(TokenType.DESIGNATOR),
+    Token(TokenType.VARIABLE),
     Token(
         TokenType.IDENTIFIER,
         identifier,
@@ -22,7 +22,7 @@ fun getLexStringVariableDeclarationResponse(identifier: String, literal: String)
 
 fun getLexStringVariableWithDoubleQuoteResponse(identifier: String, literal: String): List<Token> = listOf(
     Token(
-        TokenType.DESIGNATOR,
+        TokenType.VARIABLE,
     ),
     Token(TokenType.IDENTIFIER, identifier),
     Token(TokenType.STRING_TYPE),
@@ -36,7 +36,7 @@ fun getLexStringVariableWithDoubleQuoteResponse(identifier: String, literal: Str
 )
 
 fun getLexNumberVariableDeclarationResponse(identifier: String, literal: String): List<Token> = listOf(
-    Token(TokenType.DESIGNATOR),
+    Token(TokenType.VARIABLE),
     Token(
         TokenType.IDENTIFIER,
         identifier,
@@ -122,4 +122,20 @@ fun geLexOperationsWithParenthesisResponse(firstLiteral: String, secondLiteral: 
         thirdLiteral,
     ),
     Token(TokenType.EOL), Token(TokenType.EOF),
+)
+
+fun getLexConstDeclarationResponse(literal: String, identifier: String): List<Token> = listOf(
+    Token(TokenType.CONSTANT),
+    Token(
+        TokenType.IDENTIFIER,
+        identifier,
+    ),
+    Token(TokenType.STRING_TYPE),
+    Token(TokenType.EQUALS),
+    Token(
+        TokenType.STRING_LITERAL,
+        literal,
+    ),
+    Token(TokenType.EOL),
+    Token(TokenType.EOF),
 )

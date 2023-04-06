@@ -96,9 +96,17 @@ class LexerTest {
         testLexer(expectedTokens, inputString)
     }
 
+    @Test
     fun testOperationWithParenthesis() {
         val expectedTokens = geLexOperationsWithParenthesisResponse("2", "4", "6", TokenType.SUM, TokenType.SUBTRACTION)
         val inputString = "(2 + 4) - 6;"
+        testLexer(expectedTokens, inputString)
+    }
+
+    @Test
+    fun testConstDeclaration() {
+        val expectedTokens = getLexConstDeclarationResponse("Joe", "name")
+        val inputString = "const name: string = 'Joe';"
         testLexer(expectedTokens, inputString)
     }
 }
