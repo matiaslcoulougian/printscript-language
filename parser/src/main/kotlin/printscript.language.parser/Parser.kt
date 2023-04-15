@@ -15,7 +15,7 @@ fun CompleteParser(): Parser {
     )
 }
 
-class Parser(val lineParsers: List<LineParser>) {
+class Parser(private val lineParsers: List<LineParser>) {
     fun isValid(tokens: List<Token>): Boolean {
         val lines = getLines(tokens)
         for (line in lines) {
@@ -38,7 +38,7 @@ class Parser(val lineParsers: List<LineParser>) {
         }
         return astList
     }
-    private fun parseLine(tokens: List<Token>): AST {
+    fun parseLine(tokens: List<Token>): AST {
         val validParser = lineParsers.find { it -> it.isValidDeclaration(tokens, lineParsers) }
         if (validParser != null) {
             return validParser.parse(tokens, lineParsers)

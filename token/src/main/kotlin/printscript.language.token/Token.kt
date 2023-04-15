@@ -25,6 +25,6 @@ enum class TokenType {
     ELSE,
     OPEN_BLOCK,
     CLOSE_BLOCK,
-    READ_INPUT
+    READ_INPUT,
 }
 data class Token(val type: TokenType, val value: String = "")

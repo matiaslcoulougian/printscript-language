@@ -43,10 +43,8 @@ class Lexer {
         // Check for string literal token with " or '
         if (input[currentPos] == '"' || input[currentPos] == '\'') return checkStringLiteral(input)
 
-
         // Check for number literal token
         if (input[currentPos].isDigit()) return checkNumberLiteral(input)
-
 
         // Check for identifier or keyword token
         if (input[currentPos].isLetter()) return checkIdentifierOrKeyword(input)
