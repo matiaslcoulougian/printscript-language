@@ -1,8 +1,8 @@
 package unit
 import ast.AST
 import ast.PrintAST
-import ast.StringAST
 import ast.SumAST
+import ast.literalAST.StringAST
 import printscript.language.parser.CompleteParser
 import printscript.language.token.Token
 import printscript.language.token.TokenType

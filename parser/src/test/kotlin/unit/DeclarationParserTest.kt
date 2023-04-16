@@ -1,6 +1,8 @@
 package unit
 
 import ast.* // ktlint-disable no-wildcard-imports
+import ast.literalAST.NumberAST
+import ast.literalAST.StringAST
 import org.junit.jupiter.api.Test
 import printscript.language.parser.CompleteParser
 import printscript.language.token.Token
@@ -54,7 +56,15 @@ class DeclarationParserTest {
         )
 
         val actualResult = parser.parse(line)
-        val expectedResult = listOf<AST>(AssignationAST(DeclarationAST("example", TokenType.NUMBER_TYPE), SumAST(NumberAST(5.0), NumberAST(3.0))))
+        val expectedResult = listOf<AST>(
+            AssignationAST(
+                DeclarationAST("example", TokenType.NUMBER_TYPE),
+                SumAST(
+                    NumberAST(5.0),
+                    NumberAST(3.0),
+                ),
+            ),
+        )
         assertEquals(expectedResult, actualResult)
     }
 

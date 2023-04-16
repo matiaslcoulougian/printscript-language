@@ -1,4 +1,6 @@
 import ast.* // ktlint-disable no-wildcard-imports
+import ast.literalAST.NumberAST
+import ast.literalAST.StringAST
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import printscript.language.interpreter.interpreter.Interpreter
