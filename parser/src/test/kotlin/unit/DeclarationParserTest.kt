@@ -13,7 +13,7 @@ class DeclarationParserTest {
         val parser = CompleteParser()
 
         val line = listOf(
-            Token(TokenType.DESIGNATOR),
+            Token(TokenType.CONSTANT),
             Token(
                 TokenType.IDENTIFIER,
                 "example",
@@ -28,7 +28,7 @@ class DeclarationParserTest {
         )
 
         val actualResult = parser.parse(line)
-        val expectedResult = listOf<AST>(AssignationAST(DeclarationAST("example", TokenType.STRING_TYPE), StringAST("This is a test text")))
+        val expectedResult = listOf<AST>(AssignationAST(DeclarationAST("example", TokenType.STRING_TYPE, true), StringAST("This is a test text")))
         assertEquals(expectedResult, actualResult)
     }
 
@@ -37,7 +37,7 @@ class DeclarationParserTest {
         val parser = CompleteParser()
 
         val line = listOf(
-            Token(TokenType.DESIGNATOR),
+            Token(TokenType.VARIABLE),
             Token(
                 TokenType.IDENTIFIER,
                 "example",
@@ -54,7 +54,7 @@ class DeclarationParserTest {
         )
 
         val actualResult = parser.parse(line)
-        val expectedResult = listOf<AST>(AssignationAST(DeclarationAST("example", TokenType.NUMBER_TYPE), SumAST(NumberAST(5.0), NumberAST(3.0))))
+        val expectedResult = listOf<AST>(AssignationAST(DeclarationAST("example", TokenType.NUMBER_TYPE, false), SumAST(NumberAST(5.0), NumberAST(3.0))))
         assertEquals(expectedResult, actualResult)
     }
 
@@ -63,7 +63,7 @@ class DeclarationParserTest {
         val parser = CompleteParser()
 
         val line = listOf(
-            Token(TokenType.DESIGNATOR),
+            Token(TokenType.CONSTANT),
             Token(
                 TokenType.IDENTIFIER,
                 "example",
@@ -74,7 +74,7 @@ class DeclarationParserTest {
         )
 
         val actualResult = parser.parse(line)
-        val expectedResult = listOf<AST>(DeclarationAST("example", TokenType.NUMBER_TYPE))
+        val expectedResult = listOf<AST>(DeclarationAST("example", TokenType.NUMBER_TYPE, true))
         assertEquals(expectedResult, actualResult)
     }
 }

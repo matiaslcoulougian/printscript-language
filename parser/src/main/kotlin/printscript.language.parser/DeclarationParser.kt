@@ -24,7 +24,7 @@ class DeclarationParser() : LineParser {
     override fun parse(tokens: List<Token>, parsers: List<LineParser>): AST {
         val variableName = tokens[1].value
         val type = tokens[2].type
-        val declaration = DeclarationAST(variableName, type)
+        val declaration = DeclarationAST(variableName, type, isConstant(tokens[0]))
         if (tokens.size > 3 && tokens[3].type == TokenType.EQUALS) {
             val validParser = parsers.find { it -> it.isValidDeclaration(tokens.subList(4, tokens.size)) }
             if (validParser != null) {
@@ -35,8 +35,12 @@ class DeclarationParser() : LineParser {
         return declaration
     }
 
+    private fun isConstant(token: Token): Boolean {
+        return token.type === TokenType.CONSTANT
+    }
+
     private fun checkExceptions(tokens: List<Token>, parsers: List<LineParser>) {
-        if (tokens[0].type != TokenType.DESIGNATOR) throw Exception("invalid declaration")
+        if (tokens[0].type != TokenType.CONSTANT && tokens[0].type != TokenType.VARIABLE) throw Exception("invalid declaration")
         if (tokens[1].type != TokenType.IDENTIFIER) throw Exception("Not a variable name")
         if (tokens[2].type != TokenType.STRING_TYPE &&
             tokens[2].type != TokenType.NUMBER_TYPE

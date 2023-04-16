@@ -11,6 +11,7 @@ data class DeclarationAST(
      * val value: AST,
      */
     val type: TokenType,
+    val isConstant: Boolean = true,
 ) : AST {
 
     override fun accept(visitor: ASTVisitor): AST = visitor.visit(this)
