@@ -1,13 +1,14 @@
-package ast
+package ast.literalAST
 
-import printscript.language.token.TokenType
+import Type
+import ast.AST
 
 /**
  * Literal AST node.
  * @param T Type of the literal
  * @property value The value of the literal
  */
-interface LiteralAST<T> {
+sealed interface LiteralAST<T> : AST {
     val value: T
-    val type: TokenType
+    val type: Type
 }

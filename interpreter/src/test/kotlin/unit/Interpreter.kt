@@ -1,13 +1,19 @@
+package unit
+
+import Type
 import ast.* // ktlint-disable no-wildcard-imports
+import ast.literalAST.BooleanAST
+import ast.literalAST.NumberAST
+import ast.literalAST.StringAST
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import printscript.language.interpreter.contextProvider.ConsoleContext
 import printscript.language.interpreter.interpreter.Interpreter
 import printscript.language.interpreter.interpreter.InterpreterImpl
-import printscript.language.token.TokenType
 
 class Interpreter {
 
-    val interpreter: Interpreter = InterpreterImpl()
+    private val interpreter: Interpreter = InterpreterImpl(ConsoleContext())
 
     @Test
     fun testSum() {
@@ -15,7 +21,8 @@ class Interpreter {
         val tree = AssignationAST(
             DeclarationAST(
                 "someNumber",
-                TokenType.NUMBER_TYPE,
+                Type.NUMBER,
+                false,
             ),
             SumAST(
                 NumberAST(6.0),
@@ -23,7 +30,7 @@ class Interpreter {
             ),
         )
         interpreter.interpret(tree)
-        assert(interpreter.getMemory().get("someNumber") == 7.0)
+        assert(interpreter.getMemory().get("someNumber").value == 7.0)
     }
 
     @Test
@@ -32,7 +39,8 @@ class Interpreter {
         val tree = AssignationAST(
             DeclarationAST(
                 "someNumber",
-                TokenType.NUMBER_TYPE,
+                Type.NUMBER,
+                false,
             ),
             MulAST(
                 NumberAST(6.0),
@@ -40,7 +48,7 @@ class Interpreter {
             ),
         )
         interpreter.interpret(tree)
-        assert(interpreter.getMemory().get("someNumber") == 18.0)
+        assert(interpreter.getMemory().get("someNumber").value == 18.0)
     }
 
     @Test
@@ -49,7 +57,8 @@ class Interpreter {
         val tree = AssignationAST(
             DeclarationAST(
                 "someNumber",
-                TokenType.NUMBER_TYPE,
+                Type.NUMBER,
+                false,
             ),
             SubAST(
                 NumberAST(6.0),
@@ -57,7 +66,7 @@ class Interpreter {
             ),
         )
         interpreter.interpret(tree)
-        assert(interpreter.getMemory().get("someNumber") == 4.0)
+        assert(interpreter.getMemory().get("someNumber").value == 4.0)
     }
 
     @Test
@@ -66,7 +75,8 @@ class Interpreter {
         val tree = AssignationAST(
             DeclarationAST(
                 "someNumber",
-                TokenType.NUMBER_TYPE,
+                Type.NUMBER,
+                false,
             ),
             DivAST(
                 NumberAST(6.0),
@@ -74,7 +84,7 @@ class Interpreter {
             ),
         )
         interpreter.interpret(tree)
-        assert(interpreter.getMemory().get("someNumber") == 2.0)
+        assert(interpreter.getMemory().get("someNumber").value == 2.0)
     }
 
     @Test
@@ -85,7 +95,8 @@ class Interpreter {
                 AssignationAST(
                     DeclarationAST(
                         "someNumber",
-                        TokenType.NUMBER_TYPE,
+                        Type.NUMBER,
+                        false,
                     ),
                     DivAST(
                         NumberAST(6.0),
@@ -94,7 +105,7 @@ class Interpreter {
                 ),
             )
         interpreter.interpret(tree)
-        assert(interpreter.getMemory().get("someNumber") == 2.0)
+        assert(interpreter.getMemory().get("someNumber").value == 2.0)
     }
 
     @Test
@@ -103,9 +114,10 @@ class Interpreter {
         val tree = AssignationAST(
             DeclarationAST(
                 "someNumber",
-                TokenType.NUMBER_TYPE,
+                Type.NUMBER,
+                false,
             ),
-            StringAST("1"),
+            BooleanAST(false),
         )
         assertThrows<Exception> {
             interpreter.interpret(tree)
@@ -118,7 +130,8 @@ class Interpreter {
         val tree = AssignationAST(
             DeclarationAST(
                 "someNumber",
-                TokenType.NUMBER_TYPE,
+                Type.NUMBER,
+                false,
             ),
             SumAST(
                 NumberAST(6.0),
@@ -128,5 +141,84 @@ class Interpreter {
         assertThrows<Exception> {
             interpreter.interpret(tree)
         }
+    }
+
+    @Test
+    fun testIfElse() {
+        // let someNumber: Number = 3*2+1;
+        val numberTree = AssignationAST(
+            DeclarationAST(
+                "someNumber",
+                Type.NUMBER,
+                false,
+            ),
+            NumberAST(1.0),
+        )
+        val booleanAST = AssignationAST(
+            DeclarationAST(
+                "someBoolean",
+                Type.BOOLEAN,
+                false,
+            ),
+            BooleanAST(true),
+        )
+
+        val ifTree = IfAST(
+            VariableAST("someBoolean"),
+            BlockAST(
+                listOf(
+                    AssignationAST(
+                        VariableAST("someNumber"),
+                        NumberAST(2.0),
+                    ),
+                ),
+            ),
+            BlockAST(
+                listOf(
+                    AssignationAST(
+                        VariableAST("someNumber"),
+                        NumberAST(0.0),
+                    ),
+                ),
+            ),
+        )
+
+        interpreter.interpret(numberTree)
+        interpreter.interpret(booleanAST)
+        interpreter.interpret(ifTree)
+        assert(interpreter.getMemory().get("someNumber").value == 2.0)
+    }
+
+    @Test
+    fun testBlockMemoryIsolation() {
+        val tree = AssignationAST(
+            DeclarationAST(
+                "someNumber",
+                Type.NUMBER,
+                false,
+            ),
+            NumberAST(1.0),
+        )
+
+        val blockTree = BlockAST(
+            listOf(
+                AssignationAST(
+                    VariableAST("someNumber"),
+                    NumberAST(0.0),
+                ),
+                AssignationAST(
+                    DeclarationAST(
+                        "someNumber2",
+                        Type.NUMBER,
+                        false,
+                    ),
+                    NumberAST(2.0),
+                ),
+            ),
+        )
+        interpreter.interpret(tree)
+        interpreter.interpret(blockTree)
+        assert(interpreter.getMemory().get("someNumber").value == 0.0)
+        assert(interpreter.getMemory().get("someNumber2").type == Type.UNDEFINED)
     }
 }

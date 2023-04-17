@@ -1,6 +1,6 @@
 package printscript.language.interpreter.memory
 
-import printscript.language.token.TokenType
+import Type
 
 /**
  * Memory implementation
@@ -8,7 +8,11 @@ import printscript.language.token.TokenType
  */
 sealed interface Memory {
 
-    fun put(key: String, value: Any?): Memory
-    fun get(key: String): Any?
-    fun getType(name: String): TokenType
+    fun set(key: String, value: Variable): Memory
+    fun get(key: String): Variable
+
+    fun getParent(): Memory?
+
+    fun getType(key: String): Type
+    fun getIsConst(key: String): Boolean
 }
