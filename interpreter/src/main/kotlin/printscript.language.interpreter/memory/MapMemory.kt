@@ -1,4 +1,4 @@
-package memory
+package printscript.language.interpreter.memory
 
 import Type
 
@@ -21,6 +21,8 @@ data class MapMemory(val variables: MutableMap<String, Variable?>) : Memory {
      * Gets a value from the memory
      */
     override fun get(key: String): Variable = variables[key] ?: Variable(value = null, type = Type.UNDEFINED, isConst = false)
+    override fun getParent(): Memory? = null
+
     override fun getType(key: String): Type {
         val value = this.get(key)
         return value.type

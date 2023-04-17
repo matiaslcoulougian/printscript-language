@@ -73,4 +73,6 @@ public interface ASTVisitor {
      * Accepts a node and returns the result of the visit.
      */
     fun visit(ifAST: IfAST): AST
+
+    fun visit(inputAST: InputAST): AST
 }

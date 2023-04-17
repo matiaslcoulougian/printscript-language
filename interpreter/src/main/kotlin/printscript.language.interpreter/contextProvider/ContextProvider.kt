@@ -1,9 +1,9 @@
 package printscript.language.interpreter.contextProvider
 
-import memory.MapMemory
-import memory.Memory
 import printscript.language.interpreter.emmiter.ConsoleEmitter
 import printscript.language.interpreter.emmiter.Emitter
+import printscript.language.interpreter.memory.MapMemory
+import printscript.language.interpreter.memory.Memory
 import printscript.language.interpreter.reader.ConsoleReader
 import printscript.language.interpreter.reader.Reader
 
@@ -25,7 +25,7 @@ sealed interface ContextProvider {
  */
 class ConsoleContext(
     private var memory: Memory = MapMemory(mutableMapOf()),
-    private val emmiter: Emitter = ConsoleEmitter(),
+    private val emitter: Emitter = ConsoleEmitter(),
     private val reader: Reader = ConsoleReader(),
 ) : ContextProvider {
 
@@ -33,6 +33,6 @@ class ConsoleContext(
     override fun setMemory(memory: Memory) {
         this.memory = memory
     }
-    override fun emit(text: String) = emmiter.emit(text)
+    override fun emit(text: String) = emitter.emit(text)
     override fun read(): String = reader.read()
 }
