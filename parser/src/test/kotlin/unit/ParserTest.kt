@@ -1,5 +1,6 @@
 package unit
 import ast.* // ktlint-disable no-wildcard-imports
+import ast.literalAST.NumberAST
 import org.junit.jupiter.api.Test
 import printscript.language.parser.CompleteParser
 import printscript.language.token.Token
@@ -30,7 +31,21 @@ class ParserTest {
         val result = parser.parse(infixExpression)
 
         // val expectedAST = SumAST(MulAST(MulAST(SumAST(NumberAST(5), NumberAST(3)), NumberAST(2)), NumberAST(2)), NumberAST(5))
-        val expectedAST = listOf<AST>(SumAST(NumberAST(5.0), MulAST(NumberAST(2.0), MulAST(NumberAST(2.0), SumAST(NumberAST(3.0), NumberAST(5.0))))))
+        val expectedAST = listOf<AST>(
+            SumAST(
+                NumberAST(5.0),
+                MulAST(
+                    NumberAST(2.0),
+                    MulAST(
+                        NumberAST(2.0),
+                        SumAST(
+                            NumberAST(3.0),
+                            NumberAST(5.0),
+                        ),
+                    ),
+                ),
+            ),
+        )
         assertEquals(result, expectedAST)
     }
 

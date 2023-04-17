@@ -1,9 +1,10 @@
 import ast.* // ktlint-disable no-wildcard-imports
+import ast.literalAST.NumberAST
+import ast.literalAST.StringAST
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import printscript.language.interpreter.interpreter.Interpreter
 import printscript.language.interpreter.interpreter.InterpreterImpl
-import printscript.language.token.TokenType
 
 class Interpreter {
 
@@ -15,7 +16,7 @@ class Interpreter {
         val tree = AssignationAST(
             DeclarationAST(
                 "someNumber",
-                TokenType.NUMBER_TYPE,
+                Type.NUMBER,
             ),
             SumAST(
                 NumberAST(6.0),
@@ -32,7 +33,7 @@ class Interpreter {
         val tree = AssignationAST(
             DeclarationAST(
                 "someNumber",
-                TokenType.NUMBER_TYPE,
+                Type.NUMBER,
             ),
             MulAST(
                 NumberAST(6.0),
@@ -49,7 +50,7 @@ class Interpreter {
         val tree = AssignationAST(
             DeclarationAST(
                 "someNumber",
-                TokenType.NUMBER_TYPE,
+                Type.NUMBER,
             ),
             SubAST(
                 NumberAST(6.0),
@@ -66,7 +67,7 @@ class Interpreter {
         val tree = AssignationAST(
             DeclarationAST(
                 "someNumber",
-                TokenType.NUMBER_TYPE,
+                Type.NUMBER,
             ),
             DivAST(
                 NumberAST(6.0),
@@ -85,7 +86,7 @@ class Interpreter {
                 AssignationAST(
                     DeclarationAST(
                         "someNumber",
-                        TokenType.NUMBER_TYPE,
+                        Type.NUMBER,
                     ),
                     DivAST(
                         NumberAST(6.0),
@@ -103,7 +104,7 @@ class Interpreter {
         val tree = AssignationAST(
             DeclarationAST(
                 "someNumber",
-                TokenType.NUMBER_TYPE,
+                Type.NUMBER,
             ),
             StringAST("1"),
         )
@@ -118,7 +119,7 @@ class Interpreter {
         val tree = AssignationAST(
             DeclarationAST(
                 "someNumber",
-                TokenType.NUMBER_TYPE,
+                Type.NUMBER,
             ),
             SumAST(
                 NumberAST(6.0),

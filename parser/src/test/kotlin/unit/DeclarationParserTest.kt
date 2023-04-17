@@ -1,6 +1,9 @@
 package unit
 
+import Type
 import ast.* // ktlint-disable no-wildcard-imports
+import ast.literalAST.NumberAST
+import ast.literalAST.StringAST
 import org.junit.jupiter.api.Test
 import printscript.language.parser.CompleteParser
 import printscript.language.token.Token
@@ -13,7 +16,7 @@ class DeclarationParserTest {
         val parser = CompleteParser()
 
         val line = listOf(
-            Token(TokenType.CONSTANT),
+            Token(TokenType.VARIABLE),
             Token(
                 TokenType.IDENTIFIER,
                 "example",
@@ -28,7 +31,7 @@ class DeclarationParserTest {
         )
 
         val actualResult = parser.parse(line)
-        val expectedResult = listOf<AST>(AssignationAST(DeclarationAST("example", TokenType.STRING_TYPE, true), StringAST("This is a test text")))
+        val expectedResult = listOf<AST>(AssignationAST(DeclarationAST("example", Type.STRING), StringAST("This is a test text")))
         assertEquals(expectedResult, actualResult)
     }
 
@@ -54,7 +57,15 @@ class DeclarationParserTest {
         )
 
         val actualResult = parser.parse(line)
-        val expectedResult = listOf<AST>(AssignationAST(DeclarationAST("example", TokenType.NUMBER_TYPE, false), SumAST(NumberAST(5.0), NumberAST(3.0))))
+        val expectedResult = listOf<AST>(
+            AssignationAST(
+                DeclarationAST("example", Type.NUMBER),
+                SumAST(
+                    NumberAST(5.0),
+                    NumberAST(3.0),
+                ),
+            ),
+        )
         assertEquals(expectedResult, actualResult)
     }
 
@@ -63,7 +74,7 @@ class DeclarationParserTest {
         val parser = CompleteParser()
 
         val line = listOf(
-            Token(TokenType.CONSTANT),
+            Token(TokenType.VARIABLE),
             Token(
                 TokenType.IDENTIFIER,
                 "example",
@@ -74,7 +85,7 @@ class DeclarationParserTest {
         )
 
         val actualResult = parser.parse(line)
-        val expectedResult = listOf<AST>(DeclarationAST("example", TokenType.NUMBER_TYPE, true))
+        val expectedResult = listOf<AST>(DeclarationAST("example", Type.NUMBER))
         assertEquals(expectedResult, actualResult)
     }
 }

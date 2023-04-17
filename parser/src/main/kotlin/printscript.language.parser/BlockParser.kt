@@ -1,53 +1,35 @@
 package printscript.language.parser
 
-import ast.* // ktlint-disable no-wildcard-imports
+import ast.AST
+import ast.BlockAST
 import printscript.language.token.Token
 import printscript.language.token.TokenType
-import kotlin.Exception
 
-fun CompleteParser(): Parser {
-    return Parser(
-        listOf(
-            ShuntingYardParser(),
-            DeclarationParser(),
-            PrintParser(),
-        ),
-    )
-}
-
-class Parser(private val lineParsers: List<LineParser>) {
-    fun isValid(tokens: List<Token>): Boolean {
-        val lines = getLines(tokens)
+class BlockParser : LineParser {
+    override fun isValidDeclaration(tokens: List<Token>, parsers: List<LineParser>): Boolean {
+        if (tokens[0].type != TokenType.OPEN_BLOCK || tokens[tokens.size - 1].type != TokenType.CLOSE_BLOCK) return false
+        val lines = getLines(tokens.subList(1, tokens.size - 1))
         for (line in lines) {
-            val isLineValid = lineParsers.any { it.isValidDeclaration(line, lineParsers) }
+            val isLineValid = parsers.any { it.isValidDeclaration(line, parsers) }
             if (!isLineValid) return false
         }
         return true
     }
 
-    fun parse(tokens: List<Token>): List<AST> {
-        val lines = getLines(tokens)
+    override fun parse(tokens: List<Token>, parsers: List<LineParser>): AST {
+        val lines = getLines(tokens.subList(1, tokens.size - 1))
         val astList = ArrayList<AST>()
         for (line in lines) {
-            val validParser = lineParsers.find { it -> it.isValidDeclaration(line, lineParsers) }
+            val validParser = parsers.find { it -> it.isValidDeclaration(line, parsers) }
             if (validParser != null) {
-                astList.add(validParser.parse(line, lineParsers))
+                astList.add(validParser.parse(line, parsers))
             } else {
                 throw Exception("Cant parse expression")
             }
         }
-        return astList
-    }
-    fun parseLine(tokens: List<Token>): AST {
-        val validParser = lineParsers.find { it -> it.isValidDeclaration(tokens, lineParsers) }
-        if (validParser != null) {
-            return validParser.parse(tokens, lineParsers)
-        } else {
-            throw Exception("Cant parse expression, no valid parser found")
-        }
+        return BlockAST(astList)
     }
 
-    // Gets all tokens and separates them into lines, removing the semicolons and EOF token
     private fun getLines(tokens: List<Token>): List<List<Token>> {
         var linesList = emptyList<List<Token>>()
         var remainingTokens = tokens

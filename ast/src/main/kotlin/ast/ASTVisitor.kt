@@ -1,10 +1,14 @@
 package ast
 
+import ast.literalAST.BooleanAST
+import ast.literalAST.NumberAST
+import ast.literalAST.StringAST
+
 /**
  * AST visitor
  *
  */
-interface ASTVisitor {
+public interface ASTVisitor {
     /**
      * Accepts a node and returns the result of the visit.
      */
@@ -50,5 +54,23 @@ interface ASTVisitor {
      */
     fun visit(stringAST: StringAST): AST
 
+    /**
+     * Accepts a node and returns the result of the visit.
+     */
+    fun visit(booleanAST: BooleanAST): AST
+
+    /**
+     * Accepts a node and returns the result of the visit.
+     */
     fun visit(variableAST: VariableAST): AST
+
+    /**
+     * Accepts a node and returns the result of the visit.
+     */
+    fun visit(blockAST: BlockAST): AST
+
+    /**
+     * Accepts a node and returns the result of the visit.
+     */
+    fun visit(ifAST: IfAST): AST
 }
