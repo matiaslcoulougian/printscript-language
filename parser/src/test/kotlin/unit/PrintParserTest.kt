@@ -20,7 +20,6 @@ class PrintParserTest {
             Token(TokenType.STRING_LITERAL, "hello world!"),
             Token(TokenType.CLOSE_PARENTHESIS),
             Token(TokenType.EOL),
-            Token(TokenType.EOF),
         )
 
         val expectedResult = listOf<AST>(PrintAST(StringAST("hello world!")))
@@ -41,7 +40,6 @@ class PrintParserTest {
             Token(TokenType.STRING_LITERAL, "world!"),
             Token(TokenType.CLOSE_PARENTHESIS),
             Token(TokenType.EOL),
-            Token(TokenType.EOF),
         )
         val expectedResult = listOf<AST>(PrintAST(SumAST(StringAST("world!"), StringAST("hello "))))
         val actualResult = parser.parse(line)
