@@ -1,5 +1,6 @@
 package ast.literalAST
 
+import Type
 import ast.AST
 
 /**
@@ -9,4 +10,5 @@ import ast.AST
  */
 sealed interface LiteralAST<T> : AST {
     val value: T
+    val type: Type
 }

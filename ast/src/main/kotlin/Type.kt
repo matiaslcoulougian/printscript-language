@@ -5,9 +5,7 @@ sealed class Type {
     object UNDEFINED : Type()
 
     companion object {
-        fun values(): Array<Type> {
-            return arrayOf(STRING, NUMBER, BOOLEAN)
-        }
+        fun values(): Array<Type> = arrayOf(STRING, NUMBER, BOOLEAN, UNDEFINED)
 
         fun valueOf(value: String): Type {
             return when (value) {

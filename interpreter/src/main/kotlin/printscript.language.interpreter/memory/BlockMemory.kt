@@ -1,4 +1,4 @@
-package memory
+package printscript.language.interpreter.memory
 
 import Type
 
@@ -17,12 +17,12 @@ data class BlockMemory(val variables: MutableMap<String, Variable>, private val 
             val newMap = variables.toMutableMap()
             newMap.put(key, value)
             return BlockMemory(newMap, parent)
-        } else if (parent?.get(key) === null) {
+        } else if (parent?.get(key)?.type == Type.UNDEFINED) {
             val newMap = variables.toMutableMap()
             newMap.put(key, value)
             return BlockMemory(newMap, parent)
         }
-        return BlockMemory(variables, parent.set(key, value))
+        return BlockMemory(variables, parent?.set(key, value))
     }
 
     /**
@@ -42,4 +42,7 @@ data class BlockMemory(val variables: MutableMap<String, Variable>, private val 
         val value = this.get(key)
         return value?.isConst ?: false
     }
+
+    override fun getParent(): Memory? = parent
+    fun setParent(parent: Memory): BlockMemory = BlockMemory(variables, parent)
 }
