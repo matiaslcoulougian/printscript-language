@@ -2,7 +2,7 @@ package printscript.language.token
 
 enum class TokenType {
     IDENTIFIER,
-    DESIGNATOR,
+    VARIABLE,
     STRING_LITERAL,
     NUMBER_LITERAL,
     NUMBER_TYPE,
@@ -17,6 +17,5 @@ enum class TokenType {
     CLOSE_PARENTHESIS,
     EOL, // end of line
     EOF, // end of file
-    BOOLEAN_TYPE,
 }
 data class Token(val type: TokenType, val value: String = "")
