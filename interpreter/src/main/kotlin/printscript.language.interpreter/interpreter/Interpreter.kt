@@ -164,7 +164,7 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
     override fun visit(blockAST: BlockAST): AST {
         setMemory(BlockMemory(mutableMapOf(), getMemory()))
         blockAST.statements.forEach { it.accept(this) }
-        getMemory().getParent()?.let { setMemory(it) }
+        getMemory().getParent()?.run { setMemory(this) }
 
         return blockAST
     }
@@ -187,7 +187,13 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
     }
 
     override fun visit(inputAST: InputAST): AST {
-        TODO("Not yet implemented")
+        contextProvider.emit(inputAST.inputMsg)
+        return when (inputAST.type) {
+            Type.NUMBER -> NumberAST(contextProvider.read(0.0))
+            Type.STRING -> StringAST(contextProvider.read(""))
+            Type.BOOLEAN -> BooleanAST(contextProvider.read(false))
+            else -> throw Exception("Cannot read ${inputAST.type}")
+        }
     }
 
     override fun visit(numberAST: NumberAST): AST = numberAST

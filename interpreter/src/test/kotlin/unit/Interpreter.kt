@@ -221,4 +221,18 @@ class Interpreter {
         assert(interpreter.getMemory().get("someNumber").value == 0.0)
         assert(interpreter.getMemory().get("someNumber2").type == Type.UNDEFINED)
     }
+
+    @Test
+    fun testInput() {
+        val tree = AssignationAST(
+            DeclarationAST(
+                "someNumber",
+                Type.NUMBER,
+                false,
+            ),
+            InputAST("enter a number", Type.NUMBER),
+        )
+        interpreter.interpret(tree)
+        assert(interpreter.getMemory().get("someNumber").type == Type.NUMBER)
+    }
 }
