@@ -4,7 +4,7 @@ import printscript.language.token.Token
 import printscript.language.token.TokenType
 
 private val tokenMap = mapOf(
-    "let" to TokenType.DESIGNATOR,
+    "let" to TokenType.VARIABLE,
     "+" to TokenType.SUM,
     "-" to TokenType.SUBTRACTION,
     "*" to TokenType.PRODUCT,
@@ -58,8 +58,8 @@ class Lexer {
                     }
                     else -> accumulated += char
                 }
-            } else if (isEndOfWord(stringDelimiter, char, accumulated)) {
-                words.add(accumulated)
+            } else if (isEndOfWord(stringDelimiter, char)) {
+                if (accumulated.isNotEmpty()) words.add(accumulated)
                 if (!isIgnoreChar(char)) words.add("$char")
                 accumulated = ""
             } else {
@@ -72,8 +72,7 @@ class Lexer {
     }
     private fun isIgnoreChar(char: Char) = ignoreChars.contains(char)
 
-    private fun isEndOfWord(stringDelimiter: Char, char: Char, accumulated: String) =
-        isEmptyChar(stringDelimiter) && endChars.contains(char) && accumulated.isNotEmpty()
+    private fun isEndOfWord(stringDelimiter: Char, char: Char) = isEmptyChar(stringDelimiter) && endChars.contains(char)
 
     private fun isEmptyChar(stringDelimiter: Char) = stringDelimiter == EMTPY_CHAR
 

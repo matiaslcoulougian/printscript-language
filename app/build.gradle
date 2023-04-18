@@ -6,3 +6,11 @@ plugins {
     id 'printscript.language.kotlin-custom-conventions'
     id 'printscript.language.git-hooks'
 }
+
+dependencies {
+    implementation project(':lexer')
+    implementation project(':parser')
+    implementation project(':interpreter')
+    implementation project(':ast')
+    implementation project(':token')
+}

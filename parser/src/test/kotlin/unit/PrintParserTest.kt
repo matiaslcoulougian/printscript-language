@@ -1,5 +1,4 @@
 package unit
-import ast.AST
 import ast.PrintAST
 import ast.StringAST
 import ast.SumAST
@@ -19,11 +18,10 @@ class PrintParserTest {
             Token(TokenType.OPEN_PARENTHESIS),
             Token(TokenType.STRING_LITERAL, "hello world!"),
             Token(TokenType.CLOSE_PARENTHESIS),
-            Token(TokenType.EOL),
         )
 
-        val expectedResult = listOf<AST>(PrintAST(StringAST("hello world!")))
-        val actualResult = parser.parse(line)
+        val expectedResult = PrintAST(StringAST("hello world!"))
+        val actualResult = parser.parseLine(line)
 
         assertEquals(expectedResult, actualResult)
     }
@@ -39,10 +37,9 @@ class PrintParserTest {
             Token(TokenType.SUM),
             Token(TokenType.STRING_LITERAL, "world!"),
             Token(TokenType.CLOSE_PARENTHESIS),
-            Token(TokenType.EOL),
         )
-        val expectedResult = listOf<AST>(PrintAST(SumAST(StringAST("world!"), StringAST("hello "))))
-        val actualResult = parser.parse(line)
+        val expectedResult = PrintAST(SumAST(StringAST("world!"), StringAST("hello ")))
+        val actualResult = parser.parseLine(line)
         assertEquals(expectedResult, actualResult)
     }
 }

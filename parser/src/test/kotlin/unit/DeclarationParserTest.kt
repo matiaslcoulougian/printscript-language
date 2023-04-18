@@ -13,7 +13,7 @@ class DeclarationParserTest {
         val parser = CompleteParser()
 
         val line = listOf(
-            Token(TokenType.DESIGNATOR),
+            Token(TokenType.VARIABLE),
             Token(
                 TokenType.IDENTIFIER,
                 "example",
@@ -23,12 +23,10 @@ class DeclarationParserTest {
                 TokenType.EQUALS,
             ),
             Token(TokenType.STRING_LITERAL, "This is a test text"),
-            Token(TokenType.EOL),
-            Token(TokenType.EOF),
         )
 
-        val actualResult = parser.parse(line)
-        val expectedResult = listOf<AST>(AssignationAST(DeclarationAST("example", TokenType.STRING_TYPE), StringAST("This is a test text")))
+        val actualResult = parser.parseLine(line)
+        val expectedResult = AssignationAST(DeclarationAST("example", TokenType.STRING_TYPE), StringAST("This is a test text"))
         assertEquals(expectedResult, actualResult)
     }
 
@@ -37,7 +35,7 @@ class DeclarationParserTest {
         val parser = CompleteParser()
 
         val line = listOf(
-            Token(TokenType.DESIGNATOR),
+            Token(TokenType.VARIABLE),
             Token(
                 TokenType.IDENTIFIER,
                 "example",
@@ -49,12 +47,10 @@ class DeclarationParserTest {
             Token(TokenType.NUMBER_LITERAL, "3"),
             Token(TokenType.SUM),
             Token(TokenType.NUMBER_LITERAL, "5"),
-            Token(TokenType.EOL),
-            Token(TokenType.EOF),
         )
 
-        val actualResult = parser.parse(line)
-        val expectedResult = listOf<AST>(AssignationAST(DeclarationAST("example", TokenType.NUMBER_TYPE), SumAST(NumberAST(5.0), NumberAST(3.0))))
+        val actualResult = parser.parseLine(line)
+        val expectedResult = AssignationAST(DeclarationAST("example", TokenType.NUMBER_TYPE), SumAST(NumberAST(5.0), NumberAST(3.0)))
         assertEquals(expectedResult, actualResult)
     }
 
@@ -63,18 +59,16 @@ class DeclarationParserTest {
         val parser = CompleteParser()
 
         val line = listOf(
-            Token(TokenType.DESIGNATOR),
+            Token(TokenType.VARIABLE),
             Token(
                 TokenType.IDENTIFIER,
                 "example",
             ),
             Token(TokenType.NUMBER_TYPE),
-            Token(TokenType.EOL),
-            Token(TokenType.EOF),
         )
 
-        val actualResult = parser.parse(line)
-        val expectedResult = listOf<AST>(DeclarationAST("example", TokenType.NUMBER_TYPE))
+        val actualResult = parser.parseLine(line)
+        val expectedResult = DeclarationAST("example", TokenType.NUMBER_TYPE)
         assertEquals(expectedResult, actualResult)
     }
 }

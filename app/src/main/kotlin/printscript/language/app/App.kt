@@ -3,6 +3,33 @@
  */
 package printscript.language.app
 
+import printscript.language.interpreter.interpreter.InterpreterImpl
+import printscript.language.lexer.Lexer
+import printscript.language.parser.CompleteParser
+import java.io.BufferedReader
+import java.io.File
+
 fun main() {
-    println("hello world")
+    val lexer = Lexer()
+    val parser = CompleteParser()
+    val interpreter = InterpreterImpl()
+    val fileName = "app/src/main/resources/program.txt"
+    val fileContent = File(fileName)
+    val reader = BufferedReader(fileContent.reader())
+    var statement = ""
+    while (true) {
+        val char = reader.read()
+        if (char == -1) {
+            break // end of file
+        } else if (char.toChar() == '\n') {
+            continue
+        } else if (char.toChar() == ';') {
+            val tokens = lexer.getTokens(statement)
+            val ast = parser.parseLine(tokens)
+            interpreter.interpret(ast)
+            statement = ""
+        } else {
+            statement += char.toChar()
+        }
+    }
 }

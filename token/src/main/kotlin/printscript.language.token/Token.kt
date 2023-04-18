@@ -2,7 +2,7 @@ package printscript.language.token
 
 enum class TokenType {
     IDENTIFIER,
-    DESIGNATOR,
+    VARIABLE,
     STRING_LITERAL,
     NUMBER_LITERAL,
     NUMBER_TYPE,

@@ -4,7 +4,7 @@ import printscript.language.token.Token
 import printscript.language.token.TokenType
 
 fun getLexStringVariableDeclarationResponse(identifier: String, literal: String): List<Token> = listOf(
-    Token(TokenType.DESIGNATOR),
+    Token(TokenType.VARIABLE),
     Token(
         TokenType.IDENTIFIER,
         identifier,
@@ -19,7 +19,7 @@ fun getLexStringVariableDeclarationResponse(identifier: String, literal: String)
 
 fun getLexStringVariableWithDoubleQuoteResponse(identifier: String, literal: String): List<Token> = listOf(
     Token(
-        TokenType.DESIGNATOR,
+        TokenType.VARIABLE,
     ),
     Token(TokenType.IDENTIFIER, identifier),
     Token(TokenType.STRING_TYPE),
@@ -32,7 +32,7 @@ fun getLexStringVariableWithDoubleQuoteResponse(identifier: String, literal: Str
 )
 
 fun getLexNumberVariableDeclarationResponse(identifier: String, literal: String): List<Token> = listOf(
-    Token(TokenType.DESIGNATOR),
+    Token(TokenType.VARIABLE),
     Token(
         TokenType.IDENTIFIER,
         identifier,
