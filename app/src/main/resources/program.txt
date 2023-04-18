@@ -1,0 +1,8 @@
+let test: string = "Hello World";
+let joe: string = "Joe";
+println(test + " " + joe);
+let a: number = 1;
+let b: number = 2;
+println(a + b);
+let c: number = 4 / 2;
+println("c is: " + c);

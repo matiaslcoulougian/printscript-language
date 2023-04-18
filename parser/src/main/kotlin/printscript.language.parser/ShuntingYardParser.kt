@@ -20,7 +20,6 @@ class ShuntingYardParser : LineParser {
         try {
             checkExceptions(tokens)
         } catch (e: Exception) {
-            println(e.message)
             return false
         }
         return true

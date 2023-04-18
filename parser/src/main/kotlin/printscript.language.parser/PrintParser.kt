@@ -21,6 +21,6 @@ class PrintParser() : LineParser {
             val argument = validParser.parse(tokens.subList(2, tokens.size - 1), parsers) // removing PRINTLN and parenthesis
             return PrintAST(argument)
         }
-        throw Exception("Cant parse expression")
+        throw Exception("Cant parse expression.")
     }
 }

@@ -25,8 +25,8 @@ class Interpreter {
                 false,
             ),
             SumAST(
-                NumberAST(6.0),
                 NumberAST(1.0),
+                NumberAST(6.0),
             ),
         )
         interpreter.interpret(tree)
@@ -43,8 +43,8 @@ class Interpreter {
                 false,
             ),
             MulAST(
-                NumberAST(6.0),
                 NumberAST(3.0),
+                NumberAST(6.0),
             ),
         )
         interpreter.interpret(tree)
@@ -61,8 +61,8 @@ class Interpreter {
                 false,
             ),
             SubAST(
-                NumberAST(6.0),
                 NumberAST(2.0),
+                NumberAST(6.0),
             ),
         )
         interpreter.interpret(tree)
@@ -79,8 +79,8 @@ class Interpreter {
                 false,
             ),
             DivAST(
-                NumberAST(6.0),
                 NumberAST(3.0),
+                NumberAST(6.0),
             ),
         )
         interpreter.interpret(tree)
@@ -99,8 +99,8 @@ class Interpreter {
                         false,
                     ),
                     DivAST(
-                        NumberAST(6.0),
                         NumberAST(3.0),
+                        NumberAST(6.0),
                     ),
                 ),
             )
@@ -134,8 +134,8 @@ class Interpreter {
                 false,
             ),
             SumAST(
-                NumberAST(6.0),
                 StringAST("1"),
+                NumberAST(6.0),
             ),
         )
         assertThrows<Exception> {

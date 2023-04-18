@@ -16,7 +16,6 @@ class DeclarationParser() : LineParser {
         try {
             checkExceptions(tokens, parsers)
         } catch (e: Exception) {
-            println(e.message)
             return false
         }
         return true
@@ -36,7 +35,7 @@ class DeclarationParser() : LineParser {
     }
 
     private fun checkExceptions(tokens: List<Token>, parsers: List<LineParser>) {
-        if (tokens[0].type != TokenType.DESIGNATOR) throw Exception("invalid declaration")
+        if (tokens[0].type != TokenType.VARIABLE) throw Exception("Invalid declaration")
         if (tokens[1].type != TokenType.IDENTIFIER) throw Exception("Not a variable name")
         if (tokens[2].type != TokenType.STRING_TYPE &&
             tokens[2].type != TokenType.NUMBER_TYPE

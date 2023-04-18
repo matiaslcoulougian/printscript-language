@@ -2,7 +2,7 @@ name: Release package
 
 on:
   release:
-    branches: [master]
+    branches: [master, release/*]
     types: [created]
 
 jobs:

@@ -3,108 +3,78 @@ package printscript.language.lexer
 import printscript.language.token.Token
 import printscript.language.token.TokenType
 
+private val tokenMap = mapOf(
+    "let" to TokenType.VARIABLE,
+    "+" to TokenType.SUM,
+    "-" to TokenType.SUBTRACTION,
+    "*" to TokenType.PRODUCT,
+    "/" to TokenType.DIVISION,
+    "=" to TokenType.EQUALS,
+    "(" to TokenType.OPEN_PARENTHESIS,
+    ")" to TokenType.CLOSE_PARENTHESIS,
+    ";" to TokenType.EOL,
+    "string" to TokenType.STRING_TYPE,
+    "number" to TokenType.NUMBER_TYPE,
+    "println" to TokenType.PRINTLN,
+)
+
 class Lexer {
-    private var currentPos = 0
-    private fun getNextToken(input: String): Token {
-        // Skip whitespace characters
-        while (checkIgnoreChars(input)) {
-            currentPos++
-        }
-
-        // If we have reached the end of file, return EOF token
-        if (currentPos >= input.length) return Token(TokenType.EOF, "")
-
-        // Check for identifier or keyword token
-        if (input[currentPos].isLetter()) {
-            return checkIdentifierOrKeyword(input)
-        }
-
-        // Check for string literal token with " or '
-        if (input[currentPos] == '"' || input[currentPos] == '\'') {
-            return checkStringLiteral(input)
-        }
-
-        // Check for number literal token
-        if (input[currentPos].isDigit()) {
-            return checkNumberLiteral(input)
-        }
-
-        val token = input[currentPos]
-        currentPos++
-
-        // Check for operation token or equals
-        when (token) {
-            '+' -> return Token(TokenType.SUM)
-            '-' -> return Token(TokenType.SUBTRACTION)
-            '*' -> return Token(TokenType.PRODUCT)
-            '/' -> return Token(TokenType.DIVISION)
-            '=' -> return Token(TokenType.EQUALS)
-            '(' -> return Token(TokenType.OPEN_PARENTHESIS)
-            ')' -> return Token(TokenType.CLOSE_PARENTHESIS)
-            ';' -> return Token(TokenType.EOL)
-        }
-
-        // If we haven't matched any token, raise an exception
-        throw IllegalArgumentException("Invalid character: ${input[currentPos]}")
+    private var endChars = listOf(' ', ';', ':', ')', '(', '+', '-', '*', '/', '=')
+    private var ignoreChars = listOf(' ', ':')
+    private var stringDelimiters = listOf('"', '\'')
+    private val EMTPY_CHAR = '\u0000'
+    fun getTokens(line: String): List<Token> {
+        val words = this.getWordsFromLine(line)
+        return words.map { this.matchWordToToken(it) }
     }
-
-    private fun checkNumberLiteral(input: String): Token {
-        var value = ""
-        while (currentPos < input.length && input[currentPos].isDigit()) {
-            value += input[currentPos]
-            currentPos++
+    private fun matchWordToToken(word: String): Token {
+        val firstChar = word.first()
+        if (stringDelimiters.contains(firstChar)) {
+            val stringLiteral = word.replace("$firstChar", "")
+            return Token(TokenType.STRING_LITERAL, stringLiteral)
+        } else if (firstChar.isDigit()) {
+            return Token(TokenType.NUMBER_LITERAL, word)
         }
-        return Token(TokenType.NUMBER_LITERAL, value)
+        val tokenType = tokenMap[word]
+        if (tokenType != null) return Token(tokenType)
+        return Token(TokenType.IDENTIFIER, word)
     }
-
-    private fun checkStringLiteral(input: String): Token {
-        val quote = input[currentPos]
-        var value = ""
-        currentPos++
-        while (currentPos < input.length && input[currentPos] != quote) {
-            value += input[currentPos]
-            currentPos++
-        }
-        currentPos++
-        return Token(TokenType.STRING_LITERAL, value)
-    }
-
-    private fun checkIdentifierOrKeyword(input: String): Token {
-        var value = ""
-        while (currentPos < input.length && (input[currentPos].isLetterOrDigit() || input[currentPos] == '_')) {
-            value += input[currentPos]
-            currentPos++
-        }
-        return when (value) {
-            "let" -> Token(TokenType.DESIGNATOR)
-            "string" -> Token(TokenType.STRING_TYPE)
-            "number" -> Token(TokenType.NUMBER_TYPE)
-            "println" -> Token(TokenType.PRINTLN)
-            else -> Token(TokenType.IDENTIFIER, value)
-        }
-    }
-
-    private fun checkIgnoreChars(input: String) =
-        currentPos < input.length &&
-            (
-                input[currentPos].isWhitespace() ||
-                    input[currentPos] == ':'
-                )
-
-    fun getTokens(input: String): List<Token> {
-        val tokens = mutableListOf<Token>()
-        while (true) {
-            val token = getNextToken(input)
-            tokens.add(token)
-            if (token.type == TokenType.EOF) {
-                break
+    private fun getWordsFromLine(line: String): List<String> {
+        val words = mutableListOf<String>()
+        var accumulated = ""
+        var stringDelimiter = EMTPY_CHAR
+        for (char in line) {
+            if (isStringDelimiter(char)) {
+                when (stringDelimiter) {
+                    EMTPY_CHAR -> {
+                        accumulated += char
+                        stringDelimiter = char
+                    }
+                    char -> {
+                        accumulated += char
+                        words.add(accumulated)
+                        accumulated = ""
+                        stringDelimiter = EMTPY_CHAR
+                    }
+                    else -> accumulated += char
+                }
+            } else if (isEndOfWord(stringDelimiter, char)) {
+                if (accumulated.isNotEmpty()) words.add(accumulated)
+                if (!isIgnoreChar(char)) words.add("$char")
+                accumulated = ""
+            } else {
+                if (!isEmptyChar(stringDelimiter) || !isIgnoreChar(char)) accumulated += char
             }
         }
-        resetCurrentPos()
-        return tokens
+        // add last character accumulated
+        if (accumulated.isNotEmpty()) words.add(accumulated)
+        return words
     }
+    private fun isIgnoreChar(char: Char) = ignoreChars.contains(char)
 
-    private fun resetCurrentPos() {
-        currentPos = 0
-    }
+    private fun isEndOfWord(stringDelimiter: Char, char: Char) = isEmptyChar(stringDelimiter) && endChars.contains(char)
+
+    private fun isEmptyChar(stringDelimiter: Char) = stringDelimiter == EMTPY_CHAR
+
+    private fun isStringDelimiter(char: Char) = stringDelimiters.contains(char)
 }
