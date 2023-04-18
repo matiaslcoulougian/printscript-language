@@ -18,8 +18,8 @@ class Interpreter {
                 TokenType.NUMBER_TYPE,
             ),
             SumAST(
-                NumberAST(6.0),
                 NumberAST(1.0),
+                NumberAST(6.0),
             ),
         )
         interpreter.interpret(tree)
@@ -35,8 +35,8 @@ class Interpreter {
                 TokenType.NUMBER_TYPE,
             ),
             MulAST(
-                NumberAST(6.0),
                 NumberAST(3.0),
+                NumberAST(6.0),
             ),
         )
         interpreter.interpret(tree)
@@ -52,8 +52,8 @@ class Interpreter {
                 TokenType.NUMBER_TYPE,
             ),
             SubAST(
-                NumberAST(6.0),
                 NumberAST(2.0),
+                NumberAST(6.0),
             ),
         )
         interpreter.interpret(tree)
@@ -69,8 +69,8 @@ class Interpreter {
                 TokenType.NUMBER_TYPE,
             ),
             DivAST(
-                NumberAST(6.0),
                 NumberAST(3.0),
+                NumberAST(6.0),
             ),
         )
         interpreter.interpret(tree)
@@ -88,8 +88,8 @@ class Interpreter {
                         TokenType.NUMBER_TYPE,
                     ),
                     DivAST(
-                        NumberAST(6.0),
                         NumberAST(3.0),
+                        NumberAST(6.0),
                     ),
                 ),
             )
@@ -121,8 +121,8 @@ class Interpreter {
                 TokenType.NUMBER_TYPE,
             ),
             SumAST(
-                NumberAST(6.0),
                 StringAST("1"),
+                NumberAST(6.0),
             ),
         )
         assertThrows<Exception> {

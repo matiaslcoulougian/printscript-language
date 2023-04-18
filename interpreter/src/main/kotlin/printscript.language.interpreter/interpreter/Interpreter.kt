@@ -74,20 +74,20 @@ class InterpreterImpl : Interpreter {
         val rightValue = getValue(sumAST.right.accept(this))
         return when {
             leftValue is Number && rightValue is Number -> {
-                NumberAST(rightValue + leftValue)
+                NumberAST(leftValue + rightValue)
             }
 
             leftValue is String && rightValue is String -> {
-                StringAST(rightValue + leftValue)
+                StringAST(leftValue + rightValue)
             }
             leftValue is String && rightValue is Number -> {
-                StringAST(rightValue + leftValue)
+                StringAST(leftValue + rightValue)
             }
             leftValue is Number && rightValue is String -> {
-                StringAST(rightValue + leftValue)
+                StringAST(leftValue + rightValue)
             }
             else -> {
-                throw Exception("Cannot sum $rightValue and $leftValue")
+                throw Exception("Cannot sum $leftValue and $rightValue")
             }
         }
     }
@@ -97,11 +97,11 @@ class InterpreterImpl : Interpreter {
         val rightValue = getValue(subAST.right.accept(this))
         return when {
             leftValue is Number && rightValue is Number -> {
-                NumberAST(rightValue - leftValue)
+                NumberAST(leftValue - rightValue)
             }
 
             else -> {
-                throw Exception("Cannot sum $rightValue and $leftValue")
+                throw Exception("Cannot sum $leftValue and $rightValue")
             }
         }
     }
@@ -110,11 +110,11 @@ class InterpreterImpl : Interpreter {
         val rightValue = this.getValue(divAST.right.accept(this))
         return when {
             leftValue is Number && rightValue is Number -> {
-                NumberAST(rightValue / leftValue)
+                NumberAST(leftValue / rightValue)
             }
 
             else -> {
-                throw Exception("Cannot sum $rightValue and $leftValue")
+                throw Exception("Cannot sum $leftValue and $rightValue")
             }
         }
     }
@@ -123,10 +123,10 @@ class InterpreterImpl : Interpreter {
         val rightValue = this.getValue(mulAST.right.accept(this))
         return when {
             leftValue is Number && rightValue is Number -> {
-                NumberAST(rightValue * leftValue)
+                NumberAST(leftValue * rightValue)
             }
             else -> {
-                throw Exception("Cannot sum $rightValue and $leftValue")
+                throw Exception("Cannot sum $leftValue and $rightValue")
             }
         }
     }
