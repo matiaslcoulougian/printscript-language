@@ -16,5 +16,6 @@ enum class TokenType {
     OPEN_PARENTHESIS,
     CLOSE_PARENTHESIS,
     EOL, // end of line
+    EOF, // end of file
 }
 data class Token(val type: TokenType, val value: String = "")
