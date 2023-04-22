@@ -1,5 +1,5 @@
 package unit
-import ast.literalAST.NumberAST
+import ast.NumberAST
 import ast.* // ktlint-disable no-wildcard-imports
 import org.junit.jupiter.api.Test
 import printscript.language.parser.CompleteParser

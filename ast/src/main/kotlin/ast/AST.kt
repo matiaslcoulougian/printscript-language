@@ -3,7 +3,7 @@ package ast
 /**
  * AST interface
  */
-interface AST {
+sealed interface AST {
 
     /**
      * Accepts a visitor and returns the result of the visit.

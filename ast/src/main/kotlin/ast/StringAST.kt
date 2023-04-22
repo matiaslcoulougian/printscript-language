@@ -1,8 +1,6 @@
-package ast.literalAST
+package ast
 
 import Type
-import ast.AST
-import ast.ASTVisitor
 
 /**
  * StringAST is a class that represents a string in the AST.

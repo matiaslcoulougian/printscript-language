@@ -1,0 +1,10 @@
+
+plugins {
+    id 'printscript.language.kotlin-custom-conventions'
+}
+
+dependencies {
+         implementation project(':ast')
+        implementation project(':lexer')
+        implementation project(':parser')
+}

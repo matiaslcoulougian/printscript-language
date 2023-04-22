@@ -1,9 +1,5 @@
 package ast
 
-import ast.literalAST.BooleanAST
-import ast.literalAST.NumberAST
-import ast.literalAST.StringAST
-
 /**
  * AST visitor
  *

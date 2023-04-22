@@ -1,8 +1,8 @@
 package printscript.language.parser
 
 import ast.* // ktlint-disable no-wildcard-imports
-import ast.literalAST.NumberAST
-import ast.literalAST.StringAST
+import ast.NumberAST
+import ast.StringAST
 import printscript.language.token.Token
 import printscript.language.token.TokenType
 import java.util.Stack

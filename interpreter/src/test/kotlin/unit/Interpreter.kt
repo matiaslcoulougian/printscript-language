@@ -2,9 +2,9 @@ package unit
 
 import Type
 import ast.* // ktlint-disable no-wildcard-imports
-import ast.literalAST.BooleanAST
-import ast.literalAST.NumberAST
-import ast.literalAST.StringAST
+import ast.BooleanAST
+import ast.NumberAST
+import ast.StringAST
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import printscript.language.interpreter.contextProvider.ConsoleContext
@@ -230,7 +230,7 @@ class Interpreter {
                 Type.NUMBER,
                 false,
             ),
-            InputAST("enter a number", Type.NUMBER),
+            InputAST(StringAST("enter a number"), Type.NUMBER),
         )
         interpreter.interpret(tree)
         assert(interpreter.getMemory().get("someNumber").type == Type.NUMBER)

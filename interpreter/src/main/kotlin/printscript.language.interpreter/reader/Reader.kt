@@ -21,16 +21,16 @@ class ConsoleReader : Reader {
     private fun readBoolean(): Boolean = scanner.nextLine().toBoolean()
 
     override fun <T> read(default: T): T {
-        val value: T = when (default) {
-            is Number -> readNumber() as T
-            is String -> readString() as T
-            is Boolean -> readBoolean() as T
-            else -> throw IllegalArgumentException("Unsupported type: $default")
-        }
-        return try {
-            value
+        try {
+            return when (default) {
+                is Number -> readNumber() as T
+                is String -> readString() as T
+                is Boolean -> readBoolean() as T
+                else -> throw IllegalArgumentException("Unsupported type: $default")
+            }
         } catch (e: Exception) {
-            default
+            println(e)
+            return default
         }
     }
 }
