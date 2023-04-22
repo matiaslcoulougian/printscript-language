@@ -1,0 +1,13 @@
+let name: string = 'Joe';~VARIABLE,0,|IDENTIFIER,4,name|STRING_TYPE,10,|EQUALS,17,|STRING_LITERAL,19,Joe|EOL,24,
+let name: string = "Joe";~
+let a: number = 12;~
+println('hello');~
+println(name);~
+'hello' + 'world';~
+'hello ' + name;~
+2 + 4;~
+2 - 4;~
+2 * 4;~
+2/4;~
+(2 + 4) - 6;~
+const name: string = 'Joe';~
