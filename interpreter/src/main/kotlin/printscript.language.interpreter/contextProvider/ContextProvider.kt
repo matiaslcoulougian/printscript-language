@@ -17,7 +17,7 @@ sealed interface ContextProvider {
     fun getMemory(): Memory
     fun setMemory(memory: Memory)
     fun emit(text: String)
-    fun read(): String
+    fun <T> read(default: T): T
 }
 
 /**
@@ -34,5 +34,5 @@ class ConsoleContext(
         this.memory = memory
     }
     override fun emit(text: String) = emitter.emit(text)
-    override fun read(): String = reader.read()
+    override fun <T> read(default: T): T = reader.read(default)
 }

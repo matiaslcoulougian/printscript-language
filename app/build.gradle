@@ -5,4 +5,46 @@
 plugins {
     id 'printscript.language.kotlin-custom-conventions'
     id 'printscript.language.git-hooks'
+    id 'application'
 }
+
+
+repositories {
+    mavenCentral()
+}
+
+application {
+    mainClass = 'printscript.language.app.AppKt'
+}
+
+jar {
+    manifest {
+        attributes("Main-Class": "printscript.language.app.AppKt")
+    }
+    from {
+        configurations.runtimeClasspath.getAsFileTree().collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
+}
+
+task packageDistribution(type: Copy) {
+    dependsOn jar
+    from "${project.rootDir}/scripts/cli"
+    from("${project.buildDir}/libs/${project.name}-0.0.1.jar") {
+        into("lib")
+    }
+    into "${project.rootDir}/dist"
+}
+
+dependencies {
+    implementation project(':lexer')
+    implementation project(':parser')
+    implementation project(':interpreter')
+    implementation project(':ast')
+    implementation project(':token')
+    implementation("org.jetbrains.kotlinx:kotlinx-cli:0.3.5")
+}
+version "0.0.1"

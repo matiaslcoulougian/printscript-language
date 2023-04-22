@@ -15,9 +15,6 @@ fun getLexStringVariableDeclarationResponse(identifier: String, literal: String)
     ),
     Token(TokenType.STRING_LITERAL, literal),
     Token(TokenType.EOL),
-    Token(
-        TokenType.EOF,
-    ),
 )
 
 fun getLexStringVariableWithDoubleQuoteResponse(identifier: String, literal: String): List<Token> = listOf(
@@ -32,7 +29,6 @@ fun getLexStringVariableWithDoubleQuoteResponse(identifier: String, literal: Str
         literal,
     ),
     Token(TokenType.EOL),
-    Token(TokenType.EOF),
 )
 
 fun getLexNumberVariableDeclarationResponse(identifier: String, literal: String): List<Token> = listOf(
@@ -47,7 +43,6 @@ fun getLexNumberVariableDeclarationResponse(identifier: String, literal: String)
     Token(
         TokenType.EOL,
     ),
-    Token(TokenType.EOF),
 )
 
 fun getLexPrintLnFunctionResponse(literal: String): List<Token> = listOf(
@@ -59,7 +54,6 @@ fun getLexPrintLnFunctionResponse(literal: String): List<Token> = listOf(
     ),
     Token(TokenType.CLOSE_PARENTHESIS),
     Token(TokenType.EOL),
-    Token(TokenType.EOF),
 )
 
 fun getLexPrintLnFunctionWithIdentifierResponse(identifier: String): List<Token> = listOf(
@@ -72,7 +66,6 @@ fun getLexPrintLnFunctionWithIdentifierResponse(identifier: String): List<Token>
     Token(
         TokenType.EOL,
     ),
-    Token(TokenType.EOF),
 )
 
 fun getLexStringConcatenationResponse(firstLiteral: String, secondLiteral: String): List<Token> = listOf(
@@ -82,7 +75,6 @@ fun getLexStringConcatenationResponse(firstLiteral: String, secondLiteral: Strin
     ),
     Token(TokenType.STRING_LITERAL, secondLiteral),
     Token(TokenType.EOL),
-    Token(TokenType.EOF),
 )
 
 fun getLexStringConcatenationWithIdentifierResponse(identifier: String, literal: String): List<Token> = listOf(
@@ -95,9 +87,6 @@ fun getLexStringConcatenationWithIdentifierResponse(identifier: String, literal:
     Token(
         TokenType.EOL,
     ),
-    Token(
-        TokenType.EOF,
-    ),
 )
 
 fun geLexOperationResponse(firstLiteral: String, secondLiteral: String, operationType: TokenType): List<Token> = listOf(
@@ -107,21 +96,23 @@ fun geLexOperationResponse(firstLiteral: String, secondLiteral: String, operatio
     Token(
         TokenType.EOL,
     ),
-    Token(TokenType.EOF),
 )
 
 fun geLexOperationsWithParenthesisResponse(firstLiteral: String, secondLiteral: String, thirdLiteral: String, firstOperation: TokenType, secondOperation: TokenType): List<Token> = listOf(
-    Token(TokenType.OPEN_PARENTHESIS), Token(TokenType.NUMBER_LITERAL, firstLiteral), Token(firstOperation),
+    Token(TokenType.OPEN_PARENTHESIS),
+    Token(TokenType.NUMBER_LITERAL, firstLiteral),
+    Token(firstOperation),
     Token(
         TokenType.NUMBER_LITERAL,
         secondLiteral,
     ),
-    Token(TokenType.CLOSE_PARENTHESIS), Token(secondOperation),
+    Token(TokenType.CLOSE_PARENTHESIS),
+    Token(secondOperation),
     Token(
         TokenType.NUMBER_LITERAL,
         thirdLiteral,
     ),
-    Token(TokenType.EOL), Token(TokenType.EOF),
+    Token(TokenType.EOL),
 )
 
 fun getLexConstDeclarationResponse(literal: String, identifier: String): List<Token> = listOf(
