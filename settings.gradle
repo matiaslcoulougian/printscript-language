@@ -10,4 +10,5 @@
 rootProject.name = 'printscript-language'
 include('app', 'parser', 'lexer', 'interpreter','token','ast')
 include 'memory'
+include 'linter'
 

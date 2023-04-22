@@ -2,10 +2,10 @@ package printscript.language.interpreter.interpreter
 
 import Type
 import ast.* // ktlint-disable no-wildcard-imports
-import ast.literalAST.BooleanAST
-import ast.literalAST.LiteralAST
-import ast.literalAST.NumberAST
-import ast.literalAST.StringAST
+import ast.BooleanAST
+import ast.LiteralAST
+import ast.NumberAST
+import ast.StringAST
 import printscript.language.interpreter.contextProvider.ContextProvider
 import printscript.language.interpreter.memory.BlockMemory
 import printscript.language.interpreter.memory.Memory
@@ -208,7 +208,7 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
     }
 
     override fun visit(inputAST: InputAST): AST {
-        contextProvider.emit(inputAST.inputMsg)
+        contextProvider.emit(getValue(inputAST.inputMsg.accept(this)).toString())
         return when (inputAST.type) {
             Type.NUMBER -> NumberAST(contextProvider.read(0.0))
             Type.STRING -> StringAST(contextProvider.read(""))

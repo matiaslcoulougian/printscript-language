@@ -2,7 +2,7 @@ package unit
 import ast.AST
 import ast.PrintAST
 import ast.SumAST
-import ast.literalAST.StringAST
+import ast.StringAST
 import printscript.language.parser.CompleteParser
 import printscript.language.token.Token
 import printscript.language.token.TokenType

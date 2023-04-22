@@ -1,8 +1,6 @@
-package ast.literalAST
+package ast
 
 import Type
-import ast.AST
-import ast.ASTVisitor
 
 /**
  * @param value The value of the variable

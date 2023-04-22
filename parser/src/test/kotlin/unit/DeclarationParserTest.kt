@@ -2,8 +2,8 @@ package unit
 
 import Type
 import ast.* // ktlint-disable no-wildcard-imports
-import ast.literalAST.NumberAST
-import ast.literalAST.StringAST
+import ast.NumberAST
+import ast.StringAST
 import org.junit.jupiter.api.Test
 import printscript.language.parser.CompleteParser
 import printscript.language.token.Token

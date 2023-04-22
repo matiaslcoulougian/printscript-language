@@ -1,7 +1,6 @@
-package ast.literalAST
+package ast
 
 import Type
-import ast.AST
 
 /**
  * Literal AST node.
