@@ -8,7 +8,7 @@ import printscript.language.token.TokenType
 import java.util.Stack
 import kotlin.Exception
 
-class ShuntingYardParser : LineParser {
+class ShuntingYardParser : StatementParser {
 
     //    Valid declarations
     //    -> number literals, string literals, variables
@@ -16,17 +16,16 @@ class ShuntingYardParser : LineParser {
     //    -> number literals, string literals, variables separated by operators
     //    -> parenthesis. Have to be opened and closed after
     //
-    override fun isValidDeclaration(tokens: List<Token>, parsers: List<LineParser>): Boolean {
+    override fun isValidStatement(tokens: List<Token>): Boolean {
         try {
             checkExceptions(tokens)
         } catch (e: Exception) {
-            println(e.message)
             return false
         }
         return true
     }
 
-    override fun parse(tokens: List<Token>, parsers: List<LineParser>): AST {
+    override fun parseStatement(tokens: List<Token>): AST {
         val postfixExpression = infixToPostfix(tokens)
 
         val stack = Stack<AST>()

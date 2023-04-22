@@ -1,13 +1,16 @@
 package unit
 import ast.* // ktlint-disable no-wildcard-imports
 import ast.literalAST.NumberAST
+import ast.literalAST.StringAST
 import org.junit.jupiter.api.Test
-import printscript.language.parser.CompleteParser
+import printscript.language.parser.ShuntingYardParser
 import printscript.language.token.Token
 import printscript.language.token.TokenType
 import kotlin.test.assertEquals
 
 class ParserTest {
+    val parser = ShuntingYardParser()
+
     @Test
     fun shuntingYardParserTest() {
         // "(5 + 3) * 2 * 2 + 5"
@@ -23,15 +26,12 @@ class ParserTest {
             Token(TokenType.NUMBER_LITERAL, "2"),
             Token(TokenType.SUM),
             Token(TokenType.NUMBER_LITERAL, "5"),
-            Token(TokenType.EOL),
-            Token(TokenType.EOF),
         )
 
-        val parser = CompleteParser()
-        val result = parser.parse(infixExpression)
+        val result = parser.parseStatement(infixExpression)
 
         // val expectedAST = SumAST(MulAST(MulAST(SumAST(NumberAST(5), NumberAST(3)), NumberAST(2)), NumberAST(2)), NumberAST(5))
-        val expectedAST = listOf<AST>(
+        val expectedAST =
             SumAST(
                 NumberAST(5.0),
                 MulAST(
@@ -44,8 +44,8 @@ class ParserTest {
                         ),
                     ),
                 ),
-            ),
-        )
+            )
+
         assertEquals(result, expectedAST)
     }
 
@@ -64,15 +64,54 @@ class ParserTest {
             Token(TokenType.NUMBER_LITERAL, "2"),
             Token(TokenType.SUM),
             Token(TokenType.IDENTIFIER, "b"),
-            Token(TokenType.EOL),
-            Token(TokenType.EOF),
         )
 
-        val parser = CompleteParser()
-        val result = parser.parse(infixExpression)
+        val result = parser.parseStatement(infixExpression)
 
         // val expectedAST = SumAST(MulAST(MulAST(SumAST(NumberAST(5), NumberAST(3)), NumberAST(2)), NumberAST(2)), NumberAST(5))
-        val expectedAST = listOf<AST>(SumAST(VariableAST("b"), MulAST(NumberAST(2.0), MulAST(NumberAST(2.0), SumAST(VariableAST("a"), NumberAST(5.0))))))
+        val expectedAST = SumAST(VariableAST("b"), MulAST(NumberAST(2.0), MulAST(NumberAST(2.0), SumAST(VariableAST("a"), NumberAST(5.0)))))
         assertEquals(result, expectedAST)
+    }
+
+    @Test
+    fun shuntingYardParseLiterals() {
+        val numberLiteral = listOf<Token>(Token(TokenType.NUMBER_LITERAL, "5"))
+        val numberOperation = listOf<Token>(
+            Token(TokenType.NUMBER_LITERAL, "5"),
+            Token(TokenType.SUM),
+            Token(TokenType.NUMBER_LITERAL, "5"),
+        )
+        val stringLiteral = listOf<Token>(Token(TokenType.STRING_LITERAL, "hello"))
+        val stringOperation = listOf<Token>(
+            Token(TokenType.STRING_LITERAL, "hello"),
+            Token(TokenType.SUM),
+            Token(TokenType.STRING_LITERAL, " world"),
+        )
+
+        val variable = listOf<Token>(Token(TokenType.IDENTIFIER, "x"))
+        val variableOperation = listOf<Token>(
+            Token(TokenType.IDENTIFIER, "x"),
+            Token(TokenType.SUM),
+            Token(TokenType.IDENTIFIER, "y"),
+        )
+        val variableNumberOperation = listOf<Token>(
+            Token(TokenType.IDENTIFIER, "x"),
+            Token(TokenType.SUM),
+            Token(TokenType.NUMBER_LITERAL, "5"),
+        )
+        val variableStringOperation = listOf<Token>(
+            Token(TokenType.STRING_LITERAL, "hello"),
+            Token(TokenType.SUM),
+            Token(TokenType.IDENTIFIER, "x"),
+        )
+
+        assertEquals(parser.parseStatement(numberLiteral), NumberAST(5.0))
+        assertEquals(parser.parseStatement(numberOperation), SumAST(NumberAST(5.0), NumberAST(5.0)))
+        assertEquals(parser.parseStatement(stringLiteral), StringAST("hello"))
+        assertEquals(parser.parseStatement(stringOperation), SumAST(StringAST(" world"), StringAST("hello")))
+        assertEquals(parser.parseStatement(variable), VariableAST("x"))
+        assertEquals(parser.parseStatement(variableOperation), SumAST(VariableAST("y"), VariableAST("x")))
+        assertEquals(parser.parseStatement(variableNumberOperation), SumAST(NumberAST(5.0), VariableAST("x")))
+        assertEquals(parser.parseStatement(variableStringOperation), SumAST(VariableAST("x"), StringAST("hello")))
     }
 }

@@ -11,15 +11,26 @@ fun CompleteParser(): Parser {
             ShuntingYardParser(),
             DeclarationParser(),
             PrintParser(),
+            IfParser(),
+            BlockParser(),
         ),
     )
 }
 
-class Parser(private val lineParsers: List<LineParser>) {
+fun StatementParser(): Parser {
+    return Parser(
+        listOf(
+            ShuntingYardParser(),
+            BooleanParser(),
+        ),
+    )
+}
+
+class Parser(private val statementParsers: List<StatementParser>) {
     fun isValid(tokens: List<Token>): Boolean {
         val lines = getLines(tokens)
         for (line in lines) {
-            val isLineValid = lineParsers.any { it.isValidDeclaration(line, lineParsers) }
+            val isLineValid = statementParsers.any { it.isValidStatement(line) }
             if (!isLineValid) return false
         }
         return true
@@ -29,9 +40,9 @@ class Parser(private val lineParsers: List<LineParser>) {
         val lines = getLines(tokens)
         val astList = ArrayList<AST>()
         for (line in lines) {
-            val validParser = lineParsers.find { it -> it.isValidDeclaration(line, lineParsers) }
+            val validParser = statementParsers.find { it -> it.isValidStatement(line) }
             if (validParser != null) {
-                astList.add(validParser.parse(line, lineParsers))
+                astList.add(validParser.parseStatement(line))
             } else {
                 throw Exception("Cant parse expression")
             }
@@ -39,9 +50,9 @@ class Parser(private val lineParsers: List<LineParser>) {
         return astList
     }
     fun parseLine(tokens: List<Token>): AST {
-        val validParser = lineParsers.find { it -> it.isValidDeclaration(tokens, lineParsers) }
+        val validParser = statementParsers.find { it -> it.isValidStatement(tokens) }
         if (validParser != null) {
-            return validParser.parse(tokens, lineParsers)
+            return validParser.parseStatement(tokens)
         } else {
             throw Exception("Cant parse expression, no valid parser found")
         }
@@ -51,11 +62,17 @@ class Parser(private val lineParsers: List<LineParser>) {
     private fun getLines(tokens: List<Token>): List<List<Token>> {
         var linesList = emptyList<List<Token>>()
         var remainingTokens = tokens
-        while (remainingTokens[0] != Token(TokenType.EOF)) {
+        while (remainingTokens.isNotEmpty()) {
             val indexEOL = getNextEOLIndex(remainingTokens)
-            val lineTokens = remainingTokens.subList(0, indexEOL)
-            remainingTokens = remainingTokens.slice(IntRange(indexEOL + 1, remainingTokens.size - 1))
-            linesList = linesList.plus(listOf(lineTokens))
+            if (indexEOL < 0) {
+                val lineTokens = remainingTokens
+                remainingTokens = emptyList()
+                linesList = linesList.plus(listOf(lineTokens))
+            } else {
+                val lineTokens = remainingTokens.subList(0, indexEOL)
+                remainingTokens = remainingTokens.slice(IntRange(indexEOL + 1, remainingTokens.size - 1))
+                linesList = linesList.plus(listOf(lineTokens))
+            }
         }
         return linesList
     }
