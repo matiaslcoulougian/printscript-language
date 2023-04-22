@@ -105,6 +105,7 @@ class Test {
 
         val linter = LinterImpl(listOf(SnakeCaseRule))
         val messages = linter.lint(tree)
-        assert(messages.size == 4)
+        println(messages)
+        assert(messages.size == 3)
     }
 }

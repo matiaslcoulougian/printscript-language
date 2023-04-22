@@ -15,8 +15,8 @@ class LinterImpl(private val rules: List<Rule>) : Linter {
         return when (ast) {
             is AssignationAST -> visit(ast.declaration) + visit(ast.expression) + lintRules(ast)
             is DeclarationAST -> lintRules(ast)
-            is PrintAST -> visit(ast) + lintRules(ast)
-            is InputAST -> visit(ast) + lintRules(ast)
+            is PrintAST -> lintRules(ast)
+            is InputAST -> lintRules(ast)
             is SumAST -> visit(ast.left) + visit(ast.right) + lintRules(ast)
             is SubAST -> visit(ast.left) + visit(ast.right) + lintRules(ast)
             is DivAST -> visit(ast.left) + visit(ast.right) + lintRules(ast)
