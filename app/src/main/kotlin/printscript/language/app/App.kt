@@ -6,19 +6,20 @@ package printscript.language.app
 import kotlinx.cli.* // ktlint-disable no-wildcard-imports
 import printscript.language.interpreter.contextProvider.ConsoleContext
 import printscript.language.interpreter.interpreter.InterpreterImpl
-import printscript.language.lexer.Lexer
+import printscript.language.lexer.LexerFactory
 import printscript.language.parser.CompleteParser
 import java.io.BufferedReader
 import java.io.File
+import java.io.FileInputStream
 
 enum class MenuOptions {
     Execution,
 }
 
-// TODO: add versioning
+// TODO: change this implementation to use the new lexer
 fun execute(fileName: String?) {
     val fileContent = File(fileName ?: return)
-    val lexer = Lexer()
+    val lexer = LexerFactory().createLexer("1.1", FileInputStream(fileContent))
     val parser = CompleteParser()
     val interpreter = InterpreterImpl(ConsoleContext())
     val reader = BufferedReader(fileContent.reader())
@@ -30,7 +31,7 @@ fun execute(fileName: String?) {
         } else if (char.toChar() == '\n') {
             continue
         } else if (char.toChar() == ';') {
-            val tokens = lexer.getTokens(statement)
+            val tokens = lexer.getTokens(statement, 0)
             val ast = parser.parseLine(tokens)
             interpreter.interpret(ast)
             statement = ""

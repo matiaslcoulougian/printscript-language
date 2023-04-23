@@ -4,7 +4,7 @@ import ast.AST
 import ast.BlockAST
 import ast.IfAST
 import ast.VariableAST
-import ast.literalAST.BooleanAST
+import ast.BooleanAST
 import printscript.language.token.Token
 import printscript.language.token.TokenType
 
