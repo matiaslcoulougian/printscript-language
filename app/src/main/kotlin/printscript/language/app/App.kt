@@ -6,9 +6,11 @@ package printscript.language.app
 import kotlinx.cli.* // ktlint-disable no-wildcard-imports
 import printscript.language.interpreter.contextProvider.ConsoleContext
 import printscript.language.interpreter.interpreter.InterpreterImpl
+import printscript.language.interpreter.interpreter.InterpreterWithIterator
 import printscript.language.lexer.LexerFactory
+import printscript.language.lexer.TokenListIterator
+import printscript.language.parser.ASTIterator
 import printscript.language.parser.CompleteParser
-import java.io.BufferedReader
 import java.io.File
 import java.io.FileInputStream
 
@@ -16,30 +18,18 @@ enum class MenuOptions {
     Execution,
 }
 
-// TODO: change this implementation to use the new lexer
-fun execute(fileName: String?) {
+fun execute(fileName: String?, version: String) {
     val fileContent = File(fileName ?: return)
-    val lexer = LexerFactory().createLexer("1.1", FileInputStream(fileContent))
+    val lexer = LexerFactory().createLexer(version, FileInputStream(fileContent))
+    val tokenListIterator = TokenListIterator(lexer)
     val parser = CompleteParser()
-    val interpreter = InterpreterImpl(ConsoleContext())
-    val reader = BufferedReader(fileContent.reader())
-    var statement = ""
-    while (true) {
-        val char = reader.read()
-        if (char == -1) {
-            break // end of file
-        } else if (char.toChar() == '\n') {
-            continue
-        } else if (char.toChar() == ';') {
-            val tokens = lexer.getTokens(statement, 0)
-            val ast = parser.parseLine(tokens)
-            interpreter.interpret(ast)
-            statement = ""
-        } else {
-            statement += char.toChar()
-        }
+    val astIterator = ASTIterator(parser, tokenListIterator)
+    val interpreter = InterpreterWithIterator(InterpreterImpl(ConsoleContext()), astIterator)
+    while (interpreter.hasNextInterpretation()) {
+        interpreter.interpretNextAST()
     }
 }
+
 fun main(args: Array<String>) {
     val parser = ArgParser("printscript")
     val operation by parser.option(
@@ -55,7 +45,8 @@ fun main(args: Array<String>) {
     ).default("1.0")
     parser.parse(args)
     when (operation) {
-        MenuOptions.Execution -> { execute(input)
+        MenuOptions.Execution -> { execute(input, version)
+            // TODO: ADD format and lint operations
         }
     }
 }

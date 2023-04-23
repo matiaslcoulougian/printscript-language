@@ -33,7 +33,7 @@ jar {
 task packageDistribution(type: Copy) {
     dependsOn jar
     from "${project.rootDir}/scripts/cli"
-    from("${project.buildDir}/libs/${project.name}-0.0.1.jar") {
+    from("${project.buildDir}/libs/${project.name}-0.0.2.jar") {
         into("lib")
     }
     into "${project.rootDir}/dist"

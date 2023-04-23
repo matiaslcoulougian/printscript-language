@@ -1,10 +1,10 @@
 package unit
 
 import ast.AssignationAST
+import ast.BooleanAST
+import ast.NumberAST
+import ast.StringAST
 import ast.VariableAST
-import ast.literalAST.BooleanAST
-import ast.literalAST.NumberAST
-import ast.literalAST.StringAST
 import org.junit.jupiter.api.Test
 import printscript.language.parser.AssignationParser
 import printscript.language.token.Token

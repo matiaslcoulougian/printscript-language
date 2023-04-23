@@ -1,9 +1,9 @@
 package unit
 
 import ast.BlockAST
+import ast.BooleanAST
 import ast.IfAST
-import ast.literalAST.BooleanAST
-import ast.literalAST.StringAST
+import ast.StringAST
 import org.junit.jupiter.api.Test
 import printscript.language.parser.BlockParser
 import printscript.language.token.Token

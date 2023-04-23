@@ -1,7 +1,7 @@
 package printscript.language.linter
 
 import Type
-import ast.*
+import ast.* // ktlint-disable no-wildcard-imports
 import org.junit.jupiter.api.Test
 import prinscript.language.linter.LinterImpl
 import prinscript.language.rule.CamelCaseRule

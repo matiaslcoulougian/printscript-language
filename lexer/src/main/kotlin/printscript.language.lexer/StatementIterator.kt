@@ -27,7 +27,7 @@ class StatementIterator(private val fileInputStream: FileInputStream, private va
             if (char == '\n') { // ignore new lines
                 continue
             } else if (char == ';' && (!supportBlocks || depth == 0)) {
-                nextStatement = statement + char
+                nextStatement = statement
                 break // end of statement
             } else if (char == '{' && supportBlocks) {
                 depth++

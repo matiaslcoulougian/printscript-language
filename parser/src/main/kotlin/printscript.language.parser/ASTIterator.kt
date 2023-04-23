@@ -5,11 +5,11 @@ import printscript.language.token.Token
 
 class ASTIterator(
     private val parser: Parser,
-    private val tokenListIterator: Iterator<List<Token>>
+    private val tokenListIterator: Iterator<List<Token>>,
 ) : Iterator<AST?> {
-    private var nextAST: AST? = null;
+    private var nextAST: AST? = null
     override fun hasNext(): Boolean {
-        if (tokenListIterator.hasNext()){
+        if (tokenListIterator.hasNext()) {
             val tokens = tokenListIterator.next()
             nextAST = parser.parseLine(tokens)
         }
@@ -18,13 +18,12 @@ class ASTIterator(
 
     override fun next(): AST? {
         if (nextAST == null) {
-            if (!tokenListIterator.hasNext()) return null;
+            if (!tokenListIterator.hasNext()) return null
             val tokens = tokenListIterator.next()
             nextAST = parser.parseLine(tokens)
         }
-        val newAST = nextAST;
-        nextAST = null;
-        return newAST;
+        val newAST = nextAST
+        nextAST = null
+        return newAST
     }
-
 }

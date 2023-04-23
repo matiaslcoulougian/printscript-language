@@ -7,10 +7,10 @@ class InterpreterWithIterator(
     private val astIterator: Iterator<AST?>,
 ) {
     fun interpretNextAST() {
-        if (!astIterator.hasNext()) return
         val nextAST = astIterator.next()
         if (nextAST != null) {
             interpreter.interpret(nextAST)
         }
     }
+    fun hasNextInterpretation(): Boolean = astIterator.hasNext()
 }

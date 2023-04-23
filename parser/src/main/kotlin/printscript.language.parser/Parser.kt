@@ -49,8 +49,9 @@ class Parser(private val statementParsers: List<StatementParser>) {
         }
         return astList
     }
-    fun parseLine(tokens: List<Token>): AST? {
-        return statementParsers.find { it -> it.isValidStatement(tokens) }?.parseStatement(tokens)
+    fun parseLine(tokens: List<Token>): AST {
+        return statementParsers.find { it.isValidStatement(tokens) }?.parseStatement(tokens)
+            ?: throw Exception("Cant parse expression.")
     }
 
     // Gets all tokens and separates them into lines, removing the semicolons and EOF token
@@ -80,6 +81,7 @@ class Parser(private val statementParsers: List<StatementParser>) {
                 TokenType.OPEN_BLOCK -> depth++
                 TokenType.CLOSE_BLOCK -> depth--
                 TokenType.EOL -> if (depth == 0) return index
+                else -> {}
             }
         }
         return -1

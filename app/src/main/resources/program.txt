@@ -1,3 +1,9 @@
-let test: string = "Hello World";
-let joe: number = 2;
-print(joe);
+let test: string = "Hello World"
+println(test);
+const bool: boolean = true;
+println(a);
+if (bool) {
+    println("riki pvto");
+} else {
+    println("riki lindo");
+};

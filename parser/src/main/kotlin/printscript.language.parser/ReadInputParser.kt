@@ -1,7 +1,6 @@
 package printscript.language.parser
 
 import ast.AST
-import ast.NumberAST
 import ast.PrintAST
 import printscript.language.token.Token
 import printscript.language.token.TokenType
@@ -9,15 +8,17 @@ import printscript.language.token.TokenType
 class ReadInputParser : StatementParser {
     override fun isValidStatement(tokens: List<Token>): Boolean {
         val shuntingYardParser = ShuntingYardParser()
-        return !(tokens[0].type != TokenType.READ_INPUT ||
+        return !(
+            tokens[0].type != TokenType.READ_INPUT ||
                 tokens[1].type != TokenType.OPEN_PARENTHESIS ||
                 tokens[tokens.size - 1].type != TokenType.CLOSE_PARENTHESIS ||
-                !shuntingYardParser.isValidStatement(tokens.subList(2, tokens.size-1)))
+                !shuntingYardParser.isValidStatement(tokens.subList(2, tokens.size-1))
+            )
     }
 
     override fun parseStatement(tokens: List<Token>): AST {
         val argumentParser = StatementParser()
-        val argument = argumentParser.parse(tokens.subList(2, tokens.size-1)) //removing parentheses and println
+        val argument = argumentParser.parse(tokens.subList(2, tokens.size - 1)) // removing parentheses and println
         return PrintAST(argument[0])
     }
 }
