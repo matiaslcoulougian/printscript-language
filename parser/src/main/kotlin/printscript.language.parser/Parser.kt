@@ -49,13 +49,8 @@ class Parser(private val statementParsers: List<StatementParser>) {
         }
         return astList
     }
-    fun parseLine(tokens: List<Token>): AST {
-        val validParser = statementParsers.find { it -> it.isValidStatement(tokens) }
-        if (validParser != null) {
-            return validParser.parseStatement(tokens)
-        } else {
-            throw Exception("Cant parse expression, no valid parser found")
-        }
+    fun parseLine(tokens: List<Token>): AST? {
+        return statementParsers.find { it -> it.isValidStatement(tokens) }?.parseStatement(tokens)
     }
 
     // Gets all tokens and separates them into lines, removing the semicolons and EOF token

@@ -7,7 +7,7 @@ class TokenListIterator(private val lexer: Lexer) : Iterator<List<Token>> {
 
     override fun hasNext(): Boolean {
         if (nextTokenList.isEmpty()) nextTokenList = lexer.getTokens()
-        return !nextTokenList.isEmpty()
+        return nextTokenList.isNotEmpty()
     }
 
     override fun next(): List<Token> {
