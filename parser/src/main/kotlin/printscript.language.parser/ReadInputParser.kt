@@ -1,7 +1,7 @@
 package printscript.language.parser
 
 import ast.AST
-import ast.literalAST.NumberAST
+import ast.NumberAST
 import printscript.language.token.Token
 import printscript.language.token.TokenType
 

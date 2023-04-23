@@ -8,11 +8,11 @@ import java.io.InputStreamReader
 import kotlin.test.assertEquals
 
 class LexerTest {
-    var fileInputStream = FileInputStream("src/test/resources/lexer-test.txt")
-    var lexer = LexerFactory().createLexer("1.1", fileInputStream)
-    val testFileReader = BufferedReader(InputStreamReader(fileInputStream))
+    private var fileInputStream = FileInputStream("src/test/resources/lexer-test.txt")
+    private var lexer = LexerFactory().createLexer("1.1", fileInputStream)
+    private val testFileReader = BufferedReader(InputStreamReader(fileInputStream))
 
-    fun testStatement(expectedTokens: List<Token>, inputString: String) {
+    private fun testStatement(expectedTokens: List<Token>, inputString: String) {
         val resultTokens: List<Token> = lexer.getTokens(inputString, 1)
         assertEquals(expectedTokens, resultTokens)
     }

@@ -1,20 +1,24 @@
 package printscript.language.lexer
 
-import printscript.language.lexer.utils.avoidQuoteEncloseEndPattern
-import printscript.language.lexer.utils.avoidQuoteEncloseStartPattern
 import printscript.language.token.Token
 import printscript.language.token.TokenType
 
 class SymbolLexer(private val symbolMap: Map<String, TokenType>) : Lexer {
-    val escapedSymbolList = symbolMap.keys.map { symbol -> Regex("[\\^+*?{}\\[\\]()$.|]").replace(symbol, "\\\\$0") }
-    val symbolPattern = Regex("""$avoidQuoteEncloseStartPattern(${escapedSymbolList.joinToString("|")})$avoidQuoteEncloseEndPattern""")
+    private var stringDelimiter = ""
+
     override fun getTokens(input: String, line: Int): List<Token> {
-        return symbolPattern.findAll(input)
-            .map { match ->
-                val value = match.value
-                val range = match.range
-                Token(symbolMap[value]!!, line, range.first)
+        val tokens = mutableListOf<Token>()
+        for (index in input.indices) {
+            val char = input[index]
+            if ((char == '"' || char == '\'') && stringDelimiter == "") {
+                stringDelimiter = "$char"
+            } else if ((char == '"' || char == '\'') && stringDelimiter == "$char") {
+                stringDelimiter = ""
+            } else if (stringDelimiter == "") {
+                val symbolTokenType = symbolMap["$char"]
+                if (symbolTokenType != null) tokens.add(Token(symbolTokenType, line, index))
             }
-            .toList()
+        }
+        return tokens
     }
 }
