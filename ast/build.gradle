@@ -2,10 +2,6 @@ plugins {
     id 'printscript.language.kotlin-custom-conventions'
 }
 
-dependencies {
-
-}
-
 version "0.0.1-SNAPSHOT"
 
 
