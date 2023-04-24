@@ -25,6 +25,8 @@ enum class TokenType {
     ELSE,
     OPEN_BLOCK,
     CLOSE_BLOCK,
-    READ_INPUT
+    READ_INPUT,
 }
-data class Token(val type: TokenType, val line: Int = 0, val column: Int = 0, val value: String = "")
+data class Token(val type: TokenType, val line: Int, val column: Int, val value: String = "") {
+    constructor(type: TokenType, value: String = "") : this(type, 0, 0, value)
+}

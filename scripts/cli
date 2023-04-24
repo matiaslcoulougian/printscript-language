@@ -1,2 +1,2 @@
 #/usr/bin
-java -jar lib/cli-0.0.1.jar $@
+java -jar lib/app-0.0.2.jar $@

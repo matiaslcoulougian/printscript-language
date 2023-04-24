@@ -8,12 +8,12 @@ class ComposedLexer(private val lexers: List<Lexer>, private val statementIterat
         val tokens = lexers.flatMap { it.getTokens(input, line) }
         return tokens.sortedBy { it.column }
     }
-    override fun getTokens(): List<Token>? {
+    override fun getTokens(): List<Token> {
         if (statementIterator.hasNext()) {
             val statement = statementIterator.next()!!
             line++
             return getTokens(statement, line)
         }
-        return null
+        return emptyList()
     }
 }

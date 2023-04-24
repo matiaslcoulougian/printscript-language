@@ -13,6 +13,8 @@ fun CompleteParser(): Parser {
             PrintParser(),
             IfParser(),
             BlockParser(),
+            AssignationParser(),
+            ReadInputParser(),
         ),
     )
 }
@@ -50,12 +52,8 @@ class Parser(private val statementParsers: List<StatementParser>) {
         return astList
     }
     fun parseLine(tokens: List<Token>): AST {
-        val validParser = statementParsers.find { it -> it.isValidStatement(tokens) }
-        if (validParser != null) {
-            return validParser.parseStatement(tokens)
-        } else {
-            throw Exception("Cant parse expression, no valid parser found")
-        }
+        return statementParsers.find { it.isValidStatement(tokens) }?.parseStatement(tokens)
+            ?: throw Exception("Cant parse expression from line " + tokens[0].line + " to line " + tokens[tokens.size - 1].line + ".")
     }
 
     // Gets all tokens and separates them into lines, removing the semicolons and EOF token
@@ -85,6 +83,7 @@ class Parser(private val statementParsers: List<StatementParser>) {
                 TokenType.OPEN_BLOCK -> depth++
                 TokenType.CLOSE_BLOCK -> depth--
                 TokenType.EOL -> if (depth == 0) return index
+                else -> {}
             }
         }
         return -1

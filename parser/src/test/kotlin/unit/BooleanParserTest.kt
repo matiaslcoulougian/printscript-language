@@ -1,6 +1,6 @@
 package unit
 
-import ast.literalAST.BooleanAST
+import ast.BooleanAST
 import org.junit.jupiter.api.Test
 import printscript.language.parser.BooleanParser
 import printscript.language.token.Token

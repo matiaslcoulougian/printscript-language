@@ -2,9 +2,9 @@ package printscript.language.parser
 
 import ast.AST
 import ast.BlockAST
+import ast.BooleanAST
 import ast.IfAST
 import ast.VariableAST
-import ast.BooleanAST
 import printscript.language.token.Token
 import printscript.language.token.TokenType
 

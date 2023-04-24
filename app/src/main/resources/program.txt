@@ -1,3 +1,3 @@
 let test: string = "Hello World";
-let joe: number = 2;
-print(joe);
+println(test);
+const aNumber: number = 1 + 1;
