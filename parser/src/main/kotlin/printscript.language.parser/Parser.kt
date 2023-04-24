@@ -13,6 +13,8 @@ fun CompleteParser(): Parser {
             PrintParser(),
             IfParser(),
             BlockParser(),
+            AssignationParser(),
+            ReadInputParser(),
         ),
     )
 }
