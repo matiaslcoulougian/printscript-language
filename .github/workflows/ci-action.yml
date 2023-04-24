@@ -20,7 +20,12 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle-
       - name: Grant execute permission to gradlew
         run: chmod +x gradlew
-      - name: Run ktlintCheck
-        run: ./gradlew ktlintCheck --console=plain
-      - name: Run tests
-        run: ./gradlew test --console=plain
+      - name: Run build
+        run: ./gradlew build
+      - name: Run coverage
+        run: ./gradlew testCodeCoverageReport
+      - name: Add coverage to PR
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.3
+        with:
+          paths: ${{ github.workspace }}/interpreter/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml,${{ github.workspace }}/parser/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml,${{ github.workspace }}/lexer/build/reports/jacoco/testCodeCoverageReport/testCodeCoverageReport.xml

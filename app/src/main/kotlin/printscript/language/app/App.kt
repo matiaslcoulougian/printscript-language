@@ -4,6 +4,10 @@
 package printscript.language.app
 
 import kotlinx.cli.* // ktlint-disable no-wildcard-imports
+import prinscript.language.linter.LinterImpl
+import prinscript.language.rule.CamelCaseRule
+import prinscript.language.rule.NoExpressionsOnPrintRule
+import prinscript.language.rule.NoExpressionsOnReadRule
 import printscript.language.interpreter.contextProvider.ConsoleContext
 import printscript.language.interpreter.interpreter.InterpreterImpl
 import printscript.language.interpreter.interpreter.InterpreterWithIterator
@@ -16,18 +20,45 @@ import java.io.FileInputStream
 
 enum class MenuOptions {
     Execution,
+    Analyze,
 }
 
 fun execute(fileName: String?, version: String) {
-    val fileContent = File(fileName ?: return)
-    val lexer = LexerFactory().createLexer(version, FileInputStream(fileContent))
-    val tokenListIterator = TokenListIterator(lexer)
-    val parser = CompleteParser()
-    val astIterator = ASTIterator(parser, tokenListIterator)
+    if (fileName == null) {
+        println("No file provided")
+        return
+    }
+    val astIterator = getAstIterator(fileName, version)
     val interpreter = InterpreterWithIterator(InterpreterImpl(ConsoleContext()), astIterator)
     while (interpreter.hasNextInterpretation()) {
         interpreter.interpretNextAST()
     }
+}
+
+fun analyze(fileName: String?, version: String) {
+    if (fileName == null) {
+        println("No file provided")
+        return
+    }
+    val astIterator = getAstIterator(fileName, version)
+    val linter = LinterImpl(
+        listOf(
+            CamelCaseRule,
+            NoExpressionsOnPrintRule,
+            NoExpressionsOnReadRule,
+        ),
+    )
+    while (astIterator.hasNext()) {
+        linter.lint(astIterator.next() ?: return).forEach { println(it) }
+    }
+}
+
+private fun getAstIterator(fileName: String, version: String): ASTIterator {
+    val fileContent = File(fileName)
+    val lexer = LexerFactory().createLexer(version, FileInputStream(fileContent))
+    val tokenListIterator = TokenListIterator(lexer)
+    val parser = CompleteParser()
+    return ASTIterator(parser, tokenListIterator)
 }
 
 fun main(args: Array<String>) {
@@ -45,9 +76,8 @@ fun main(args: Array<String>) {
     ).default("1.0")
     parser.parse(args)
     when (operation) {
-        MenuOptions.Execution -> { execute(input, version)
-            // TODO: ADD format and lint operations
-        }
+        MenuOptions.Execution -> execute(input, version)
+        MenuOptions.Analyze -> analyze(input, version)
     }
 }
 
