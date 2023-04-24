@@ -17,26 +17,37 @@ class Test {
             BlockAST(
                 listOf(
                     PrintAST(
-                        MulAST(NumberAST(1.0), NumberAST(1.0)),
+                        MulAST(NumberAST(1.0, 1, 2), NumberAST(1.0, 1, 3), 1, 1),
+                        1,
+                        1,
                     ),
                     PrintAST(
-                        SubAST(NumberAST(3.0), NumberAST(2.0)),
+                        SubAST(NumberAST(3.0, 2, 1), NumberAST(2.0, 2, 2)),
+                        2,
+                        1,
                     ),
                 ),
+                1,
+                1,
             ),
             BlockAST(
                 listOf(
                     PrintAST(
-                        SumAST(StringAST("Hello"), StringAST("World")),
+                        SumAST(StringAST("Hello", 3, 3), StringAST("World", 3, 4), 3, 2),
+                        3,
+                        1,
                     ),
                     PrintAST(
-                        StringAST("Hello World"),
+                        StringAST("Hello World", 4, 1),
+                        4,
+                        1,
                     ),
                 ),
             ),
         )
         val linter = LinterImpl(listOf(NoExpressionsOnPrintRule))
         val messages = linter.lint(tree2)
+        println(messages)
         assert(messages.size == 3)
     }
 

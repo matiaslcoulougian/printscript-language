@@ -16,7 +16,11 @@ data class DeclarationAST(
     val type: Type,
 
     val isConst: Boolean = false,
+    val line: Int,
+    val column: Int,
 ) : AST {
+
+    constructor(name: String, type: Type, isConst: Boolean = false) : this(name, type, isConst, -1, -1)
 
     override fun accept(visitor: ASTVisitor): AST = visitor.visit(this)
 }
