@@ -53,7 +53,7 @@ class Parser(private val statementParsers: List<StatementParser>) {
     }
     fun parseLine(tokens: List<Token>): AST {
         return statementParsers.find { it.isValidStatement(tokens) }?.parseStatement(tokens)
-            ?: throw Exception("Cant parse expression.")
+            ?: throw Exception("Cant parse expression from line " + tokens[0].line + " to line " + tokens[tokens.size - 1].line + ".")
     }
 
     // Gets all tokens and separates them into lines, removing the semicolons and EOF token
