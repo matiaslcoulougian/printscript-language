@@ -1,5 +1,10 @@
 let test: string = "Hello World";
 println(test);
 let hello: boolean = true;
-const name: boolean = readInput("Enter your name: ");
-println(name);
+const aBool: boolean = readInput("Enter a boolean: ");
+println(aBool);
+if (aBool) {
+    println("it is true ");
+} else {
+    println('it is false!');
+}

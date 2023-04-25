@@ -1,8 +1,8 @@
 package printscript.language.lexer
 
-import java.io.FileInputStream
+import java.io.InputStream
 
-class StatementIterator(private val fileInputStream: FileInputStream, private val supportBlocks: Boolean) : Iterator<String?> {
+class StatementIterator(private val inputStream: InputStream, private val supportBlocks: Boolean) : Iterator<String?> {
     private var nextStatement: String? = null
 
     override fun hasNext(): Boolean {
@@ -21,12 +21,11 @@ class StatementIterator(private val fileInputStream: FileInputStream, private va
         var statement = ""
         var depth = 0
         while (true) {
-            val byte = fileInputStream.read()
-            if (byte == -1) break // end of file
+            val byte = inputStream.read()
             val char = byte.toChar()
             if (char == '\n') { // ignore new lines
                 continue
-            } else if (char == ';' && (!supportBlocks || depth == 0)) {
+            } else if ((char == ';' && (!supportBlocks || depth == 0)) || byte == -1) {
                 nextStatement = statement
                 break // end of statement
             } else if (char == '{' && supportBlocks) {
