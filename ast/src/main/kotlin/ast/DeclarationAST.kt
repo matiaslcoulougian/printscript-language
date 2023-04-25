@@ -20,7 +20,7 @@ data class DeclarationAST(
     val column: Int,
 ) : AST {
 
-    constructor(name: String, type: Type, isConst: Boolean = false) : this(name, type, isConst, -1, -1)
+    constructor(name: String, type: Type, isConst: Boolean = false) : this(name, type, isConst, 0, 0)
 
     override fun accept(visitor: ASTVisitor): AST = visitor.visit(this)
 }
