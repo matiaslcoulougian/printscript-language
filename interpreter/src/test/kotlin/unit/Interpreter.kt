@@ -230,7 +230,7 @@ class Interpreter {
                 Type.NUMBER,
                 false,
             ),
-            InputAST(StringAST("enter a number"), Type.NUMBER),
+            InputAST(StringAST("enter a number")),
         )
         interpreter.interpret(tree)
         assert(interpreter.getMemory().get("someNumber").type == Type.NUMBER)

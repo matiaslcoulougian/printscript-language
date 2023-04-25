@@ -38,9 +38,12 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
     private fun getType(ast: AST): Type {
         if (ast is VariableAST) {
             return getMemory().getType(ast.name)
-        } else if (ast is LiteralAST<*>) return ast.type
+        } else if (ast is LiteralAST<*>) {
+            return ast.type
+        } else if (ast is DeclarationAST) return ast.type
         return Type.UNDEFINED
     }
+
     private fun isConst(variable: VariableAST): Boolean = getMemory().getIsConst(variable.name)
 
     private fun getValue(ast: AST): Any? {
@@ -53,13 +56,19 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
     override fun visit(declarationAST: DeclarationAST): AST = declarationAST
     override fun visit(assignationAST: AssignationAST): AST {
         val declaration = assignationAST.declaration.accept(this)
-        when (val expression = assignationAST.expression.accept(this)) {
-            is LiteralAST<*> -> when (declaration) {
-                is DeclarationAST -> addVariable(declaration, expression)
+        var expression = assignationAST.expression.accept(this)
+        when (expression) {
+            is LiteralAST<*> -> {
+                if (expression is LiteralInputAST) {
+                    expression = inferenceType(expression, getType(declaration))
+                }
+                when (declaration) {
+                    is DeclarationAST -> addVariable(declaration, expression)
 
-                is VariableAST -> setVariable(declaration, expression)
+                    is VariableAST -> setVariable(declaration, expression)
 
-                else -> throw Exception("Cannot assign $expression to $declaration")
+                    else -> throw Exception("Cannot assign $expression to $declaration")
+                }
             }
         }
 
@@ -83,6 +92,15 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
         }
     }
 
+    private fun inferenceType(expression: LiteralInputAST, type: Type): LiteralAST<*> {
+        return when (type) {
+            Type.NUMBER -> NumberAST(expression.value.toDouble())
+            Type.STRING -> StringAST(expression.value)
+            Type.BOOLEAN -> BooleanAST(expression.value.toBooleanStrict())
+            else -> throw Exception("Cannot inference type")
+        }
+    }
+
     private fun addVariable(declaration: DeclarationAST, expression: LiteralAST<*>) {
         if (validateTypes(declaration.type, expression)) {
             setMemory(
@@ -92,6 +110,7 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
                         this.getValue(expression),
                         declaration.isConst,
                         declaration.type,
+
                     ),
                 ),
             )
@@ -120,12 +139,15 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
             leftValue is String && rightValue is String -> {
                 StringAST(leftValue + rightValue)
             }
+
             leftValue is String && rightValue is Number -> {
                 StringAST(leftValue + rightValue)
             }
+
             leftValue is Number && rightValue is String -> {
                 StringAST(leftValue + rightValue)
             }
+
             else -> {
                 throw Exception("Cannot sum $leftValue and $rightValue")
             }
@@ -169,6 +191,7 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
             leftValue is Number && rightValue is Number -> {
                 NumberAST(leftValue * rightValue)
             }
+
             else -> {
                 throw Exception("Cannot sum $leftValue and $rightValue")
             }
@@ -209,13 +232,10 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
 
     override fun visit(inputAST: InputAST): AST {
         contextProvider.emit(getValue(inputAST.inputMsg.accept(this)).toString())
-        return when (inputAST.type) {
-            Type.NUMBER -> NumberAST(contextProvider.read(0.0))
-            Type.STRING -> StringAST(contextProvider.read(""))
-            Type.BOOLEAN -> BooleanAST(contextProvider.read(false))
-            else -> throw Exception("Cannot read ${inputAST.type}")
-        }
+        return LiteralInputAST(contextProvider.read("1"), inputAST.line, inputAST.column)
     }
+
+    override fun visit(literalInputAST: LiteralInputAST): AST = literalInputAST
 
     override fun visit(numberAST: NumberAST): AST = numberAST
 }

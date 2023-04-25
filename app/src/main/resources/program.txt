@@ -1,5 +1,5 @@
 let test: string = "Hello World";
 println(test);
 let hello: boolean = true;
-const name: string = readInput("Enter your name: "): string;
-println("Hello " + name);
+const name: boolean = readInput("Enter your name: ");
+println(name);

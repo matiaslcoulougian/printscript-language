@@ -31,6 +31,7 @@ class LinterImpl(private val rules: List<Rule>) : Linter {
             } else {
                 visit(ast.condition) + visit(ast.ifBlock) + lintRules(ast)
             }
+            is LiteralInputAST -> lintRules(ast)
         }
     }
 

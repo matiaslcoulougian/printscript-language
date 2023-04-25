@@ -14,23 +14,12 @@ class ConsoleReader : Reader {
     /**
      * Reads a line from the console
      */
-    private fun readNumber(): Number = scanner.nextLine().toDouble()
-
-    private fun readString(): String = scanner.nextLine()
-
-    private fun readBoolean(): Boolean = scanner.nextLine().toBoolean()
-
-    override fun <T> read(default: T): T {
-        try {
-            return when (default) {
-                is Number -> readNumber() as T
-                is String -> readString() as T
-                is Boolean -> readBoolean() as T
-                else -> throw IllegalArgumentException("Unsupported type: $default")
-            }
+    override fun read(default: String): String {
+        return try {
+            scanner.nextLine()
         } catch (e: Exception) {
             println(e)
-            return default
+            default
         }
     }
 }
@@ -44,5 +33,5 @@ sealed interface Reader {
      * Reads a line
      */
 
-    fun <T> read(default: T): T
+    fun read(default: String): String
 }

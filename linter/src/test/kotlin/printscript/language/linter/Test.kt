@@ -59,11 +59,9 @@ class Test {
                 listOf(
                     InputAST(
                         MulAST(NumberAST(1.0), NumberAST(1.0)),
-                        Type.NUMBER,
                     ),
                     InputAST(
                         SubAST(NumberAST(3.0), NumberAST(2.0)),
-                        Type.NUMBER,
                     ),
                 ),
             ),
@@ -71,11 +69,9 @@ class Test {
                 listOf(
                     InputAST(
                         SumAST(StringAST("Hello"), StringAST("World")),
-                        Type.STRING,
                     ),
                     InputAST(
                         StringAST("Hello World"),
-                        Type.STRING,
                     ),
                 ),
             ),

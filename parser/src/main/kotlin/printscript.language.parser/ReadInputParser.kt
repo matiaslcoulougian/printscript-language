@@ -19,6 +19,6 @@ class ReadInputParser : StatementParser {
     override fun parseStatement(tokens: List<Token>): AST {
         val argumentParser = StatementParser()
         val argument = argumentParser.parse(tokens.subList(2, tokens.size - 1)) // removing parentheses and println
-        return InputAST(argument[0], Type.STRING, tokens[0].line, tokens[0].column)
+        return InputAST(argument[0], tokens[0].line, tokens[0].column)
     }
 }

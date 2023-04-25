@@ -71,4 +71,5 @@ public interface ASTVisitor {
     fun visit(ifAST: IfAST): AST
 
     fun visit(inputAST: InputAST): AST
+    fun visit(literalInputAST: LiteralInputAST): AST
 }
