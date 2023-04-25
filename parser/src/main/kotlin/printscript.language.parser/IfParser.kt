@@ -14,7 +14,6 @@ class IfParser : StatementParser {
             checkExceptions(tokens)
             true
         } catch (e: Exception) {
-            println(e.message)
             false
         }
     }
@@ -58,22 +57,22 @@ class IfParser : StatementParser {
     private fun checkExceptions(tokens: List<Token>) {
         if (tokens[0].type != TokenType.IF) throw Exception("invalid declaration")
         if (tokens[1].type == TokenType.OPEN_PARENTHESIS) {
-            if (tokens[2].type != TokenType.VARIABLE &&
+            if (tokens[2].type != TokenType.IDENTIFIER &&
                 tokens[2].type != TokenType.TRUE &&
                 tokens[2].type != TokenType.FALSE
             ) {
-                throw Exception("Invalid boolean argument")
+                throw Exception("Invalid boolean argument in column ${tokens[2].column}")
             }
-            if (tokens[3].type != TokenType.CLOSE_PARENTHESIS) throw Exception("Invalid boolean argument")
-            if (tokens[4].type != TokenType.OPEN_BLOCK) { throw Exception("No block for if statement") }
+            if (tokens[3].type != TokenType.CLOSE_PARENTHESIS) throw Exception("Invalid boolean argument in column ${tokens[3].column}")
+            if (tokens[4].type != TokenType.OPEN_BLOCK) { throw Exception("No block for if statement in line ${tokens[4].line}") }
         } else {
-            if (tokens[1].type != TokenType.VARIABLE &&
+            if (tokens[1].type != TokenType.IDENTIFIER &&
                 tokens[1].type != TokenType.TRUE &&
                 tokens[1].type != TokenType.FALSE
             ) {
-                throw Exception("Invalid boolean argument")
+                throw Exception("Invalid boolean argument in column ${tokens[1].column}")
             }
-            if (tokens[2].type != TokenType.OPEN_BLOCK) { throw Exception("No block for if statement") }
+            if (tokens[2].type != TokenType.OPEN_BLOCK) { throw Exception("No block for if statement in line ${tokens[2].line}") }
         }
 
         val blockParser = BlockParser()

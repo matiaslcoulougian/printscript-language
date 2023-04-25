@@ -14,12 +14,12 @@ import printscript.language.interpreter.interpreter.InterpreterWithIterator
 import printscript.language.lexer.LexerFactory
 import printscript.language.lexer.TokenListIterator
 import printscript.language.parser.ASTIterator
-import printscript.language.parser.CompleteParser
+import printscript.language.parser.ParserFactory
 import java.io.File
 import java.io.FileInputStream
 
 enum class MenuOptions {
-    Execution,
+    Execute,
     Analyze,
 }
 
@@ -57,7 +57,7 @@ private fun getAstIterator(fileName: String, version: String): ASTIterator {
     val fileContent = File(fileName)
     val lexer = LexerFactory().createLexer(version, FileInputStream(fileContent))
     val tokenListIterator = TokenListIterator(lexer)
-    val parser = CompleteParser()
+    val parser = ParserFactory().createParser(version)
     return ASTIterator(parser, tokenListIterator)
 }
 
@@ -67,7 +67,7 @@ fun main(args: Array<String>) {
         ArgType.Choice<MenuOptions>(),
         shortName = "o",
         description = "Operation to run",
-    ).default(MenuOptions.Execution)
+    ).default(MenuOptions.Execute)
     val input by parser.option(ArgType.String, shortName = "i", description = "Input file")
     val version by parser.option(
         ArgType.Choice(listOf("1.0", "1.1"), { it }),
@@ -76,7 +76,7 @@ fun main(args: Array<String>) {
     ).default("1.0")
     parser.parse(args)
     when (operation) {
-        MenuOptions.Execution -> execute(input, version)
+        MenuOptions.Execute -> execute(input, version)
         MenuOptions.Analyze -> analyze(input, version)
     }
 }

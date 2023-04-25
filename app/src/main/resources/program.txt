@@ -1,3 +1,5 @@
 let test: string = "Hello World";
 println(test);
-const aNumber: number = 1 + 1;
+let hello: boolean = true;
+const name: string = readInput("Enter your name: "): string;
+println("Hello " + name);
