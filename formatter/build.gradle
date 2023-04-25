@@ -1,0 +1,9 @@
+plugins {
+    id 'printscript.language.kotlin-custom-conventions'
+}
+
+dependencies {
+    implementation project(':ast')
+}
+
+version "0.0.1-SNAPSHOT"

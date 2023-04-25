@@ -3,6 +3,7 @@
  */
 package printscript.language.app
 
+import FormatterImpl
 import kotlinx.cli.* // ktlint-disable no-wildcard-imports
 import prinscript.language.linter.LinterImpl
 import prinscript.language.rule.CamelCaseRule
@@ -17,10 +18,10 @@ import printscript.language.parser.ASTIterator
 import printscript.language.parser.ParserFactory
 import java.io.File
 import java.io.FileInputStream
-
 enum class MenuOptions {
     Execute,
     Analyze,
+    Format,
 }
 
 fun execute(fileName: String?, version: String) {
@@ -52,6 +53,17 @@ fun analyze(fileName: String?, version: String) {
         linter.lint(astIterator.next() ?: return).forEach { println(it) }
     }
 }
+fun format(fileName: String?, version: String) {
+    if (fileName == null) {
+        println("No file provided")
+        return
+    }
+    val astIterator = getAstIterator(fileName, version)
+    val formatter = FormatterImpl(fileName.replace(".txt", "_formatted.txt"))
+    while (astIterator.hasNext()) {
+        formatter.format(astIterator.next() ?: return)
+    }
+}
 
 private fun getAstIterator(fileName: String, version: String): ASTIterator {
     val fileContent = File(fileName)
@@ -78,6 +90,7 @@ fun main(args: Array<String>) {
     when (operation) {
         MenuOptions.Execute -> execute(input, version)
         MenuOptions.Analyze -> analyze(input, version)
+        MenuOptions.Format -> format(input, version)
     }
 }
 

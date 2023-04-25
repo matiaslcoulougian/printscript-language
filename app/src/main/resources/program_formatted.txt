@@ -1,0 +1,10 @@
+let test = "Hello World";
+println( test );
+let hello = true;
+const name = readInput( "Enter your name: " );
+println( name );
+if(hello) {
+	println( "Hello World" ); 
+} else {
+	println( "Goodbye World" ); 
+};

@@ -1,5 +1,6 @@
 package printscript.language.app
 
+import FormatterImpl
 import printscript.language.interpreter.contextProvider.ConsoleContext
 import printscript.language.interpreter.interpreter.InterpreterImpl
 import printscript.language.interpreter.interpreter.InterpreterWithIterator
@@ -13,8 +14,9 @@ import java.io.FileInputStream
 fun main() {
     val astIterator = getAstIterator("app/src/main/resources/program.txt", "1.1")
     val interpreter = InterpreterWithIterator(InterpreterImpl(ConsoleContext()), astIterator)
-    while (interpreter.hasNextInterpretation()) {
-        interpreter.interpretNextAST()
+    val formatter = FormatterImpl("app/src/main/resources/program_formatted.txt")
+    while (astIterator.hasNext()) {
+        formatter.format(astIterator.next() ?: return)
     }
 }
 
