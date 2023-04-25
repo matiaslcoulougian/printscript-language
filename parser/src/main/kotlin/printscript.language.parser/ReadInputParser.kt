@@ -1,7 +1,7 @@
 package printscript.language.parser
 
 import ast.AST
-import ast.PrintAST
+import ast.InputAST
 import printscript.language.token.Token
 import printscript.language.token.TokenType
 
@@ -19,6 +19,6 @@ class ReadInputParser : StatementParser {
     override fun parseStatement(tokens: List<Token>): AST {
         val argumentParser = StatementParser()
         val argument = argumentParser.parse(tokens.subList(2, tokens.size - 1)) // removing parentheses and println
-        return PrintAST(argument[0])
+        return InputAST(argument[0], Type.STRING, tokens[0].line, tokens[0].column)
     }
 }

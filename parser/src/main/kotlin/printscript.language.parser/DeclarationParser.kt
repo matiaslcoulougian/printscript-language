@@ -24,11 +24,11 @@ class DeclarationParser() : StatementParser {
     override fun parseStatement(tokens: List<Token>): AST {
         val variableName = tokens[1].value
         val type = tokens[2].type
-        val declaration = DeclarationAST(variableName, getType(type), isConstant(tokens[0]))
+        val declaration = DeclarationAST(variableName, getType(type), isConstant(tokens[0]), tokens[1].line, tokens[1].column)
         if (tokens.size > 3 && tokens[3].type == TokenType.EQUALS) { // has an assignation
             val statementParser = StatementParser()
             val statement = statementParser.parseLine(tokens.subList(4, tokens.size))
-            return AssignationAST(declaration, statement)
+            return AssignationAST(declaration, statement, tokens[4].line, tokens[4].column)
         }
         return declaration
     }

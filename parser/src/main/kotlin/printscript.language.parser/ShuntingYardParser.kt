@@ -32,13 +32,13 @@ class ShuntingYardParser : StatementParser {
         try {
             for (token in postfixExpression) {
                 when (token.type) {
-                    TokenType.NUMBER_LITERAL -> stack.push(NumberAST(token.value.toDoubleOrNull() as Number))
-                    TokenType.STRING_LITERAL -> stack.push(StringAST(token.value))
-                    TokenType.IDENTIFIER -> stack.push(VariableAST(token.value))
-                    TokenType.SUM -> stack.push(SumAST(stack.pop(), stack.pop()))
-                    TokenType.SUBTRACTION -> stack.push(SubAST(stack.pop(), stack.pop()))
-                    TokenType.PRODUCT -> stack.push(MulAST(stack.pop(), stack.pop()))
-                    TokenType.DIVISION -> stack.push(DivAST(stack.pop(), stack.pop()))
+                    TokenType.NUMBER_LITERAL -> stack.push(NumberAST(token.value.toDoubleOrNull() as Number, token.line, token.column))
+                    TokenType.STRING_LITERAL -> stack.push(StringAST(token.value, token.line, token.column))
+                    TokenType.IDENTIFIER -> stack.push(VariableAST(token.value, token.line, token.column))
+                    TokenType.SUM -> stack.push(SumAST(stack.pop(), stack.pop(), token.line, token.column))
+                    TokenType.SUBTRACTION -> stack.push(SubAST(stack.pop(), stack.pop(), token.line, token.column))
+                    TokenType.PRODUCT -> stack.push(MulAST(stack.pop(), stack.pop(), token.line, token.column))
+                    TokenType.DIVISION -> stack.push(DivAST(stack.pop(), stack.pop(), token.line, token.column))
                     else -> throw Exception("Invalid token for value expresion")
                 }
             }

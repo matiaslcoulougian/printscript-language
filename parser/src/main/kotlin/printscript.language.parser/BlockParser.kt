@@ -14,6 +14,6 @@ class BlockParser : StatementParser {
     override fun parseStatement(tokens: List<Token>): BlockAST {
         val completeParser = CompleteParser()
         val astList = completeParser.parse(tokens.subList(1, tokens.size - 1))
-        return BlockAST(astList)
+        return BlockAST(astList, tokens[0].line, tokens[0].column)
     }
 }

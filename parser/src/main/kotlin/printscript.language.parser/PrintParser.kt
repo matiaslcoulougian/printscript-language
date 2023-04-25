@@ -17,8 +17,8 @@ class PrintParser() : StatementParser {
     }
 
     override fun parseStatement(tokens: List<Token>): AST {
-        val shuntingYardParser = ShuntingYardParser()
-        val argument = shuntingYardParser.parseStatement(tokens.subList(2, tokens.size - 1)) // removing PRINTLN and parenthesis
-        return PrintAST(argument)
+        val statementParser = StatementParser()
+        val argument = statementParser.parseLine(tokens.subList(2, tokens.size - 1)) // removing PRINTLN and parenthesis
+        return PrintAST(argument, tokens[0].line, tokens[0].column)
     }
 }

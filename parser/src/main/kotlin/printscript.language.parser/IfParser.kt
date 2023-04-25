@@ -25,9 +25,9 @@ class IfParser : StatementParser {
         val elseIndex = elseIndex(tokens)
         if (elseIndex > 0) {
             val elseBlock: BlockAST = getBlock(tokens.subList(elseIndex, tokens.size))
-            return IfAST(condition, ifBlock, elseBlock)
+            return IfAST(condition, ifBlock, elseBlock, tokens[0].line, tokens[0].column)
         }
-        return IfAST(condition, ifBlock)
+        return IfAST(condition, ifBlock, tokens[0].line, tokens[0].column)
     }
 
     private fun getBlock(tokens: List<Token>): BlockAST {

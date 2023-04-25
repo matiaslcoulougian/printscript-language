@@ -29,6 +29,6 @@ class AssignationParser : StatementParser {
         val parser = StatementParser()
         val value = parser.parseLine(tokens.subList(2, tokens.size))
 
-        return AssignationAST(VariableAST(identifierName), value)
+        return AssignationAST(VariableAST(identifierName, tokens[0].line, tokens[0].column), value, tokens[2].line, tokens[2].column)
     }
 }
