@@ -24,6 +24,7 @@ fun StatementParser(): Parser {
         listOf(
             ShuntingYardParser(),
             BooleanParser(),
+            ReadInputParser(),
         ),
     )
 }
