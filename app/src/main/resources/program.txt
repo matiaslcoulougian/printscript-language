@@ -1,10 +1,2 @@
-let test: string = "Hello World";
-println(test);
-let hello: boolean = true;
-const aBool: boolean = readInput("Enter a boolean: ");
-println(aBool);
-if (aBool) {
-    println("it is true ");
-} else {
-    println('it is false!');
-}
+let numberResult: number = 5 * 5 - 8;
+println(numberResult);

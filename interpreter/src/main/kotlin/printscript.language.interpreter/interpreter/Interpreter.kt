@@ -53,7 +53,21 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
         return null
     }
 
-    override fun visit(declarationAST: DeclarationAST): AST = declarationAST
+    private fun getStringValue(ast: AST): String? {
+        if (ast is LiteralAST<*>) {
+            return ast.getStringValue()
+        } else if (ast is VariableAST) {
+            val memoryValue = getMemory().get(ast.name).value
+            if (memoryValue is Double) return doubleToString(memoryValue)
+        }
+        return null
+    }
+
+    override fun visit(declarationAST: DeclarationAST): AST {
+        addVariable(declarationAST)
+        return declarationAST
+    }
+
     override fun visit(assignationAST: AssignationAST): AST {
         val declaration = assignationAST.declaration.accept(this)
         var expression = assignationAST.expression.accept(this)
@@ -64,7 +78,6 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
                 }
                 when (declaration) {
                     is DeclarationAST -> addVariable(declaration, expression)
-
                     is VariableAST -> setVariable(declaration, expression)
 
                     else -> throw Exception("Cannot assign $expression to $declaration")
@@ -101,29 +114,23 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
         }
     }
 
-    private fun addVariable(declaration: DeclarationAST, expression: LiteralAST<*>) {
-        if (validateTypes(declaration.type, expression)) {
-            setMemory(
-                getMemory().set(
-                    declaration.name,
-                    Variable(
-                        this.getValue(expression),
-                        declaration.isConst,
-                        declaration.type,
+    private fun addVariable(declaration: DeclarationAST, expression: LiteralAST<*>? = null) {
+        val validType = expression == null || validateTypes(declaration.type, expression)
+        if (!validType) throw Exception("Cannot assign $expression to ${declaration.type}")
 
-                    ),
-                ),
-            )
-        } else {
-            throw Exception("Cannot assign $expression to ${declaration.type}")
-        }
+        val invalidConst = declaration.isConst && expression == null
+        if (invalidConst) throw Exception("Cannot declare constant without value.")
+
+        val value = if (expression == null) null else this.getValue(expression)
+        val variable = Variable(value, declaration.isConst, declaration.type)
+        setMemory(getMemory().set(declaration.name, variable))
     }
 
     private fun validateTypes(type: Type, expression: AST): Boolean = type == getType(expression)
 
     override fun visit(printAST: PrintAST): AST {
-        val toPrint = this.getValue(printAST.value.accept(this))
-        contextProvider.emit(toPrint.toString())
+        val toPrint = this.getStringValue(printAST.value.accept(this))
+        if (toPrint != null) contextProvider.emit(toPrint)
         return printAST
     }
 
@@ -132,7 +139,7 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
         val rightValue = this.getValue(sumAST.right.accept(this))
 
         return when {
-            leftValue is Number && rightValue is Number -> {
+            leftValue is Double && rightValue is Double -> {
                 NumberAST(leftValue + rightValue)
             }
 
@@ -140,12 +147,12 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
                 StringAST(leftValue + rightValue)
             }
 
-            leftValue is String && rightValue is Number -> {
-                StringAST(leftValue + rightValue)
+            leftValue is String && rightValue is Double -> {
+                StringAST(leftValue + doubleToString(rightValue))
             }
 
-            leftValue is Number && rightValue is String -> {
-                StringAST(leftValue + rightValue)
+            leftValue is Double && rightValue is String -> {
+                StringAST(doubleToString(leftValue) + rightValue)
             }
 
             else -> {
@@ -159,7 +166,7 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
         val rightValue = this.getValue(subAST.right.accept(this))
 
         return when {
-            leftValue is Number && rightValue is Number -> {
+            leftValue is Double && rightValue is Double -> {
                 NumberAST(leftValue - rightValue)
             }
 
@@ -173,7 +180,7 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
         val leftValue = this.getValue(divAST.left.accept(this))
         val rightValue = this.getValue(divAST.right.accept(this))
         return when {
-            leftValue is Number && rightValue is Number -> {
+            leftValue is Double && rightValue is Double -> {
                 NumberAST(leftValue / rightValue)
             }
 
@@ -188,7 +195,7 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
         val rightValue = this.getValue(mulAST.right.accept(this))
 
         return when {
-            leftValue is Number && rightValue is Number -> {
+            leftValue is Double && rightValue is Double -> {
                 NumberAST(leftValue * rightValue)
             }
 
@@ -238,13 +245,9 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
     override fun visit(literalInputAST: LiteralInputAST): AST = literalInputAST
 
     override fun visit(numberAST: NumberAST): AST = numberAST
-}
 
-private operator fun Number.minus(number: Number): Number = this.toDouble() - number.toDouble()
-private operator fun Number.div(number: Number): Number = this.toDouble() / number.toDouble()
-private operator fun Number.plus(number: Number): Number = this.toDouble() + number.toDouble()
-private operator fun Number.plus(string: String): String = "$this" + string
-private operator fun Number.times(number: Number): Number = this.toDouble() * number.toDouble()
+    private fun doubleToString(value: Double) = if (value % 1 == 0.0) "${value.toInt()}" else "$value"
+}
 
 /**
  * Interpreter Interface

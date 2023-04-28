@@ -11,7 +11,7 @@ import java.io.File
 import java.io.FileInputStream
 
 fun main() {
-    val astIterator = getAstIterator("app/src/main/resources/program.txt", "1.1")
+    val astIterator = getAstIterator("app/src/main/resources/program.txt", "1.0")
     val interpreter = InterpreterWithIterator(InterpreterImpl(ConsoleContext()), astIterator)
     while (interpreter.hasNextInterpretation()) {
         interpreter.interpretNextAST()

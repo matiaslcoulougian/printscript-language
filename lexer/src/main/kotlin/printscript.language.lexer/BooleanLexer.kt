@@ -6,7 +6,7 @@ import printscript.language.token.Token
 import printscript.language.token.TokenType
 
 class BooleanLexer : Lexer {
-    private val booleanPattern = Regex("$avoidQuoteEncloseStartPattern(true|false|boolean)$avoidQuoteEncloseEndPattern")
+    private val booleanPattern = Regex("$avoidQuoteEncloseStartPattern(\\btrue\\b|\\bfalse\\b|\\bboolean\\b)$avoidQuoteEncloseEndPattern")
     override fun getTokens(input: String, line: Int): List<Token> {
         return booleanPattern.findAll(input)
             .map { match ->

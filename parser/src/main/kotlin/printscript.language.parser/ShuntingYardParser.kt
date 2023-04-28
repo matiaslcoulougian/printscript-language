@@ -32,7 +32,7 @@ class ShuntingYardParser : StatementParser {
         try {
             for (token in postfixExpression) {
                 when (token.type) {
-                    TokenType.NUMBER_LITERAL -> stack.push(NumberAST(token.value.toDoubleOrNull() as Number, token.line, token.column))
+                    TokenType.NUMBER_LITERAL -> stack.push(NumberAST(token.value.toDouble(), token.line, token.column))
                     TokenType.STRING_LITERAL -> stack.push(StringAST(token.value, token.line, token.column))
                     TokenType.IDENTIFIER -> stack.push(VariableAST(token.value, token.line, token.column))
                     TokenType.SUM -> stack.push(SumAST(stack.pop(), stack.pop(), token.line, token.column))

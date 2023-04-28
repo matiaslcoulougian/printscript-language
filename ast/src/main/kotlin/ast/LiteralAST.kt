@@ -7,7 +7,9 @@ import Type
  * @param T Type of the literal
  * @property value The value of the literal
  */
-sealed interface LiteralAST<T> : AST {
+sealed interface LiteralAST<out T> : AST {
     val value: T
     val type: Type
+
+    fun getStringValue(): String = value.toString()
 }
