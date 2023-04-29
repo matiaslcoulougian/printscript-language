@@ -69,7 +69,7 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
     }
 
     override fun visit(assignationAST: AssignationAST): AST {
-        val declaration = assignationAST.declaration.accept(this)
+        val declaration = assignationAST.declaration
         var expression = assignationAST.expression.accept(this)
         when (expression) {
             is LiteralAST<*> -> {
@@ -116,7 +116,7 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
 
     private fun addVariable(declaration: DeclarationAST, expression: LiteralAST<*>? = null) {
         val validType = expression == null || validateTypes(declaration.type, expression)
-        if (!validType) throw Exception("Cannot assign $expression to ${declaration.type}")
+        if (!validType) throw Exception("Cannot assign ${expression?.type.toString().lowercase()} value to ${declaration.type.toString().lowercase()} variable.")
 
         val invalidConst = declaration.isConst && expression == null
         if (invalidConst) throw Exception("Cannot declare constant without value.")

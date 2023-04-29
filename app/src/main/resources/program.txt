@@ -1,2 +1,1 @@
-let numberResult: number = 5 * 5 - 8;
-println(numberResult);
+let pi: number = "hola";
