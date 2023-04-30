@@ -1,0 +1,9 @@
+const name: string = readInput("enter your name");
+println("hello " + name);
+let aBoolean: boolean = readInput("enter a boolean");
+if (aBoolean) {
+    println("you entered true");
+} else {
+    println("you entered false");
+}
+const num: number = 9 * 4 + 45/3;
