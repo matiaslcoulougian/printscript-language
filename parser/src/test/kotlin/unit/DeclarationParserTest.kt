@@ -26,6 +26,7 @@ class DeclarationParserTest {
                 TokenType.EQUALS,
             ),
             Token(TokenType.STRING_LITERAL, "This is a test text"),
+            Token(TokenType.EOL),
         )
 
         val actualResult = parser.parse(line)

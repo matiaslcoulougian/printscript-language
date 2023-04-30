@@ -4,7 +4,7 @@ import printscript.language.token.Token
 import printscript.language.token.TokenType
 
 class SymbolLexer(private val symbolMap: Map<String, TokenType>, private val stringDelimiters: List<Char> = listOf('\'', '"')) : Lexer {
-    private var currentDelimiter = ""
+    private var currentDelimiter = "" // The current string delimiter that we are in
 
     override fun getTokens(input: String, line: Int): List<Token> {
         val tokens = mutableListOf<Token>()

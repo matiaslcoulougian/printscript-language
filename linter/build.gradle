@@ -7,4 +7,4 @@ dependencies {
     implementation project(':ast')
 }
 
-version "0.0.6-SNAPSHOT"
+version "0.0.9-SNAPSHOT"

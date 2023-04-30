@@ -6,4 +6,4 @@ plugins {
     id 'printscript.language.kotlin-custom-conventions'
 }
 
-version "0.0.6-SNAPSHOT"
+version "0.0.9-SNAPSHOT"

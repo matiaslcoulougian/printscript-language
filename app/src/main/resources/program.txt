@@ -1,1 +1,1 @@
-let pi: number = "hola";
+let pi: string = "hola";

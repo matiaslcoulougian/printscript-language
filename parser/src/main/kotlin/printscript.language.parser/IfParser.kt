@@ -88,14 +88,8 @@ class IfParser : StatementParser {
         if (tokens[tokens.size - 1].type != TokenType.CLOSE_BLOCK) throw Exception("did not open block after else expression")
     }
 
-    private fun openBlock(tokens: List<Token>): Int {
-        return tokens.indexOfFirst { it.type == TokenType.OPEN_BLOCK }
-    }
+    private fun openBlock(tokens: List<Token>): Int = tokens.indexOfFirst { it.type == TokenType.OPEN_BLOCK }
 
-    private fun closeBlock(tokens: List<Token>): Int {
-        return tokens.indexOfFirst { it.type == TokenType.CLOSE_BLOCK }
-    }
-    private fun elseIndex(tokens: List<Token>): Int {
-        return tokens.indexOfFirst { it.type == TokenType.ELSE }
-    }
+    private fun closeBlock(tokens: List<Token>): Int = tokens.indexOfFirst { it.type == TokenType.CLOSE_BLOCK }
+    private fun elseIndex(tokens: List<Token>): Int = tokens.indexOfFirst { it.type == TokenType.ELSE }
 }

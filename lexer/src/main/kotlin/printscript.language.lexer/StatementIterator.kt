@@ -28,12 +28,12 @@ class StatementIterator(private val inputStream: InputStream, private val suppor
         var depth = 0
         while (true) {
             val byte = inputStream.read()
-            if (byte == -1) return null // end of file
+            if (byte == -1) return statement // end of file
             val char = byte.toChar()
-            if (char == '\n') { // ignore new lines
-                continue
-            } else if ((char == ';' && (!supportBlocks || depth == 0))) {
-                return statement
+            if (char == '\n') {
+                continue // ignore new lines
+            } else if (char == ';' && depth == 0) {
+                return statement + char
             } else if (char == '{' && supportBlocks) {
                 depth++
             } else if (char == '}' && supportBlocks) {

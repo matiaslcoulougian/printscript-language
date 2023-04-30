@@ -8,10 +8,10 @@ import printscript.language.token.TokenType
 
 class AssignationParser : StatementParser {
 /*    can parse statements like:
-    x = 5
-    x = 5 * 5
-    x = true
-    x = "hello"
+    x = 5;
+    x = 5 * 5;
+    x = true;
+    x = "hello";
 
     [IDENTIFIER] [EQUALS] [NUMBER_LITERAL | OPERATION | STRING_LITERAL | IDENTIFIER | BOOLEAN_LITERAL]
  */
