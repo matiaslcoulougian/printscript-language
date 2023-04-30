@@ -11,14 +11,14 @@ class ReadInputParser : StatementParser {
         return !(
             tokens[0].type != TokenType.READ_INPUT ||
                 tokens[1].type != TokenType.OPEN_PARENTHESIS ||
-                tokens[tokens.size - 2].type != TokenType.CLOSE_PARENTHESIS ||
-                !shuntingYardParser.isValidStatement(tokens.subList(2, tokens.size-2))
+                tokens[tokens.size - 1].type != TokenType.CLOSE_PARENTHESIS ||
+                !shuntingYardParser.isValidStatement(tokens.subList(2, tokens.size-1))
             )
     }
 
     override fun parseStatement(tokens: List<Token>): AST {
         val argumentParser = StatementParser()
-        val argument = argumentParser.parse(tokens.subList(2, tokens.size - 2)) // removing parentheses and println
+        val argument = argumentParser.parse(tokens.subList(2, tokens.size - 1)) // removing parentheses and println
         return InputAST(argument[0], tokens[0].line, tokens[0].column)
     }
 }

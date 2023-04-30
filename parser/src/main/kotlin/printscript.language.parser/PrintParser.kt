@@ -9,16 +9,16 @@ class PrintParser() : StatementParser {
     // Valid declarations:
     // -> Print(<...>) where argument is valid for any other parser
     override fun isValidStatement(tokens: List<Token>): Boolean {
-        val shuntingYardParser = ShuntingYardParser()
+        val statementParser = StatementParser()
         return tokens[0].type == TokenType.PRINTLN &&
             tokens[1].type == TokenType.OPEN_PARENTHESIS &&
-            tokens[tokens.size - 2].type == TokenType.CLOSE_PARENTHESIS &&
-            shuntingYardParser.isValidStatement(tokens.subList(2, tokens.size - 2))
+            tokens[tokens.size - 1].type == TokenType.CLOSE_PARENTHESIS &&
+            statementParser.isValid(tokens.subList(2, tokens.size - 1))
     }
 
     override fun parseStatement(tokens: List<Token>): AST {
         val statementParser = StatementParser()
-        val argument = statementParser.parseLine(tokens.subList(2, tokens.size - 2)) // removing PRINTLN and parenthesis
+        val argument = statementParser.parseLine(tokens.subList(2, tokens.size - 1)) // removing PRINTLN and parenthesis
         return PrintAST(argument, tokens[0].line, tokens[0].column)
     }
 }
