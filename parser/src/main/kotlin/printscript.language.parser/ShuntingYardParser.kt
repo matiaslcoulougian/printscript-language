@@ -39,7 +39,6 @@ class ShuntingYardParser : StatementParser {
                     TokenType.SUBTRACTION -> stack.push(SubAST(stack.pop(), stack.pop(), token.line, token.column))
                     TokenType.PRODUCT -> stack.push(MulAST(stack.pop(), stack.pop(), token.line, token.column))
                     TokenType.DIVISION -> stack.push(DivAST(stack.pop(), stack.pop(), token.line, token.column))
-                    TokenType.EOL -> continue
                     else -> throw Exception("Invalid token for value expresion")
                 }
             }
@@ -74,7 +73,6 @@ class ShuntingYardParser : StatementParser {
                 }
                 TokenType.OPEN_PARENTHESIS -> parenthesisStack.push(token)
                 TokenType.CLOSE_PARENTHESIS -> parenthesisStack.pop()
-                TokenType.EOL -> continue
                 else -> throw Exception("Invalid Token for shunting yard parser")
             }
         }
@@ -144,7 +142,6 @@ class ShuntingYardParser : StatementParser {
                         operatorStack.removeLast()
                     }
                 }
-                TokenType.EOL -> continue
                 else -> throw Exception("Invalid postifx Token")
             }
         }

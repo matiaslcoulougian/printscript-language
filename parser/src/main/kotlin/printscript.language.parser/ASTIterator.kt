@@ -11,7 +11,7 @@ class ASTIterator(
     override fun hasNext(): Boolean {
         if (tokenListIterator.hasNext()) {
             val tokens = tokenListIterator.next()
-            nextAST = parser.parseLine(tokens, true)
+            nextAST = parser.parseLine(tokens)
         }
         return nextAST != null
     }
@@ -20,7 +20,7 @@ class ASTIterator(
         if (nextAST == null) {
             if (!tokenListIterator.hasNext()) return null
             val tokens = tokenListIterator.next()
-            nextAST = parser.parseLine(tokens, true)
+            nextAST = parser.parseLine(tokens)
         }
         val newAST = nextAST
         nextAST = null

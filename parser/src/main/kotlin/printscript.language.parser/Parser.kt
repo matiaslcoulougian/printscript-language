@@ -53,8 +53,7 @@ class Parser(private val statementParsers: List<StatementParser>) {
         return astList
     }
 
-    fun parseLine(tokens: List<Token>, completeLine: Boolean = false): AST {
-        if (completeLine) validateEndOfLine(tokens)
+    fun parseLine(tokens: List<Token>): AST {
         return statementParsers.find { it.isValidStatement(tokens) }?.parseStatement(tokens)
             ?: throw Exception("Cant parse expression in line " + tokens[0].line + ".")
     }
@@ -79,7 +78,7 @@ class Parser(private val statementParsers: List<StatementParser>) {
                 remainingTokens = emptyList()
                 linesList = linesList.plus(listOf(lineTokens))
             } else {
-                val lineTokens = remainingTokens.subList(0, indexEOL)
+                val lineTokens = remainingTokens.subList(0, indexEOL + 1)
                 remainingTokens = remainingTokens.slice(IntRange(indexEOL + 1, remainingTokens.size - 1))
                 linesList = linesList.plus(listOf(lineTokens))
             }
