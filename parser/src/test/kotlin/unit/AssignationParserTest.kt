@@ -20,6 +20,7 @@ class AssignationParserTest {
             Token(TokenType.IDENTIFIER, "x"),
             Token(TokenType.EQUALS),
             Token(TokenType.NUMBER_LITERAL, "5"),
+            Token(TokenType.EOL),
         )
 
         assertEquals(parser.isValidStatement(numberAssignation), true)
@@ -31,6 +32,7 @@ class AssignationParserTest {
             Token(TokenType.IDENTIFIER, "x"),
             Token(TokenType.EQUALS),
             Token(TokenType.STRING_LITERAL, "hello"),
+            Token(TokenType.EOL),
         )
         assertEquals(parser.isValidStatement(stringAssignation), true)
     }
@@ -41,8 +43,9 @@ class AssignationParserTest {
             Token(TokenType.IDENTIFIER, "x"),
             Token(TokenType.EQUALS),
             Token(TokenType.TRUE),
+            Token(TokenType.EOL),
         )
-        assertEquals(parser.isValidStatement(booleanAssignation), true)
+        assertEquals(true, parser.isValidStatement(booleanAssignation))
     }
 
     @Test
@@ -51,6 +54,7 @@ class AssignationParserTest {
             Token(TokenType.IDENTIFIER, "x"),
             Token(TokenType.EQUALS),
             Token(TokenType.IDENTIFIER, "y"),
+            Token(TokenType.EOL),
         )
         assertEquals(parser.isValidStatement(variableAssignation), true)
     }
@@ -61,6 +65,7 @@ class AssignationParserTest {
             Token(TokenType.IDENTIFIER, "x"),
             Token(TokenType.EQUALS),
             Token(TokenType.NUMBER_LITERAL, "5"),
+            Token(TokenType.EOL),
         )
 
         val expectedResult = AssignationAST(VariableAST("x"), NumberAST(5.0))
@@ -75,6 +80,7 @@ class AssignationParserTest {
             Token(TokenType.IDENTIFIER, "x"),
             Token(TokenType.EQUALS),
             Token(TokenType.STRING_LITERAL, "hello"),
+            Token(TokenType.EOL),
         )
 
         val expectedResult = AssignationAST(VariableAST("x"), StringAST("hello"))
@@ -89,6 +95,7 @@ class AssignationParserTest {
             Token(TokenType.IDENTIFIER, "x"),
             Token(TokenType.EQUALS),
             Token(TokenType.TRUE),
+            Token(TokenType.EOL),
         )
 
         val expectedResult = AssignationAST(VariableAST("x"), BooleanAST(true))
@@ -103,6 +110,7 @@ class AssignationParserTest {
             Token(TokenType.IDENTIFIER, "x"),
             Token(TokenType.EQUALS),
             Token(TokenType.IDENTIFIER, "y"),
+            Token(TokenType.EOL),
         )
 
         val expectedResult = AssignationAST(VariableAST("x"), VariableAST("y"))

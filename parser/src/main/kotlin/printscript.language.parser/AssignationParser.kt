@@ -21,7 +21,7 @@ class AssignationParser : StatementParser {
         if (tokens[tokens.size - 1].type != TokenType.EOL) return false
 
         val parser = StatementParser()
-        return parser.isValid(tokens.subList(2, tokens.size))
+        return parser.isValid(tokens.subList(2, tokens.size-1))
     }
 
     override fun parseStatement(tokens: List<Token>): AST {
