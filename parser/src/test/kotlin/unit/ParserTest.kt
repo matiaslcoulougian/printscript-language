@@ -1,6 +1,6 @@
 package unit
 
-import ast.*
+import ast.* // ktlint-disable no-wildcard-imports
 import org.junit.jupiter.api.Test
 import printscript.language.parser.CompleteParser
 import printscript.language.token.Token
@@ -111,7 +111,7 @@ class ParserTest {
             Token(TokenType.SUM),
             Token(TokenType.STRING_LITERAL, "world!"),
             Token(TokenType.CLOSE_PARENTHESIS),
-            Token(TokenType.EOL)
+            Token(TokenType.EOL),
         )
 
         val expectedResult = PrintAST(SumAST(StringAST("world!"), StringAST("hello ")))

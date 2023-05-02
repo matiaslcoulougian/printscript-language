@@ -1,4 +1,4 @@
-import ast.*
+import ast.* // ktlint-disable no-wildcard-imports
 import java.io.File
 
 class FormatterImpl(pathToFile: String) : Formatter {

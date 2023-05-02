@@ -19,7 +19,7 @@ class PrintParserTest {
             Token(TokenType.OPEN_PARENTHESIS),
             Token(TokenType.STRING_LITERAL, "hello world!"),
             Token(TokenType.CLOSE_PARENTHESIS),
-            Token(TokenType.EOL)
+            Token(TokenType.EOL),
         )
 
         val expectedResult = PrintAST(StringAST("hello world!"))
@@ -37,7 +37,7 @@ class PrintParserTest {
             Token(TokenType.SUM),
             Token(TokenType.STRING_LITERAL, "world!"),
             Token(TokenType.CLOSE_PARENTHESIS),
-            Token(TokenType.EOL)
+            Token(TokenType.EOL),
         )
         val expectedResult = PrintAST(SumAST(StringAST("world!"), StringAST("hello ")))
         val actualResult = parser.parseStatement(line)
@@ -53,7 +53,7 @@ class PrintParserTest {
             Token(TokenType.SUM),
             Token(TokenType.STRING_LITERAL, "world!"),
             Token(TokenType.CLOSE_PARENTHESIS),
-            Token(TokenType.EOL)
+            Token(TokenType.EOL),
         )
 
         val invalidLine = listOf<Token>(
@@ -61,7 +61,7 @@ class PrintParserTest {
             Token(TokenType.OPEN_PARENTHESIS),
             Token(TokenType.PRINTLN),
             Token(TokenType.CLOSE_PARENTHESIS),
-            Token(TokenType.EOL)
+            Token(TokenType.EOL),
         )
         assertEquals(true, parser.isValidStatement(validLine))
         assertEquals(false, parser.isValidStatement(invalidLine))
