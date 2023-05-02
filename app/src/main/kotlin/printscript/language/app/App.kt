@@ -18,6 +18,8 @@ import printscript.language.parser.ASTIterator
 import printscript.language.parser.ParserFactory
 import java.io.File
 import java.io.FileInputStream
+import java.nio.file.Files
+
 enum class MenuOptions {
     Execute,
     Analyze,
@@ -59,10 +61,13 @@ fun format(fileName: String?, version: String) {
         return
     }
     val astIterator = getAstIterator(fileName, version)
-    val formatter = FormatterImpl(fileName.replace(".txt", "_formatted.txt"))
+    val newFileName = fileName.replace(".txt", "_formatted.txt")
+    val formatter = FormatterImpl(newFileName)
     while (astIterator.hasNext()) {
         formatter.format(astIterator.next() ?: return)
     }
+    Files.write(File(fileName).toPath(), File(newFileName).readBytes())
+    File(newFileName).delete()
 }
 
 private fun getAstIterator(fileName: String, version: String): ASTIterator {
