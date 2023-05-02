@@ -6,7 +6,7 @@ import printscript.language.token.Token
 import printscript.language.token.TokenType
 
 class IdentifierLexer(private val reservedWords: List<String>) : Lexer {
-    private val identifierPattern = Regex("$avoidQuoteEncloseStartPattern[a-zA-Z_]$avoidQuoteEncloseEndPattern")
+    private val identifierPattern = Regex("$avoidQuoteEncloseStartPattern\\w*[a-zA-Z]\\w*$avoidQuoteEncloseEndPattern")
 
     override fun getTokens(input: String, line: Int): List<Token> {
         return identifierPattern.findAll(input)

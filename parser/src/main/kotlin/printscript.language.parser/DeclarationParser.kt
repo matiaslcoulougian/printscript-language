@@ -10,8 +10,8 @@ import printscript.language.token.TokenType
 class DeclarationParser() : StatementParser {
 
 //    Valid declarations
-//    -> let a : String
-//    -> let a : Number = <valid argument>
+//    -> let a : String;
+//    -> let a : Number = <valid argument>;
 
     override fun isValidStatement(tokens: List<Token>): Boolean {
         try {
@@ -27,7 +27,7 @@ class DeclarationParser() : StatementParser {
         val declaration = DeclarationAST(variableName, getType(type), isConstant(tokens[0]), tokens[1].line, tokens[1].column)
         if (tokens.size > 3 && tokens[3].type == TokenType.EQUALS) { // has an assignation
             val statementParser = StatementParser()
-            val statement = statementParser.parseLine(tokens.subList(4, tokens.size))
+            val statement = statementParser.parseLine(tokens.subList(4, tokens.size - 1))
             return AssignationAST(declaration, statement, tokens[4].line, tokens[4].column)
         }
         return declaration
@@ -55,9 +55,10 @@ class DeclarationParser() : StatementParser {
         ) {
             throw Exception("Invalid type")
         }
+        if (tokens[tokens.size - 1].type != TokenType.EOL) throw Exception("Missing semicolon")
         if (tokens.size > 3 && tokens[3].type == TokenType.EQUALS) {
             val statementParser = StatementParser()
-            val isExpressionValid = statementParser.isValid(tokens.subList(4, tokens.size))
+            val isExpressionValid = statementParser.isValid(tokens.subList(4, tokens.size - 1))
             if (!isExpressionValid) throw Exception("Invalid assignation value")
         }
     }

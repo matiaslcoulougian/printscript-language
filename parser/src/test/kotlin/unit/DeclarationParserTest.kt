@@ -5,16 +5,16 @@ import ast.* // ktlint-disable no-wildcard-imports
 import ast.NumberAST
 import ast.StringAST
 import org.junit.jupiter.api.Test
-import printscript.language.parser.CompleteParser
+import printscript.language.parser.DeclarationParser
 import printscript.language.token.Token
 import printscript.language.token.TokenType
 import kotlin.test.assertEquals
 
 class DeclarationParserTest {
+    private val parser = DeclarationParser()
+
     @Test
     fun parseStringDeclarationTest() {
-        val parser = CompleteParser()
-
         val line = listOf(
             Token(TokenType.VARIABLE),
             Token(
@@ -28,17 +28,15 @@ class DeclarationParserTest {
             Token(TokenType.STRING_LITERAL, "This is a test text"),
         )
 
-        val actualResult = parser.parse(line)
-        val expectedResult = listOf<AST>(AssignationAST(DeclarationAST("example", Type.STRING), StringAST("This is a test text")))
+        val actualResult = parser.parseStatement(line)
+        val expectedResult = AssignationAST(DeclarationAST("example", Type.STRING), StringAST("This is a test text"))
         assertEquals(expectedResult, actualResult)
     }
 
     @Test
     fun parseSumDeclarationTest() {
-        val parser = CompleteParser()
-
         val line = listOf(
-            Token(TokenType.VARIABLE),
+            Token(TokenType.CONSTANT),
             Token(
                 TokenType.IDENTIFIER,
                 "example",
@@ -50,17 +48,14 @@ class DeclarationParserTest {
             Token(TokenType.NUMBER_LITERAL, "3"),
             Token(TokenType.SUM),
             Token(TokenType.NUMBER_LITERAL, "5"),
-            Token(TokenType.EOL),
         )
 
-        val actualResult = parser.parse(line)
-        val expectedResult = listOf<AST>(
-            AssignationAST(
-                DeclarationAST("example", Type.NUMBER),
-                SumAST(
-                    NumberAST(5.0),
-                    NumberAST(3.0),
-                ),
+        val actualResult = parser.parseStatement(line)
+        val expectedResult = AssignationAST(
+            DeclarationAST("example", Type.NUMBER, true),
+            SumAST(
+                NumberAST(5.0),
+                NumberAST(3.0),
             ),
         )
         assertEquals(expectedResult, actualResult)
@@ -68,9 +63,23 @@ class DeclarationParserTest {
 
     @Test
     fun parseJustDeclarationTest() {
-        val parser = CompleteParser()
-
         val line = listOf(
+            Token(TokenType.VARIABLE),
+            Token(
+                TokenType.IDENTIFIER,
+                "example",
+            ),
+            Token(TokenType.NUMBER_TYPE),
+        )
+
+        val actualResult = parser.parseStatement(line)
+        val expectedResult = DeclarationAST("example", Type.NUMBER)
+        assertEquals(expectedResult, actualResult)
+    }
+
+    @Test
+    fun declarationValidationTest() {
+        val validLine = listOf(
             Token(TokenType.VARIABLE),
             Token(
                 TokenType.IDENTIFIER,
@@ -79,9 +88,11 @@ class DeclarationParserTest {
             Token(TokenType.NUMBER_TYPE),
             Token(TokenType.EOL),
         )
+        val invalidLine = listOf(
+            Token(TokenType.NUMBER_TYPE),
+        )
 
-        val actualResult = parser.parse(line)
-        val expectedResult = listOf<AST>(DeclarationAST("example", Type.NUMBER))
-        assertEquals(expectedResult, actualResult)
+        assertEquals(true, parser.isValidStatement(validLine))
+        assertEquals(false, parser.isValidStatement(invalidLine))
     }
 }

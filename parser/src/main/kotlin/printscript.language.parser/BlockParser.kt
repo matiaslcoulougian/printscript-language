@@ -6,8 +6,8 @@ import printscript.language.token.TokenType
 
 class BlockParser : StatementParser {
     override fun isValidStatement(tokens: List<Token>): Boolean {
-        val completeParser = CompleteParser()
         if (tokens[0].type != TokenType.OPEN_BLOCK || tokens[tokens.size - 1].type != TokenType.CLOSE_BLOCK) return false
+        val completeParser = CompleteParser()
         return completeParser.isValid(tokens.subList(1, tokens.size - 1))
     }
 

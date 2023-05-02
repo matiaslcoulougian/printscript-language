@@ -1,3 +1,20 @@
+let pi: string = "hola";
+let a: string = "chau";
+let b: number = 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10;
+if (false) {
+    println("hola");
+} else {
+    println("chau");
+}
+const bool: boolean = true;
+if (bool) {
+    println("hola");
+}
+let c: boolean = readInput("enter boolean");
+if (c) {
+    println("hola de nuevo");
+    println(b);
+}
 let test = "Hello World";
 println( test );
 let hello = true;

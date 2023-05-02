@@ -1,37 +1,45 @@
 package printscript.language.lexer
 
-import java.io.FileInputStream
+import java.io.InputStream
 
-class StatementIterator(private val fileInputStream: FileInputStream, private val supportBlocks: Boolean) : Iterator<String?> {
-    private var nextStatement: String? = null
+class StatementIterator(private val inputStream: InputStream, private val supportBlocks: Boolean) : Iterator<String?> {
+    private var currentStatement: String? = null
 
     override fun hasNext(): Boolean {
-        if (nextStatement == null) readNextStatement()
-        return nextStatement != null
+        if (currentStatement == null) currentStatement = readStatement()
+        return currentStatement != null
     }
 
     override fun next(): String? {
-        if (nextStatement == null) readNextStatement()
-        val statement = nextStatement
-        nextStatement = null
+        var statement = if (currentStatement == null) readStatement() else currentStatement
+        currentStatement = null
+        val nextStatement = readStatement()
+        if (nextStatement != null && nextStatement.trim().startsWith("else")) {
+            statement += nextStatement
+        } else {
+            currentStatement = nextStatement
+        }
         return statement
     }
 
-    private fun readNextStatement() {
+    // Read statement from input stream
+    private fun readStatement(): String? {
         var statement = ""
         var depth = 0
         while (true) {
-            val byte = fileInputStream.read()
-            if (byte == -1) break // end of file
+            val byte = inputStream.read()
+            if (byte == -1) return statement // end of file
             val char = byte.toChar()
-            if (char == '\n') { // ignore new lines
-                continue
-            } else if (char == ';' && (!supportBlocks || depth == 0)) {
-                nextStatement = statement
-                break // end of statement
+            if (char == '\n') {
+                continue // ignore new lines
+            } else if (char == ';' && depth == 0) {
+                return statement + char
             } else if (char == '{' && supportBlocks) {
                 depth++
-            } else if (char == '}' && supportBlocks) depth--
+            } else if (char == '}' && supportBlocks) {
+                depth--
+                if (depth == 0) return statement + char
+            }
             statement += char // add char to statement
         }
     }

@@ -12,7 +12,7 @@ class ReadInputParser : StatementParser {
             tokens[0].type != TokenType.READ_INPUT ||
                 tokens[1].type != TokenType.OPEN_PARENTHESIS ||
                 tokens[tokens.size - 1].type != TokenType.CLOSE_PARENTHESIS ||
-                !shuntingYardParser.isValidStatement(tokens.subList(2, tokens.size-1))
+                !shuntingYardParser.isValidStatement(tokens.subList(2, tokens.size - 1))
             )
     }
 

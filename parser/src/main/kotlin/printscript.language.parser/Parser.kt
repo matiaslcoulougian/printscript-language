@@ -52,9 +52,19 @@ class Parser(private val statementParsers: List<StatementParser>) {
         }
         return astList
     }
+
     fun parseLine(tokens: List<Token>): AST {
         return statementParsers.find { it.isValidStatement(tokens) }?.parseStatement(tokens)
             ?: throw Exception("Cant parse expression in line " + tokens[0].line + ".")
+    }
+
+    private fun validateEndOfLine(tokens: List<Token>) {
+        if (tokens.size > 1) {
+            val lastTokenType = tokens[tokens.size - 1].type
+            if (lastTokenType != TokenType.EOL && lastTokenType != TokenType.CLOSE_BLOCK) {
+                throw Exception("Missing ; at the end of line ${tokens[0].line}.")
+            }
+        }
     }
 
     // Gets all tokens and separates them into lines, removing the semicolons and EOF token
@@ -68,7 +78,7 @@ class Parser(private val statementParsers: List<StatementParser>) {
                 remainingTokens = emptyList()
                 linesList = linesList.plus(listOf(lineTokens))
             } else {
-                val lineTokens = remainingTokens.subList(0, indexEOL)
+                val lineTokens = remainingTokens.subList(0, indexEOL + 1)
                 remainingTokens = remainingTokens.slice(IntRange(indexEOL + 1, remainingTokens.size - 1))
                 linesList = linesList.plus(listOf(lineTokens))
             }

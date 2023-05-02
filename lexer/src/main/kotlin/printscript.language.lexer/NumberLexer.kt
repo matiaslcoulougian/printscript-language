@@ -6,7 +6,7 @@ import printscript.language.token.Token
 import printscript.language.token.TokenType
 
 class NumberLexer : Lexer {
-    private val numberPattern = Regex("""$avoidQuoteEncloseStartPattern(\d+|number)$avoidQuoteEncloseEndPattern""")
+    private val numberPattern = Regex("""$avoidQuoteEncloseStartPattern(\b(0|\d+(\.\d+)?)\b|\bnumber\b)$avoidQuoteEncloseEndPattern""")
 
     override fun getTokens(input: String, line: Int): List<Token> {
         return numberPattern.findAll(input)

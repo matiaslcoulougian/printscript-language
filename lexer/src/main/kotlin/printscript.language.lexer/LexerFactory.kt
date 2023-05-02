@@ -1,7 +1,7 @@
 package printscript.language.lexer
 
 import printscript.language.token.TokenType
-import java.io.FileInputStream
+import java.io.InputStream
 
 class LexerFactory {
     private val initialKeywords = mapOf(
@@ -25,7 +25,7 @@ class LexerFactory {
         "number",
         "println",
     )
-    fun createLexer(version: String, fileInputStream: FileInputStream): Lexer {
+    fun createLexer(version: String, inputStream: InputStream): Lexer {
         return when (version) {
             "1.0" -> ComposedLexer(
                 listOf(
@@ -35,7 +35,7 @@ class LexerFactory {
                     KeywordLexer(initialKeywords),
                     SymbolLexer(initialSymbols),
                 ),
-                StatementIterator(fileInputStream, false),
+                StatementIterator(inputStream, false),
             )
             "1.1" -> ComposedLexer(
                 listOf(
@@ -46,7 +46,7 @@ class LexerFactory {
                     KeywordLexer(initialKeywords + mapOf("const" to TokenType.CONSTANT, "if" to TokenType.IF, "else" to TokenType.ELSE, "readInput" to TokenType.READ_INPUT)),
                     SymbolLexer(initialSymbols + mapOf("{" to TokenType.OPEN_BLOCK, "}" to TokenType.CLOSE_BLOCK)),
                 ),
-                StatementIterator(fileInputStream, true),
+                StatementIterator(inputStream, true),
             )
             else -> throw Exception("Version $version not supported")
         }

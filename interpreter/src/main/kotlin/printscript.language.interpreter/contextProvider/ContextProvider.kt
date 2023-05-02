@@ -12,7 +12,7 @@ import printscript.language.interpreter.reader.Reader
  * @property emit Emits the text
  * @property read Reads the text
  */
-sealed interface ContextProvider {
+interface ContextProvider {
 
     fun getMemory(): Memory
     fun setMemory(memory: Memory)
