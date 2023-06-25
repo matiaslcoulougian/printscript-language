@@ -30,9 +30,7 @@ class StatementIterator(private val inputStream: InputStream, private val suppor
             val byte = inputStream.read()
             if (byte == -1) return statement // end of file
             val char = byte.toChar()
-            if (char == '\n') {
-                continue // ignore new lines
-            } else if (char == ';' && depth == 0) {
+            if (char == ';' && depth == 0) {
                 return statement + char
             } else if (char == '{' && supportBlocks) {
                 depth++

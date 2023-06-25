@@ -7,13 +7,16 @@ import printscript.language.token.TokenType
 
 class KeywordLexer(private val keywordsMap: Map<String, TokenType>) : Lexer {
     val keywordPattern = Regex("""$avoidQuoteEncloseStartPattern(${keywordsMap.keys.joinToString("|")})$avoidQuoteEncloseEndPattern""")
-    override fun getTokens(input: String, line: Int): List<Token> {
-        return keywordPattern.findAll(input)
-            .map { match ->
-                val value = match.value
-                val range = match.range
-                Token(keywordsMap[value]!!, line, range.first)
-            }
-            .toList()
+
+    override fun getTokens(input: List<String>, line: Int): List<Token> {
+        return input.flatMapIndexed { index, it ->
+            keywordPattern.findAll(it)
+                .map { match ->
+                    val value = match.value
+                    val range = match.range
+                    Token(keywordsMap[value]!!, line + index + 1, range.first)
+                }
+                .toList()
+        }
     }
 }

@@ -59,6 +59,7 @@ class InterpreterImpl(private val contextProvider: ContextProvider) : Interprete
         } else if (ast is VariableAST) {
             val memoryValue = getMemory().get(ast.name).value
             if (memoryValue is Double) return doubleToString(memoryValue)
+            return memoryValue.toString()
         }
         return null
     }
