@@ -12,7 +12,7 @@ import kotlin.test.assertEquals
 class LexerTest {
 
     private fun testStatement(lexer: Lexer, expectedTokens: List<Token>, inputString: String) {
-        val resultTokens: List<Token> = lexer.getTokens(inputString, 1)
+        val resultTokens: List<Token> = lexer.getTokens(listOf(inputString), 0)
         assertEquals(expectedTokens, resultTokens)
     }
 
@@ -26,19 +26,29 @@ class LexerTest {
             val testParts = line.split("~")
             val inputString = testParts[0]
             val resultTokens = testParts[1]
-            val expectedTokens = getExpectedTokensList(resultTokens, 1)
+            val expectedTokens = getExpectedTokensListWithLine(resultTokens, 1)
             testStatement(lexer, expectedTokens, inputString)
             line = testFileReader.readLine()
         }
         testFileReader.close()
     }
 
-    private fun getExpectedTokensList(resultLine: String, lineNumber: Int): List<Token> {
+    private fun getExpectedTokensListWithLine(resultLine: String, lineNumber: Int): List<Token> {
         return resultLine
             .split("|")
             .map { tokenParams ->
                 val params = tokenParams.split(",")
                 Token(TokenType.valueOf(params[0]), lineNumber, params[1].toInt(), params[2])
+            }
+            .toList()
+    }
+
+    private fun getExpectedTokensList(resultLine: String): List<Token> {
+        return resultLine
+            .split("|")
+            .map { tokenParams ->
+                val params = tokenParams.split(",")
+                Token(TokenType.valueOf(params[0]), params[1].toInt(), params[2].toInt(), params[3])
             }
             .toList()
     }
@@ -51,13 +61,11 @@ class LexerTest {
         val resultFileInputStream = FileInputStream("src/test/resources/printscript-file-tokens.txt")
         val resultFileReader = BufferedReader(InputStreamReader(resultFileInputStream))
         var resultLine = resultFileReader.readLine()
-        var lineCount = 1
         while (resultLine != null) {
-            val expectedTokens = getExpectedTokensList(resultLine, lineCount)
+            val expectedTokens = getExpectedTokensList(resultLine)
             val resultTokens = tokenListIterator.next()
             assertEquals(expectedTokens, resultTokens)
             resultLine = resultFileReader.readLine()
-            lineCount++
         }
     }
 }
