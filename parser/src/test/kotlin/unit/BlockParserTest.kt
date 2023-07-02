@@ -33,7 +33,6 @@ class BlockParserTest {
     @Test
     fun testInvalidBlock() {
         val tokens = listOf<Token>(
-            Token(TokenType.OPEN_BLOCK),
             Token(TokenType.IF),
             Token(TokenType.OPEN_PARENTHESIS),
             Token(TokenType.TRUE),

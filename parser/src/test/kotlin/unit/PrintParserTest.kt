@@ -57,7 +57,6 @@ class PrintParserTest {
         )
 
         val invalidLine = listOf<Token>(
-            Token(TokenType.PRINTLN),
             Token(TokenType.OPEN_PARENTHESIS),
             Token(TokenType.PRINTLN),
             Token(TokenType.CLOSE_PARENTHESIS),

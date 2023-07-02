@@ -42,8 +42,6 @@ class ParserTest {
         )
 
         val invalidLines = listOf<Token>(
-            Token(TokenType.IF),
-            Token(TokenType.OPEN_PARENTHESIS),
             Token(TokenType.TRUE),
             Token(TokenType.CLOSE_PARENTHESIS),
             Token(TokenType.OPEN_BLOCK),
