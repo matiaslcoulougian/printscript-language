@@ -1,12 +1,28 @@
 import ast.*
+import prinscript.language.formatter.*
 import java.io.File
 
-class FormatterImpl(pathToFile: String) : Formatter {
+class FormatterImpl(var pathToFile: String, var rules: List<FormattingRule>) : Formatter {
+
+    constructor(pathToFile: String) : this(
+        pathToFile,
+        listOf(
+            SpaceBeforeColon(),
+            SpaceAfterColon(),
+            SpaceAroundEquals(),
+            NewLineBeforeMethod(),
+            IndentSize(4),
+        ),
+    )
 
     private val newFile: File = File(pathToFile)
     override fun format(ast: AST) {
-        val statement = visit(ast)
-        newFile.appendText("$statement;\n")
+        var statement = visit(ast)
+        statement = "$statement;"
+        rules.forEach {
+            statement = it.applyRule(statement)
+        }
+        newFile.appendText("$statement\n")
     }
 
     private fun visit(ast: AST): String {
@@ -29,13 +45,13 @@ class FormatterImpl(pathToFile: String) : Formatter {
         }
     }
 
-    private fun formatMul(ast: MulAST): String = ("${visit(ast.left)} * ${visit(ast.right)}")
+    private fun formatMul(ast: MulAST): String = "${visit(ast.left)}*${visit(ast.right)}"
 
-    private fun formatDiv(ast: DivAST): String = ("${visit(ast.left)} / ${visit(ast.right)}")
+    private fun formatDiv(ast: DivAST): String = "${visit(ast.left)}/${visit(ast.right)}"
 
-    private fun formatSub(ast: SubAST): String = ("${visit(ast.left)} - ${visit(ast.right)}")
+    private fun formatSub(ast: SubAST): String = "${visit(ast.left)}-${visit(ast.right)}"
 
-    private fun formatSum(ast: SumAST): String = ("${visit(ast.left)} + ${visit(ast.right)}")
+    private fun formatSum(ast: SumAST): String = "${visit(ast.left)}+${visit(ast.right)}"
 
     private fun formatIf(ast: IfAST): String {
         if (ast.elseBlock != null) {
@@ -53,9 +69,9 @@ class FormatterImpl(pathToFile: String) : Formatter {
 
     private fun formatVariable(ast: VariableAST): String = (ast.name)
 
-    private fun formatInput(ast: InputAST): String = ("readInput( ${visit(ast.inputMsg)} )")
+    private fun formatInput(ast: InputAST): String = "readInput(${visit(ast.inputMsg)})"
 
-    private fun formatPrint(ast: PrintAST): String = ("println( ${visit(ast.value)} )")
+    private fun formatPrint(ast: PrintAST): String = "println(${visit(ast.value)})"
 
     private fun formatDeclaration(ast: DeclarationAST): String {
         if (ast.isConst) {
@@ -65,7 +81,7 @@ class FormatterImpl(pathToFile: String) : Formatter {
     }
 
     private fun formatAssigation(ast: AssignationAST): String =
-        ("${visit(ast.declaration)} = ${visit(ast.expression)}")
+        ("${visit(ast.declaration)}=${visit(ast.expression)}")
     private fun formatLiteral(ast: LiteralAST<*>): String {
         if (ast is StringAST) return "\"${ast.value}\""
         return ("${ast.value}")
