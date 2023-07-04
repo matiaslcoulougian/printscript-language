@@ -9,16 +9,10 @@ import printscript.language.token.Token
 import printscript.language.token.TokenType
 
 class IfParser : StatementParser {
-    override fun isValidStatement(tokens: List<Token>): Boolean {
-        return try {
-            checkExceptions(tokens)
-            true
-        } catch (e: Exception) {
-            false
-        }
-    }
+    override fun isValidStatement(tokens: List<Token>): Boolean = tokens[0].type == TokenType.IF
 
     override fun parseStatement(tokens: List<Token>): AST {
+        checkExceptions(tokens)
         val condition: AST = getCondition(tokens)
         val ifBlock: BlockAST = getBlock(tokens)
         val elseIndex = elseIndex(tokens)
@@ -61,9 +55,9 @@ class IfParser : StatementParser {
                 tokens[2].type != TokenType.TRUE &&
                 tokens[2].type != TokenType.FALSE
             ) {
-                throw Exception("Invalid boolean argument in column ${tokens[2].column}")
+                throw Exception("Invalid boolean argument in line ${tokens[3].line} column ${tokens[2].column}")
             }
-            if (tokens[3].type != TokenType.CLOSE_PARENTHESIS) throw Exception("Invalid boolean argument in column ${tokens[3].column}")
+            if (tokens[3].type != TokenType.CLOSE_PARENTHESIS) throw Exception("Invalid boolean argument in line ${tokens[3].line} column ${tokens[3].column}")
             if (tokens[4].type != TokenType.OPEN_BLOCK) { throw Exception("No block for if statement in line ${tokens[4].line}") }
         } else {
             if (tokens[1].type != TokenType.IDENTIFIER &&
@@ -77,15 +71,15 @@ class IfParser : StatementParser {
 
         val blockParser = BlockParser()
         val ifBlock = tokens.subList(openBlock(tokens), closeBlock(tokens) + 1)
-        if (!blockParser.isValidStatement(ifBlock)) throw Exception("Invalid Block")
+        if (!blockParser.isValidStatement(ifBlock)) throw Exception("Invalid Block for if statement in line ${tokens[0].line}")
         val elseIndex = elseIndex(tokens)
         if (elseIndex > 0) { // when the if has else
-            if (tokens[elseIndex - 1].type != TokenType.CLOSE_BLOCK) throw Exception("did not close block before else")
-            if (tokens[elseIndex + 1].type != TokenType.OPEN_BLOCK) throw Exception("did not open block after else expression")
+            if (tokens[elseIndex - 1].type != TokenType.CLOSE_BLOCK) throw Exception("Did not close block before else in line ${tokens[elseIndex].line}")
+            if (tokens[elseIndex + 1].type != TokenType.OPEN_BLOCK) throw Exception("Did not open block after else expression in line ${tokens[elseIndex].line}")
             val elseBlock = tokens.subList(openBlock(tokens.subList(elseIndex(tokens), tokens.size)) + elseIndex, closeBlock(tokens.subList(elseIndex(tokens), tokens.size)) + elseIndex + 1)
-            if (!blockParser.isValidStatement(elseBlock)) throw Exception("Invalid Block")
+            if (!blockParser.isValidStatement(elseBlock)) throw Exception("Invalid Block in else statement in line ${tokens[elseIndex].line}")
         }
-        if (tokens[tokens.size - 1].type != TokenType.CLOSE_BLOCK) throw Exception("did not open block after else expression")
+        if (tokens[tokens.size - 1].type != TokenType.CLOSE_BLOCK) throw Exception("Did not open block after else expression in line ${tokens[elseIndex].line}")
     }
 
     private fun openBlock(tokens: List<Token>): Int = tokens.indexOfFirst { it.type == TokenType.OPEN_BLOCK }

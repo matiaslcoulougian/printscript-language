@@ -32,7 +32,7 @@ class LinterImpl(private val rules: List<Rule>) : Linter {
                 visit(ast.condition) + visit(ast.ifBlock) + lintRules(ast)
             }
 
-            else -> {lintRules(ast)}
+            else -> { lintRules(ast) }
         }
     }
 
