@@ -1,5 +1,5 @@
-import ast.* // ktlint-disable no-wildcard-imports
-import prinscript.language.formatter.* // ktlint-disable no-wildcard-imports
+import ast.* //  ktlint-disable no-wildcard-imports
+import prinscript.language.formatter.* //  ktlint-disable no-wildcard-imports
 import java.io.File
 
 class FormatterImpl(var pathToFile: String, var rules: List<FormattingRule>) : Formatter {
